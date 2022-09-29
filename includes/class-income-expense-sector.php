@@ -81,8 +81,28 @@ class Income_Expense_Sector {
             wp_die( 'Are you cheating?' );
         }
 
-        echo '<pre>';
-        print_r( $_POST );
+        $name    = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
+        $type    = isset( $_POST['type'] ) ? sanitize_textarea_field( $_POST['type'] ) : '';
+
+        if ( empty( $name ) ) {
+            $this->errors['name'] = __( 'Please provide a name', 'wpcodal-pf' );
+        }
+
+        if ( ! empty( $this->errors ) ) {
+            return;
+        }
+
+        $insert_id = wpcpf_insert_income_expense_sector( [
+            'name'    => $name,
+            'type'    => (int) $type,
+        ] );
+
+        if ( is_wp_error( $insert_id ) ) {
+            wp_die( $insert_id->get_error_message() );
+        }
+        
+        $redirected_to = admin_url( 'admin.php?page=income_sector&inserted=true' );
+        wp_redirect( $redirected_to );
         exit;
     }
 }
