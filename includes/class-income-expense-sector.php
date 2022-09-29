@@ -25,7 +25,9 @@ class Income_Expense_Sector {
 	 * Constructor of Bootstrap class.
 	 */
 	private function __construct( $sector_type ) {
+		$this->form_handler();
 		$this->income_expense_page( $sector_type );
+		
 	}
 
 	/**
@@ -39,7 +41,7 @@ class Income_Expense_Sector {
 
         switch ( $action ) {
             case 'new':
-                $template = __DIR__ . '/views/income-expense-sector/create.php';
+                $template = WPCPF_PLUGIN_DIR . '/templates/income-expense-sector/create.php';
                 break;
 
             case 'edit':
@@ -61,16 +63,26 @@ class Income_Expense_Sector {
     }
 
 	/**
-	 * Add JS scripts.
-	 */
-	public function enqueue_scripts() {
-		// wp_enqueue_script();
-	}
+     * Handle the form
+     *
+     * @return void
+     */
+    public function form_handler() {
+        if ( ! isset( $_POST['submit_income_expense_sector'] ) ) {
+            return;
+        }
+		
 
-	/**
-	 * Add CSS files.
-	 */
-	public function enqueue_styles() {
-		// wp_enqueue_style();
-	}
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'new-income-expense-sector' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        echo '<pre>';
+        print_r( $_POST );
+        exit;
+    }
 }

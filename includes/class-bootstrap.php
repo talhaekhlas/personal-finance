@@ -60,7 +60,7 @@ class Bootstrap {
 	 */
 	private function load_ajax_classes() {
 		require_once __DIR__ . '/ajax/class-sample-ajax.php';
-
+		
 		Sample_Ajax::instance();
 	}
 
@@ -68,10 +68,10 @@ class Bootstrap {
 	 * Load ajax classes
 	 */
 	private function load_common_classes() {
+		require_once __DIR__ . '/class-table-creation.php';
 		require_once __DIR__ . '/class-menu.php';
+		Table_Creation::instance();
 		Menu::instance();
-
-		Sample_Ajax::instance();
 	}
 
 }

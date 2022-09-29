@@ -58,9 +58,16 @@ class Enqueue {
                 'src'     => WPCPF_PLUGIN_URL . '/assets/js/admin.js',
                 'version' => time(),
                 'deps'    => [ 'jquery' ]
+			],
+			'tailwind-script' => [
+                'src'     => WPCPF_PLUGIN_URL . '/assets/js/tailwind.js',
+                'version' => time(),
+                'deps'    => []
             ]
         ];
     }
+
+	
 
     /**
      * All available admin styles.
