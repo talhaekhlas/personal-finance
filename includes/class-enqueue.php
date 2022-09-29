@@ -5,9 +5,9 @@
  * @package WPBP
  */
 
-namespace WPBP;
+namespace WPCPF;
 
-use WPBP\Traits\Singleton;
+use WPCPF\Traits\Singleton;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,6 +28,9 @@ class Enqueue {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+
+		add_action( 'admin_enqueue_scripts', [ $this, 'register_admin_assets' ] );
+
 	}
 
 	/**
@@ -43,4 +46,55 @@ class Enqueue {
 	public function enqueue_styles() {
 		// wp_enqueue_style();
 	}
+
+	/**
+     * All available admin scripts.
+     *
+     * @return array
+     */
+    public function get_admin_scripts() {
+        return [
+            'admin-script' => [
+                'src'     => WPCPF_PLUGIN_URL . '/assets/js/admin.js',
+                'version' => time(),
+                'deps'    => [ 'jquery' ]
+            ]
+        ];
+    }
+
+    /**
+     * All available admin styles.
+     *
+     * @return array
+     */
+    public function get_admin_styles() {
+        return [
+            'admin-style' => [
+                'src'     => WPCPF_PLUGIN_URL . '/assets/css/admin.css',
+                'version' => time()
+            ]
+        ];
+    }
+
+	/**
+     * Register scripts and styles
+     *
+     * @return void
+     */
+    public function register_admin_assets() {
+        $scripts = $this->get_admin_scripts();
+        $styles  = $this->get_admin_styles();
+
+        foreach ( $scripts as $handle => $script ) {
+            $deps = isset( $script['deps'] ) ? $script['deps'] : false;
+
+            wp_register_script( $handle, $script['src'], $deps, $script['version'], true );
+        }
+
+        foreach ( $styles as $handle => $style ) {
+            $deps = isset( $style['deps'] ) ? $style['deps'] : false;
+
+            wp_register_style( $handle, $style['src'], $deps, $style['version'] );
+        }
+    }
 }

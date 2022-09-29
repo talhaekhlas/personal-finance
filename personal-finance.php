@@ -22,14 +22,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin __FILE__
  */
-if ( ! defined( 'WPBP_PLUGIN_FILE' ) ) {
-	define( 'WPBP_PLUGIN_FILE', __FILE__ );
+if ( ! defined( 'WPCPF_PLUGIN_FILE' ) ) {
+	define( 'WPCPF_PLUGIN_FILE', __FILE__ );
+}
+
+/**
+ * Define plugin __FILE__
+ */
+if ( ! defined( 'WPCPF_PLUGIN_URL' ) ) {
+	define( 'WPCPF_PLUGIN_URL', plugins_url( '', WPCPF_PLUGIN_FILE ) );
+}
+
+
+/**
+ * Define plugin __FILE__
+ */
+if ( ! defined( 'WPCPF_PLUGIN_DIR' ) ) {
+	define( 'WPCPF_PLUGIN_DIR', __DIR__ );
 }
 
 /**
  * Include necessary files to initial load of the plugin.
  */
-if ( ! class_exists( 'WPBP\Bootstrap' ) ) {
+if ( ! class_exists( 'WPCPF\Bootstrap' ) ) {
 	require_once __DIR__ . '/includes/traits/trait-singleton.php';
 	require_once __DIR__ . '/includes/class-bootstrap.php';
 }
@@ -41,7 +56,7 @@ if ( ! class_exists( 'WPBP\Bootstrap' ) ) {
  * @return WPBP\Bootstrap
  */
 function wp_boilerplate_plugin() {
-	return WPBP\Bootstrap::instance();
+	return WPCPF\Bootstrap::instance();
 }
 
 // Call initialization function.

@@ -2,13 +2,13 @@
 /**
  * Bootstrap class.
  *
- * @package WPBP
+ * @package WPCPF
  */
 
-namespace WPBP;
+namespace WPCPF;
 
-use WPBP\Ajax\Sample_Ajax;
-use WPBP\Traits\Singleton;
+use WPCPF\Ajax\Sample_Ajax;
+use WPCPF\Traits\Singleton;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -68,7 +68,8 @@ class Bootstrap {
 	 * Load ajax classes
 	 */
 	private function load_common_classes() {
-		require_once __DIR__ . '/ajax/class-sample-ajax.php';
+		require_once __DIR__ . '/class-menu.php';
+		Menu::instance();
 
 		Sample_Ajax::instance();
 	}

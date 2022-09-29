@@ -5,7 +5,7 @@
  * @package WPBP
  */
 
-namespace WPBP\Traits;
+namespace WPCPF\Traits;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,12 +29,12 @@ trait Singleton {
 	 *
 	 * @return self
 	 */
-	public static function instance() {
+	public static function instance($param=null) {
 		if ( self::$object ) {
 			return self::$object;
 		}
 
-		self::$object = new self();
+		self::$object = new self($param);
 
 		return self::$object;
 	}

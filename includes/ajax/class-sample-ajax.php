@@ -2,12 +2,12 @@
 /**
  * Sample_Ajax class.
  *
- * @package WPBP
+ * @package WPCPF
  */
 
-namespace WPBP\Ajax;
+namespace WPCPF\Ajax;
 
-use WPBP\Traits\Singleton;
+use WPCPF\Traits\Singleton;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
