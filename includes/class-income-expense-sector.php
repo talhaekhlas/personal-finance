@@ -46,7 +46,9 @@ class Income_Expense_Sector {
                 break;
 
             case 'edit':
-                $template = __DIR__ . '/views/income-expense-sector/edit.php';
+                $id       = isset( $_GET['id'] ) ? $_GET['id'] : null;
+                $single_income_expense = wpcpf_get_single_income_expense_sector( $id );
+                $template = WPCPF_PLUGIN_DIR . '/templates/income-expense-sector/edit.php';
                 break;
 
             case 'view':
@@ -84,8 +86,10 @@ class Income_Expense_Sector {
             wp_die( 'Are you cheating?' );
         }
 
-        $name    = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
-        $type    = isset( $_POST['type'] ) ? sanitize_textarea_field( $_POST['type'] ) : '';
+        $name     = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
+        $type     = isset( $_POST['type'] ) ? sanitize_textarea_field( $_POST['type'] ) : '';
+        $id       = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
+        $page_url = $type == 1 ? 'income_sector' : 'expense_sector';
 
         if ( empty( $name ) ) {
             $this->errors['name'] = __( 'Please provide a name', 'wpcodal-pf' );
@@ -95,18 +99,29 @@ class Income_Expense_Sector {
             return;
         }
 
-        $insert_id = wpcpf_insert_income_expense_sector( [
-            'name'    => $name,
-            'type'    => (int) $type,
-        ] );
+        if ( ! $id ) {
+            $insert_id = wpcpf_insert_income_expense_sector( [
+                'name'    => $name,
+                'type'    => (int) $type,
+            ] );
+    
+            if ( is_wp_error( $insert_id ) ) {
+                wp_die( $insert_id->get_error_message() );
+            }
 
-        if ( is_wp_error( $insert_id ) ) {
-            wp_die( $insert_id->get_error_message() );
+            $redirected_to = admin_url( "admin.php?page={$page_url}&inserted=true" );
+        } else {
+            $update_data = wpcpf_update_income_expense_sector( [
+                'name'    => $name,
+                'type'    => (int) $type,
+            ], $id );
+    
+            if ( is_wp_error( $update_data ) ) {
+                wp_die( $update_data->get_error_message() );
+            }
+            $redirected_to = admin_url( "admin.php?page={$page_url}&updateee=true" );
         }
 
-        $page_url = $type == 1 ? 'income_sector' : 'expense_sector';
-        
-        $redirected_to = admin_url( "admin.php?page={$page_url}&inserted=true" );
         wp_redirect( $redirected_to );
         exit;
     }

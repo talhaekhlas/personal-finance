@@ -50,6 +50,43 @@ function wpcpf_insert_income_expense_sector( $args = [] ) {
 }
 
 /**
+ * Insert a new address
+ *
+ * @param  array  $args
+ *
+ * @return int|WP_Error
+ */
+function wpcpf_update_income_expense_sector( $args = [], $id ) {
+    global $wpdb;
+
+    if ( empty( $args['name'] ) ) {
+        return new \WP_Error( 'no-name', __( 'You must provide a name.', 'wpcodal-pf' ) );
+    }
+
+    $defaults = [
+        'name'       => '',
+        'type'    => 1,
+        'created_by' => get_current_user_id(),
+    ];
+
+    $data = wp_parse_args( $args, $defaults );
+
+    $updated = $wpdb->update(
+        $wpdb->prefix . 'income_expense_sectors',
+        $data,
+        [ 'id' => $id ],
+        [
+            '%s',
+            '%d',
+            '%d'
+        ],
+        [ '%d' ]
+    );
+
+    return $updated;
+}
+
+/**
  * Fetch Addresses
  *
  * @param  array  $args
@@ -73,11 +110,26 @@ function wpcpf_get_income_expense_sector( $sector_type = 1 ) {
 
     $sql = $wpdb->prepare(
             "SELECT * FROM {$wpdb->prefix}income_expense_sectors
-            WHERE type = $sector_type 
-            ORDER BY {$order_by} {$order}",
+            WHERE type = %d 
+            ORDER BY {$order_by} {$order}",$sector_type
     );
 
     $items = $wpdb->get_results( $sql );
 
     return $items;
+}
+
+/**
+ * Fetch a single contact from the DB
+ *
+ * @param  int $id
+ *
+ * @return object
+ */
+function wpcpf_get_single_income_expense_sector( $id ) {
+    global $wpdb;
+
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expense_sectors WHERE id = %d", $id )
+    );
 }

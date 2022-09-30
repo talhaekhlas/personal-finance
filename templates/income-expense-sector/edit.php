@@ -1,5 +1,5 @@
 <?php 
-    $button_title = $sector_type == 'income' ? 'Add Income Sector' : 'Add Expense Sector';
+    $button_title = $sector_type == 'income' ? 'Update Income Sector' : 'Update Expense Sector';
     $placeholder  = $sector_type == 'income' ? 'Please Enter Income Sector' : 'Please Enter Expense Sector';
     $type         = $sector_type == 'income' ? 1 : 2;
 
@@ -20,6 +20,7 @@
         <input
           type="text"
           name="name"
+          value="<?php echo $single_income_expense->name; ?>"
           id="name"
           placeholder="<?php echo $placeholder; ?>"
           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -30,6 +31,7 @@
         <?php } ?>
        
         <input type="hidden" name="type" value="<?php echo $type; ?>">
+        <input type="hidden" name="id" value="<?php echo $single_income_expense->id; ?>">
       </div>
       
       <div>
