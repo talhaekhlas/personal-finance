@@ -54,10 +54,15 @@ class Enqueue {
      */
     public function get_admin_scripts() {
         return [
+            'wpcpf-sweetalert-js' => [
+                'src'     => WPCPF_PLUGIN_URL . '/assets/js/sweetalert.js',
+                'version' => time(),
+                'deps'    => []
+			],
             'wpcpf-admin-js' => [
                 'src'     => WPCPF_PLUGIN_URL . '/assets/js/admin.js',
                 'version' => time(),
-                'deps'    => [ 'jquery' ]
+                'deps'    => [ 'wpcpf-sweetalert-js','jquery' ]
 			],
 			'tailwind-script' => [
                 'src'     => WPCPF_PLUGIN_URL . '/assets/js/tailwind.js',
@@ -97,7 +102,6 @@ class Enqueue {
 
             wp_register_script( $handle, $script['src'], $deps, $script['version'], true );
         }
-        wp_enqueue_script( 'tailwind-script' );
 
         foreach ( $styles as $handle => $style ) {
             $deps = isset( $style['deps'] ) ? $style['deps'] : false;

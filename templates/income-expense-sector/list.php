@@ -50,7 +50,7 @@
           <td class="py-4 px-6 border-b border-grey-light">
           <?php $edit_url = admin_url( "admin.php?page={$sector_type}_sector&action=edit&id={$value->id}") ; ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
-          <a href="#" class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">Delete</a>
+          <a href="#" onclick="JSconfirm()" class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">Delete</a>
           <?php printf( '<a href="%s" class="submitdelete" onclick="return confirm(\'Are you sure?\');" title="%s">%s</a>', wp_nonce_url( admin_url( 'admin-post.php?action=wd-ac-delete-address&id=' . $value->id ), 'wd-ac-delete-address' ), $value->id, __( 'Delete', 'wedevs-academy' ), __( 'Delete', 'wedevs-academy' ) ); ?>
           </td>
         </tr>
