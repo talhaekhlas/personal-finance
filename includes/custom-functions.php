@@ -48,3 +48,36 @@ function wpcpf_insert_income_expense_sector( $args = [] ) {
 
     return $wpdb->insert_id;
 }
+
+/**
+ * Fetch Addresses
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_income_expense_sector( $sector_type = 1 ) {
+    global $wpdb;
+
+    // $defaults = [
+    //     'number'  => 20,
+    //     'offset'  => 0,
+    //     'orderby' => 'id',
+    //     'order'   => 'ASC'
+    // ];
+
+    $order_by = 'id';
+    $order    = 'desc';
+
+    // $args = wp_parse_args( $args, $defaults );
+
+    $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}income_expense_sectors
+            WHERE type = $sector_type 
+            ORDER BY {$order_by} {$order}",
+    );
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+}

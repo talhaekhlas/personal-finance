@@ -67,7 +67,7 @@ class Menu {
      */
     public function enqueue_assets() {
         wp_enqueue_style( 'admin-style' );
-        wp_enqueue_script( 'tailwind-script' );
+        wp_enqueue_script( 'wpcpf-admin-js' );
     }
 
 }

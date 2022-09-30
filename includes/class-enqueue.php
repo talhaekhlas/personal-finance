@@ -54,7 +54,7 @@ class Enqueue {
      */
     public function get_admin_scripts() {
         return [
-            'admin-script' => [
+            'wpcpf-admin-js' => [
                 'src'     => WPCPF_PLUGIN_URL . '/assets/js/admin.js',
                 'version' => time(),
                 'deps'    => [ 'jquery' ]
@@ -97,6 +97,7 @@ class Enqueue {
 
             wp_register_script( $handle, $script['src'], $deps, $script['version'], true );
         }
+        wp_enqueue_script( 'tailwind-script' );
 
         foreach ( $styles as $handle => $style ) {
             $deps = isset( $style['deps'] ) ? $style['deps'] : false;

@@ -38,6 +38,7 @@ class Income_Expense_Sector {
     public function income_expense_page( $sector_type ) {
         $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
         $url    = isset( $_GET['page'] ) ? $_GET['page'] : 'income_sector';
+        $sector_type_id = $sector_type == 'income' ? 1 : 2;
 
         switch ( $action ) {
             case 'new':
@@ -53,6 +54,8 @@ class Income_Expense_Sector {
                 break;
 
             default:
+                $data  = wpcpf_get_income_expense_sector( $sector_type_id );
+                $title = $sector_type == 'income' ? 'List of Income Sectors' : 'List of Expense Sectors';
                 $template = WPCPF_PLUGIN_DIR . '/templates/income-expense-sector/list.php';
                 break;
         }
@@ -100,8 +103,10 @@ class Income_Expense_Sector {
         if ( is_wp_error( $insert_id ) ) {
             wp_die( $insert_id->get_error_message() );
         }
+
+        $page_url = $type == 1 ? 'income_sector' : 'expense_sector';
         
-        $redirected_to = admin_url( 'admin.php?page=income_sector&inserted=true' );
+        $redirected_to = admin_url( "admin.php?page={$page_url}&inserted=true" );
         wp_redirect( $redirected_to );
         exit;
     }
