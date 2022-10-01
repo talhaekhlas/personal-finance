@@ -25,6 +25,7 @@ class Income_Expense_Sector {
 	 * Constructor of Bootstrap class.
 	 */
 	private function __construct( $sector_type ) {
+        session_start();
 		$this->form_handler();
         // add_action( 'admin_post_wpcpf-delete-sector', [ $this, 'delete_income_expense_sector' ] );
         $this->delete_income_expense_sector();
@@ -125,6 +126,8 @@ class Income_Expense_Sector {
             $redirected_to = admin_url( "admin.php?page={$page_url}&updateee=true" );
         }
 
+        $_SESSION["alert_message"] = true;
+
         wp_redirect( $redirected_to );
         exit;
     }
@@ -150,7 +153,7 @@ class Income_Expense_Sector {
         } else {
             $redirected_to = admin_url( "admin.php?page={$page}&sector-deleted-failed=true" );
         }
-
+        $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );
         exit;
     }

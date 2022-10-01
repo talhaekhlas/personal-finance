@@ -1,39 +1,7 @@
 <div class="w-2/3 mx-auto">
   <?php 
-    if ( isset( $_GET['inserted'] ) ) {
-      $success_message = $_GET['page'] == 'income_sector' ? 'Income sector added successfully' : 'Expense sector added successfully'
-  ?>
-        <div class="success-message notice notice-success">
-        <p class="text-base text-emerald-900 italic font-bold"><?php echo $success_message; ?></p>
-        </div>
-  <?php } ?>
-
-  <?php 
-    if ( isset( $_GET['updateee'] ) ) {
-      $updated_message = $_GET['page'] == 'income_sector' ? 'Income sector updated successfully' : 'Expense sector updated successfully'
-  ?>
-        <div class="success-message notice notice-success">
-        <p class="text-base text-emerald-900 italic font-bold"><?php echo $updated_message; ?></p>
-        </div>
-  <?php } ?>
-
-  <?php 
-    if ( isset( $_REQUEST['sector-deleted'] ) ) {
-      $deleted_message = $_GET['page'] == 'income_sector' ? 'Income sector deleted successfully' : 'Expense sector deleted successfully'
-  ?>
-        <div class="success-message notice notice-success">
-        <p class="text-base text-emerald-900 italic font-bold"><?php echo $deleted_message; ?></p>
-        </div>
-  <?php } ?>
-
-  <?php 
-    if ( isset( $_GET['sector-deleted-failed'] ) ) {
-      $deleted_message = $_GET['page'] == 'income_sector' ? 'Income sector failed' : 'Expense sector failed'
-  ?>
-        <div class="success-message notice notice-success">
-        <p class="text-base text-emerald-900 italic font-bold"><?php echo $deleted_message; ?></p>
-        </div>
-  <?php } ?>
+    include WPCPF_PLUGIN_DIR . '/templates/notification.php'; 
+   ?>
 
   <div>
        
