@@ -17,6 +17,24 @@
         </div>
   <?php } ?>
 
+  <?php 
+    if ( isset( $_REQUEST['sector-deleted'] ) ) {
+      $deleted_message = $_GET['page'] == 'income_sector' ? 'Income sector deleted successfully' : 'Expense sector deleted successfully'
+  ?>
+        <div class="success-message notice notice-success">
+        <p class="text-base text-emerald-900 italic font-bold"><?php echo $deleted_message; ?></p>
+        </div>
+  <?php } ?>
+
+  <?php 
+    if ( isset( $_GET['sector-deleted-failed'] ) ) {
+      $deleted_message = $_GET['page'] == 'income_sector' ? 'Income sector failed' : 'Expense sector failed'
+  ?>
+        <div class="success-message notice notice-success">
+        <p class="text-base text-emerald-900 italic font-bold"><?php echo $deleted_message; ?></p>
+        </div>
+  <?php } ?>
+
   <div>
        
         <a href="<?php echo admin_url( "admin.php?page={$sector_type}_sector&action=new" ); ?>">
@@ -30,7 +48,7 @@
   <div class="bg-white shadow-md rounded my-6">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
       <caption>
-        <p class="text-2xl text-emerald-900 font-bold"><?php echo $title; ?></p>
+        <p class="underline underline-offset-8 text-2xl text-emerald-900 font-bold"><?php echo $title; ?></p>
       </caption>
       <thead>
         <tr>
@@ -50,8 +68,13 @@
           <td class="py-4 px-6 border-b border-grey-light">
           <?php $edit_url = admin_url( "admin.php?page={$sector_type}_sector&action=edit&id={$value->id}") ; ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
-          <a href="#" onclick="JSconfirm()" class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">Delete</a>
-          <?php printf( '<a href="%s" class="submitdelete" onclick="return confirm(\'Are you sure?\');" title="%s">%s</a>', wp_nonce_url( admin_url( 'admin-post.php?action=wd-ac-delete-address&id=' . $value->id ), 'wd-ac-delete-address' ), $value->id, __( 'Delete', 'wedevs-academy' ), __( 'Delete', 'wedevs-academy' ) ); ?>
+          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page={$sector_type}_sector&delete_sector_action=wpcpf-delete-sector&id=" . $value->id ), 'wpcpf-delete-sector' ); ?>
+          <a 
+            href="#" 
+            onclick="JSconfirm('<?php echo $delete_url;  ?>')" 
+            class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">
+              Delete
+          </a>
           </td>
         </tr>
         <?php } ?>

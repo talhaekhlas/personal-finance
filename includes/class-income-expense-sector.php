@@ -26,6 +26,9 @@ class Income_Expense_Sector {
 	 */
 	private function __construct( $sector_type ) {
 		$this->form_handler();
+        // add_action( 'admin_post_wpcpf-delete-sector', [ $this, 'delete_income_expense_sector' ] );
+        $this->delete_income_expense_sector();
+
 		$this->income_expense_page( $sector_type );
 		
 	}
@@ -120,6 +123,32 @@ class Income_Expense_Sector {
                 wp_die( $update_data->get_error_message() );
             }
             $redirected_to = admin_url( "admin.php?page={$page_url}&updateee=true" );
+        }
+
+        wp_redirect( $redirected_to );
+        exit;
+    }
+
+    public function delete_income_expense_sector() {
+        
+        if ( ! isset( $_REQUEST['delete_sector_action'] ) ) {
+            return;
+        }
+        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-sector' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        $id   = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+        $page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'income_sector';
+
+        if ( delete_sector( $id ) ) {
+            $redirected_to = admin_url( "admin.php?page={$page}&sector-deleted=true" );
+        } else {
+            $redirected_to = admin_url( "admin.php?page={$page}&sector-deleted-failed=true" );
         }
 
         wp_redirect( $redirected_to );

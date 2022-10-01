@@ -133,3 +133,20 @@ function wpcpf_get_single_income_expense_sector( $id ) {
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expense_sectors WHERE id = %d", $id )
     );
 }
+
+/**
+ * Delete an address
+ *
+ * @param  int $id
+ *
+ * @return int|boolean
+ */
+function delete_sector( $id ) {
+    global $wpdb;
+
+    return $wpdb->delete(
+        $wpdb->prefix . 'income_expense_sectors',
+        [ 'id' => $id ],
+        [ '%d' ]
+    );
+}

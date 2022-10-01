@@ -1,5 +1,5 @@
-function JSconfirm(){
-    console.log('hamba')
+function JSconfirm( delete_url ){
+
     swal({
         title: "Are you sure?",
         text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -14,10 +14,12 @@ function JSconfirm(){
             icon: "success",
             timer: 3000,
           });
+          window.location.href = delete_url;
         } else {
           swal("Your imaginary file is safe!",{
             timer: 3000,
           });
+          console.log('not saved')
           
         }
       });
