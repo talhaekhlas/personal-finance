@@ -9,12 +9,13 @@
     <form action="" method="post">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Component Select</label>
-      <select class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-        <option>Surabaya</option>
-        <option>Bandung</option>
-        <option>jakarta</option>
+      <select class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+        <?php foreach ( $expense_sectors as $value) { ?>
+        <option><?php echo $value->name; ?></option>
+        <?php } ?>
       </select>
     </div>
+
     <div class="mb-5">
         <label
           for="name"
@@ -27,23 +28,37 @@
           name="name"
           id="name"
           placeholder="<?php echo $placeholder; ?>"
-          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
       </div>
       <div class="mb-5">
-        <label
-          for="name"
-          class="mb-3 block text-base font-medium text-[#07074D]"
-        >
-          Sector Name budget
-        </label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          placeholder="<?php echo $placeholder; ?>"
-          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-        />
+      <label
+              for="date"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              Start Date
+            </label>
+            <input
+              type="date"
+              name="date"
+              id="date"
+              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+      </div>
+
+      <div class="mb-5">
+      <label
+              for="date"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              End Date
+            </label>
+            <input
+              type="date"
+              name="date"
+              id="date"
+              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
 
         <?php if ( $name_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $name_error; ?></p>

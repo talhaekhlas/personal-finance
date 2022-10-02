@@ -46,7 +46,8 @@ class Expense_Budget {
 
         switch ( $action ) {
             case 'new':
-                $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
+                $expense_sectors = wpcpf_get_income_expense_sector( 2 );
+                $template       = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
                 break;
 
             case 'edit':
