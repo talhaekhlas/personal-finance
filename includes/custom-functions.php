@@ -87,7 +87,7 @@ function wpcpf_update_income_expense_sector( $args = [], $id ) {
 }
 
 /**
- * Fetch Addresses
+ * Fetch Income Expense sector.
  *
  * @param  array  $args
  *
@@ -150,3 +150,26 @@ function delete_sector( $id ) {
         [ '%d' ]
     );
 }
+
+/**
+ * Fetch Income Expense sector.
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_expense_budget() {
+    global $wpdb;
+    $order_by = 'id';
+    $order    = 'desc';
+
+    $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
+            ORDER BY {$order_by} {$order}"
+    );
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+}
+
