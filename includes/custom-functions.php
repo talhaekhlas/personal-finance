@@ -172,4 +172,5 @@ function wpcpf_get_expense_budget() {
 
     return $items;
 }
+include WPCPF_PLUGIN_DIR . '/includes/custom-files/expense-budget-functions.php';
 

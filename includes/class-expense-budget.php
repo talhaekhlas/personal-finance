@@ -77,12 +77,14 @@ class Expense_Budget {
      * @return void
      */
     public function budget_form_handler() {
-        if ( ! isset( $_POST['submit_income_expense_sector'] ) ) {
+        
+        if ( ! isset( $_POST['submit_expense_budget'] ) ) {
             return;
         }
+        echo 'talha';
 		
 
-        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'new-income-expense-sector' ) ) {
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'expense-budget' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
@@ -90,13 +92,31 @@ class Expense_Budget {
             wp_die( 'Are you cheating?' );
         }
 
-        $name     = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
-        $type     = isset( $_POST['type'] ) ? sanitize_textarea_field( $_POST['type'] ) : '';
-        $id       = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
-        $page_url = $type == 1 ? 'income_sector' : 'expense_sector';
+        $expense_sector_id = isset( $_POST['expense_sector_id'] ) ? sanitize_text_field( $_POST['expense_sector_id'] ) : '';
+        $amount            = isset( $_POST['amount'] ) ? sanitize_textarea_field( $_POST['amount'] ) : '';
+        $start_date        = isset( $_POST['start_date'] ) ? sanitize_textarea_field( $_POST['start_date'] ) : '';
+        $end_date          = isset( $_POST['end_date'] ) ? sanitize_textarea_field( $_POST['end_date'] ) : '';
+        $remarks           = isset( $_POST['remarks'] ) ? sanitize_textarea_field( $_POST['remarks'] ) : '';
+        $id                = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
 
-        if ( empty( $name ) ) {
-            $this->errors['name'] = __( 'Please provide a name', 'wpcodal-pf' );
+        if ( empty( $expense_sector_id ) ) {
+            $this->errors['expense_sector_id'] = __( 'Please Provide Expense Sector', 'wpcodal-pf' );
+        }
+
+        if ( empty( $amount ) ) {
+            $this->errors['amount'] = __( 'Please Provide Budget Amount', 'wpcodal-pf' );
+        }
+
+        if ( empty( $start_date ) ) {
+            $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
+        }
+
+        if ( empty( $end_date ) ) {
+            $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
+        }
+
+        if ( empty( $remarks ) ) {
+            $this->errors['remarks'] = __( 'Please Provide Remarks', 'wpcodal-pf' );
         }
 
         if ( ! empty( $this->errors ) ) {
@@ -104,26 +124,32 @@ class Expense_Budget {
         }
 
         if ( ! $id ) {
-            $insert_id = wpcpf_insert_income_expense_sector( [
-                'name'    => $name,
-                'type'    => (int) $type,
+            $insert_id = wpcpf_insert_expense_budget( [
+                'expense_sector_id' => $expense_sector_id,
+                'amount'            => $amount,
+                'start_date'        => $start_date,
+                'end_date'          => $end_date,
+                'remarks'           => $remarks
             ] );
     
             if ( is_wp_error( $insert_id ) ) {
                 wp_die( $insert_id->get_error_message() );
             }
 
-            $redirected_to = admin_url( "admin.php?page={$page_url}&inserted=true" );
+            $redirected_to = admin_url( "admin.php?page=expense_budget&inserted_expense_budget=true" );
         } else {
-            $update_data = wpcpf_update_income_expense_sector( [
-                'name'    => $name,
-                'type'    => (int) $type,
+            $update_data = wpcpf_update_expense_budget( [
+                'expense_sector_id' => $expense_sector_id,
+                'amount'            => $amount,
+                'start_date'        => $start_date,
+                'end_date'          => $end_date,
+                'remarks'           => $remarks
             ], $id );
     
             if ( is_wp_error( $update_data ) ) {
                 wp_die( $update_data->get_error_message() );
             }
-            $redirected_to = admin_url( "admin.php?page={$page_url}&updateee=true" );
+            $redirected_to = admin_url( "admin.php?page=expense_budget&updateee_expense_budget=true" );
         }
 
         $_SESSION["alert_message"] = true;
