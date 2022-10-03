@@ -52,9 +52,6 @@ function wpcpf_insert_expense_budget( $args = [] ) {
 
     $data = wp_parse_args( $args, $defaults );
 
-    echo '<pre>';
-    print_r($data);
-
     $inserted = $wpdb->insert(
         $wpdb->prefix . 'budget_for_expenses',
         $data,
@@ -86,29 +83,84 @@ function wpcpf_insert_expense_budget( $args = [] ) {
 function wpcpf_update_expense_budget( $args = [], $id ) {
     global $wpdb;
 
-    if ( empty( $args['name'] ) ) {
-        return new \WP_Error( 'no-name', __( 'You must provide a name.', 'wpcodal-pf' ) );
+    if ( empty( $args['expense_sector_id'] ) ) {
+        return new \WP_Error( 'no-expense-sector', __( 'You must expense sector name.', 'wpcodal-pf' ) );
     }
 
+    if ( empty( $args['amount'] ) ) {
+        return new \WP_Error( 'no-budget-amount', __( 'You must provide budget amount.', 'wpcodal-pf' ) );
+    }
+
+    if ( empty( $args['start_date'] ) ) {
+        return new \WP_Error( 'no-start-date', __( 'You must provide start date.', 'wpcodal-pf' ) );
+    }
+
+    if ( empty( $args['end_date'] ) ) {
+        return new \WP_Error( 'no-end-date', __( 'You must provide end date.', 'wpcodal-pf' ) );
+    }
+
+    if ( empty( $args['remarks'] ) ) {
+        return new \WP_Error( 'no-expense-budget-remarks', __( 'You must provide remarks.', 'wpcodal-pf' ) );
+    }
+
+
     $defaults = [
-        'name'       => '',
-        'type'    => 1,
-        'created_by' => get_current_user_id(),
+        'expense_sector_id' => 0,
+        'amount'            => 0,
+        'start_date'        => null,
+        'end_date'          => null,
+        'remarks'           => '',
+        'created_by'        => get_current_user_id(),
     ];
 
     $data = wp_parse_args( $args, $defaults );
 
     $updated = $wpdb->update(
-        $wpdb->prefix . 'income_expense_sectors',
+        $wpdb->prefix . 'budget_for_expenses',
         $data,
         [ 'id' => $id ],
         [
+            '%d',
+            '%d',
+            '%s',
+            '%s',
             '%s',
             '%d',
-            '%d'
         ],
         [ '%d' ]
     );
 
     return $updated;
+}
+
+/**
+ * Fetch a single expense budget from the DB
+ *
+ * @param  int $id
+ *
+ * @return object
+ */
+function wpcpf_get_single_expense_budget( $id ) {
+    global $wpdb;
+
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE id = %d", $id )
+    );
+}
+
+/**
+ * Delete expense budget
+ *
+ * @param  int $id
+ *
+ * @return int|boolean
+ */
+function delete_expense_budget( $id ) {
+    global $wpdb;
+
+    return $wpdb->delete(
+        $wpdb->prefix . 'budget_for_expenses',
+        [ 'id' => $id ],
+        [ '%d' ]
+    );
 }

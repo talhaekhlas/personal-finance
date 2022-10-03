@@ -18,6 +18,12 @@ $noficaiton_message = null;
       $noficaiton_message = __("Expense Budget Updated Successfully");
     }
 
+    if ( isset( $_GET['expense_budget_deleted'] ) ) {
+      $noficaiton_message = __("Expense Budget Deleted Successfully");
+    }
+
+    
+
     if ( $noficaiton_message && $_SESSION && $_SESSION['alert_message'] ) { ?>
         <div class="success-message notice notice-success">
           <p class="text-base text-emerald-900 italic font-bold"><?php echo $noficaiton_message; ?></p>

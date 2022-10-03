@@ -35,14 +35,14 @@
         ?>
         <tr class="hover:bg-grey-lighter">
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light"><?php echo $expense_sector_by_id[ $value->expense_sector_id ]; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->start_date; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->end_date; ?></td>
           <td class="py-4 px-6 border-b border-grey-light">
           <?php $edit_url = admin_url( "admin.php?page=expense_budget&action=edit&id={$value->id}") ; ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
-          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=expense_budget&delete_sector_action=wpcpf-delete-sector&id=" . $value->id ), 'wpcpf-delete-sector' ); ?>
+          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=expense_budget&delete_expense_budget_action=wpcpf-delete-expense-budget&id=" . $value->id ), 'wpcpf-delete-expense-budget' ); ?>
           <a 
             href="#" 
             onclick="JSconfirm('<?php echo $delete_url;  ?>')" 

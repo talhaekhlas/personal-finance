@@ -28,7 +28,7 @@ class Expense_Budget {
         session_start();
 		$this->budget_form_handler();
         
-        $this->delete_income_expense_sector();
+        $this->delete_expense_budget();
 
 		$this->expense_budget_page();
 		
@@ -41,18 +41,22 @@ class Expense_Budget {
      */
     public function expense_budget_page() {
         $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
-        $url    = isset( $_GET['page'] ) ? $_GET['page'] : 'income_sector';
-        
+        $expense_sectors = wpcpf_get_income_expense_sector( 2 ); // 2 means expense sector.
+
+        $expense_sector_by_id = [];
+
+        foreach ($expense_sectors as $value) {
+            $expense_sector_by_id[$value->id] = $value->name;
+        }
 
         switch ( $action ) {
             case 'new':
-                $expense_sectors = wpcpf_get_income_expense_sector( 2 );
                 $template        = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
                 break;
 
             case 'edit':
-                $id       = isset( $_GET['id'] ) ? $_GET['id'] : null;
-                $single_income_expense = wpcpf_get_single_income_expense_sector( $id );
+                $id                    = isset( $_GET['id'] ) ? $_GET['id'] : null;
+                $single_expense_budget = wpcpf_get_single_expense_budget( $id );
                 $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/edit.php';
                 break;
 
@@ -157,12 +161,12 @@ class Expense_Budget {
         exit;
     }
 
-    public function delete_income_expense_sector() {
+    public function delete_expense_budget() {
         
-        if ( ! isset( $_REQUEST['delete_sector_action'] ) ) {
+        if ( ! isset( $_REQUEST['delete_expense_budget_action'] ) ) {
             return;
         }
-        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-sector' ) ) {
+        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-expense-budget' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
@@ -173,13 +177,15 @@ class Expense_Budget {
         $id   = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
         $page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'income_sector';
 
-        if ( delete_sector( $id ) ) {
-            $redirected_to = admin_url( "admin.php?page={$page}&sector-deleted=true" );
+        if ( delete_expense_budget( $id ) ) {
+            $redirected_to = admin_url( "admin.php?page=expense_budget&expense_budget_deleted=true" );
         } else {
-            $redirected_to = admin_url( "admin.php?page={$page}&sector-deleted-failed=true" );
+            $redirected_to = admin_url( "admin.php?page=expense_budget&expense_budget_deleted_failed=true" );
         }
         $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );
         exit;
     }
 }
+
+
