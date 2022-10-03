@@ -4,6 +4,7 @@
   $start_date_error     = null;
   $end_date_error       = null;
   $remarks_error        = null;
+  $greater_startd_error = null;
 
   if ( isset( $this->errors ) ) {
       $expense_sector_error = isset( $this->errors['expense_sector_id'] ) ? $this->errors['expense_sector_id'] : null;
@@ -11,6 +12,7 @@
       $start_date_error     = isset( $this->errors['start_date'] ) ? $this->errors['start_date'] : null;
       $end_date_error       = isset( $this->errors['end_date'] ) ? $this->errors['end_date'] : null;
       $remarks_error        = isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
+      $greater_startd_error = isset( $this->errors['greater_start_date'] ) ? $this->errors['greater_start_date'] : null;
   }
 ?>
 <div class="flex items-center justify-center p-12">
@@ -61,6 +63,10 @@
             />
             <?php if ( $start_date_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $start_date_error; ?></p>
+            <?php } ?>
+
+            <?php if ( $greater_startd_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $greater_startd_error; ?></p>
             <?php } ?>
       </div>
 

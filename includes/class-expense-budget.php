@@ -118,6 +118,8 @@ class Expense_Budget {
             $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
         }
 
+
+
         if ( empty( $remarks ) ) {
             $this->errors['remarks'] = __( 'Please Provide Remarks', 'wpcodal-pf' );
         }
@@ -125,6 +127,17 @@ class Expense_Budget {
         if ( ! empty( $this->errors ) ) {
             return;
         }
+
+        if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
+            $this->errors['greater_start_date'] = __( 'Start date will no be greater than end date', 'wpcodal-pf' );
+            return;
+        }
+
+        $check_data_in_this_range = wpcpf_check_data_in_this_range( $expense_sector_id, $start_date );
+
+        echo '<pre>';
+        print_r($check_data_in_this_range);
+        return null;
 
         if ( ! $id ) {
             $insert_id = wpcpf_insert_expense_budget( [

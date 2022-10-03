@@ -51,6 +51,7 @@ function wpcpf_insert_expense_budget( $args = [] ) {
     ];
 
     $data = wp_parse_args( $args, $defaults );
+   
 
     $inserted = $wpdb->insert(
         $wpdb->prefix . 'budget_for_expenses',
@@ -67,7 +68,7 @@ function wpcpf_insert_expense_budget( $args = [] ) {
     );
 
     if ( ! $inserted ) {
-        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', 'wpcodal-pf' ) );
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data1', 'wpcodal-pf' ) );
     }
 
     return $wpdb->insert_id;
@@ -147,6 +148,24 @@ function wpcpf_get_single_expense_budget( $id ) {
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE id = %d", $id )
     );
 }
+
+/**
+ * Fetch a single expense budget from the DB
+ *
+ * @param  int $id
+ *
+ * @return object
+ */
+function wpcpf_check_data_in_this_range( $expense_sector_id, $start_date ) {
+    return $start_date;
+    global $wpdb;
+
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE expense_sector_id = %d and WHERE end_date >= %s", $expense_sector_id, $start_date
+    ));
+}
+
+
 
 /**
  * Delete expense budget
