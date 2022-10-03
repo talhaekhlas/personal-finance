@@ -78,14 +78,14 @@ class Table_Creation {
 
         $schema = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}budget_for_expenses` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-          `sector_for_expense_id` int(11) unsigned NOT NULL,
+          `expense_sector_id` int(11) unsigned NOT NULL,
           `amount` int(11) unsigned NOT NULL,
           `start_date` date NOT NULL,
           `end_date` date NOT NULL,
           `remarks` varchar(300) DEFAULT NULL,
           `created_by` bigint(20) unsigned NOT NULL,
           PRIMARY KEY (`id`),
-          FOREIGN KEY (`sector_for_expense_id`) REFERENCES `{$wpdb->prefix}income_expense_sectors`(`id`)
+          FOREIGN KEY (`expense_sector_id`) REFERENCES `{$wpdb->prefix}income_expense_sectors`(`id`)
         ) $charset_collate";
 
         if ( ! function_exists( 'dbDelta' ) ) {

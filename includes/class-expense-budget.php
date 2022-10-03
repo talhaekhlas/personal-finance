@@ -47,13 +47,13 @@ class Expense_Budget {
         switch ( $action ) {
             case 'new':
                 $expense_sectors = wpcpf_get_income_expense_sector( 2 );
-                $template       = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
+                $template        = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
                 break;
 
             case 'edit':
                 $id       = isset( $_GET['id'] ) ? $_GET['id'] : null;
                 $single_income_expense = wpcpf_get_single_income_expense_sector( $id );
-                $template = WPCPF_PLUGIN_DIR . '/templates/income-expense-sector/edit.php';
+                $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/edit.php';
                 break;
 
             case 'view':
@@ -81,7 +81,6 @@ class Expense_Budget {
         if ( ! isset( $_POST['submit_expense_budget'] ) ) {
             return;
         }
-        echo 'talha';
 		
 
         if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'expense-budget' ) ) {
