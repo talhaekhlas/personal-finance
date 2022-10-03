@@ -157,11 +157,11 @@ function wpcpf_get_single_expense_budget( $id ) {
  * @return object
  */
 function wpcpf_check_data_in_this_range( $expense_sector_id, $start_date ) {
-    return $start_date;
     global $wpdb;
-
+    $date    = new DateTime($start_date);
+    
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE expense_sector_id = %d and WHERE end_date >= %s", $expense_sector_id, $start_date
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE end_date >= %s AND expense_sector_id=%d", $start_date, $expense_sector_id
     ));
 }
 
