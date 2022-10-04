@@ -26,7 +26,8 @@ class Menu {
 	 */
 	private function __construct() {
 		require_once __DIR__ . '/class-income-expense-sector.php';
-        require_once __DIR__ . '/class-expense-budget.php';
+    require_once __DIR__ . '/class-expense-budget.php';
+    require_once __DIR__ . '/class-income.php';
 		add_action( 'admin_menu', [$this, 'admin_menu'] );
 	}
 
@@ -41,9 +42,13 @@ class Menu {
         add_submenu_page( $parent_slug, __( 'Income Sector', 'wpcodal-pf' ), __( 'Income Sector', 'wpcodal-pf' ), $capability, $parent_slug, [ $this, 'income_sector' ] );
         $expense_sector_hook = add_submenu_page( $parent_slug, __( 'Expense Sector', 'wpcodal-pf' ), __( 'Expense Sector', 'wpcodal-pf' ), $capability, 'expense_sector', [ $this, 'expense_sector' ] );
         $expense_budget_hook = add_submenu_page( $parent_slug, __( 'Expense Budget', 'wpcodal-pf' ), __( 'Expense Budget', 'wpcodal-pf' ), $capability, 'expense_budget', [ $this, 'expense_budget' ] );
+        $income_hook = add_submenu_page( $parent_slug, __( 'Income', 'wpcodal-pf' ), __( 'Income', 'wpcodal-pf' ), $capability, 'income', [ $this, 'income' ] );
+        $expense_hook = add_submenu_page( $parent_slug, __( 'Expense', 'wpcodal-pf' ), __( 'Expense', 'wpcodal-pf' ), $capability, 'expense', [ $this, 'expense' ] );
         add_action( 'admin_head-' . $main_hook, [ $this, 'enqueue_assets' ] );
         add_action( 'admin_head-' . $expense_sector_hook, [ $this, 'enqueue_assets' ] );
         add_action( 'admin_head-' . $expense_budget_hook, [ $this, 'enqueue_assets' ] );
+        add_action( 'admin_head-' . $income_hook, [ $this, 'enqueue_assets' ] );
+        add_action( 'admin_head-' . $expense_hook, [ $this, 'enqueue_assets' ] );
     }
 
 	/**
@@ -51,6 +56,24 @@ class Menu {
      */
     public function income_sector() {
 		Income_Expense_Sector::instance('income');
+    }
+
+    /**
+     * Income.
+     * 
+     * @return void
+     */
+    public function income() {
+      Income::instance();
+    }
+
+    /**
+     * Expense.
+     * 
+     * @return void
+     */
+    public function expense() {
+      Expense::instance();
     }
 
     /**
