@@ -39,6 +39,7 @@ class Table_Creation {
     public function activate() {
         $this->create_income_expense_sectors_table();
         $this->create_budget_for_expenses_table();
+        $this->create_income_expense_table();
     }
 
     /**
@@ -86,6 +87,39 @@ class Table_Creation {
           `created_by` bigint(20) unsigned NOT NULL,
           PRIMARY KEY (`id`),
           FOREIGN KEY (`expense_sector_id`) REFERENCES `{$wpdb->prefix}income_expense_sectors`(`id`)
+          ON DELETE CASCADE
+        ) $charset_collate";
+
+        if ( ! function_exists( 'dbDelta' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        }
+
+        dbDelta( $schema );
+    }
+
+    /**
+     * Create income expense budget table.
+     *
+     * @return void
+     */
+    public function create_income_expense_table() {
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $schema = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}income_expenses` (
+          `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `income_sector_id` int(11) unsigned DEFAULT NULL,
+          `budget_for_expense_id` int(11) unsigned DEFAULT NULL,
+          `amount` int(11) unsigned NOT NULL,
+          `entry_date` date NOT NULL,
+          `remarks` varchar(300) DEFAULT NULL,
+          `created_by` bigint(20) unsigned NOT NULL,
+          PRIMARY KEY (`id`),
+          FOREIGN KEY (`income_sector_id`) REFERENCES `{$wpdb->prefix}income_expense_sectors`(`id`)
+          ON DELETE CASCADE,
+          FOREIGN KEY (`budget_for_expense_id`) REFERENCES `{$wpdb->prefix}budget_for_expenses`(`id`)
+          ON DELETE CASCADE
         ) $charset_collate";
 
         if ( ! function_exists( 'dbDelta' ) ) {

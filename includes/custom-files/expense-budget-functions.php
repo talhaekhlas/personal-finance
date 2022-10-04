@@ -11,6 +11,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Fetch budget for expense.
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_expense_budget() {
+    global $wpdb;
+    $order_by = 'id';
+    $order    = 'desc';
+
+    $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
+            ORDER BY %s %s ", $order_by, $order
+    );
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+}
+
+/**
  * Insert a new expense budget.
  *
  * @param  array  $args
@@ -68,7 +90,7 @@ function wpcpf_insert_expense_budget( $args = [] ) {
     );
 
     if ( ! $inserted ) {
-        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data1', 'wpcodal-pf' ) );
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', 'wpcodal-pf' ) );
     }
 
     return $wpdb->insert_id;
