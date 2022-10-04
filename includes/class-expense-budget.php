@@ -104,24 +104,32 @@ class Expense_Budget {
 
         if ( empty( $expense_sector_id ) ) {
             $this->errors['expense_sector_id'] = __( 'Please Provide Expense Sector', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['expense_sector_id'] = $expense_sector_id;
         }
 
         if ( empty( $amount ) ) {
             $this->errors['amount'] = __( 'Please Provide Budget Amount', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['amount'] = $amount;
         }
 
         if ( empty( $start_date ) ) {
             $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['start_date'] = $start_date;
         }
 
         if ( empty( $end_date ) ) {
             $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['end_date'] = $end_date;
         }
-
-
 
         if ( empty( $remarks ) ) {
             $this->errors['remarks'] = __( 'Please Provide Remarks', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['remarks'] = $remarks;
         }
 
         if ( ! empty( $this->errors ) ) {
@@ -133,11 +141,12 @@ class Expense_Budget {
             return;
         }
 
-        $check_data_in_this_range = wpcpf_check_data_in_this_range( $expense_sector_id, $start_date );
+        $check_data_in_this_range = wpcpf_check_data_in_this_range( $expense_sector_id, $start_date, $id );
 
-        echo '<pre>';
-        print_r($check_data_in_this_range);
-        return null;
+        if ( $check_data_in_this_range ) {
+            $this->errors['already_exist_budget'] = __( 'Expense budget in this sector and range exist already', 'wpcodal-pf' );
+            return;
+        }
 
         if ( ! $id ) {
             $insert_id = wpcpf_insert_expense_budget( [

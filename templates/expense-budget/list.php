@@ -4,14 +4,13 @@
    ?>
 
   <div>
-       
-        <a href="<?php echo admin_url( "admin.php?page=expense_budget&action=new" ); ?>">
-        <button
-          class="hover:shadow-form rounded-md bg-[#6A64F1] mt-5 py-2 px-8 text-base font-semibold text-white outline-none"
-        >
-          Add New
-        </button>
-        </a>
+    <a href="<?php echo admin_url( "admin.php?page=expense_budget&action=new" ); ?>">
+    <button
+      class="hover:shadow-form rounded-md bg-[#6A64F1] mt-5 py-2 px-8 text-base font-semibold text-white outline-none"
+    >
+      Add New
+    </button>
+    </a>
   </div>
   <div class="bg-white shadow-md rounded my-6">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->

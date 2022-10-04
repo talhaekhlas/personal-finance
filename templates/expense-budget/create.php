@@ -5,6 +5,7 @@
   $end_date_error       = null;
   $remarks_error        = null;
   $greater_startd_error = null;
+  $budget_exist_error   = null;
 
   if ( isset( $this->errors ) ) {
       $expense_sector_error = isset( $this->errors['expense_sector_id'] ) ? $this->errors['expense_sector_id'] : null;
@@ -13,10 +14,22 @@
       $end_date_error       = isset( $this->errors['end_date'] ) ? $this->errors['end_date'] : null;
       $remarks_error        = isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
       $greater_startd_error = isset( $this->errors['greater_start_date'] ) ? $this->errors['greater_start_date'] : null;
+      $budget_exist_error   = isset( $this->errors['already_exist_budget'] ) ? $this->errors['already_exist_budget'] : null;
   }
+
+  
+  $prev_expense_sector_id = isset( $this->prev_data ) && $this->prev_data['expense_sector_id'] ? $this->prev_data['expense_sector_id'] : null;
+  $prev_amount = isset( $this->prev_data ) && $this->prev_data['amount'] ? $this->prev_data['amount'] : null;
+  $prev_start_date = isset( $this->prev_data ) && $this->prev_data['start_date'] ? $this->prev_data['start_date'] : null;
+  $prev_end_date = isset( $this->prev_data ) && $this->prev_data['end_date'] ? $this->prev_data['end_date'] : null;
+  $prev_remarks = isset( $this->prev_data ) && $this->prev_data['remarks'] ? $this->prev_data['remarks'] : null;
+
 ?>
 <div class="flex items-center justify-center p-12">
   <div class="mx-auto w-full max-w-[550px]">
+    <?php if ( $budget_exist_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $budget_exist_error; ?></p>
+    <?php } ?>
     <form action="" method="post">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Expense Sector Name</label>
@@ -40,6 +53,7 @@
         <input
           type="text"
           name="amount"
+          value="<?php echo $prev_amount; ?>"
           id="amount"
           placeholder="<?php _e("Enter Budget Amount", "wpcodal-pf"); ?>"
           class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
