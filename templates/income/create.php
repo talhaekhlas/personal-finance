@@ -1,8 +1,6 @@
 <?php 
   $expense_sector_error = null;
   $amount_error         = null;
-  $start_date_error     = null;
-  $end_date_error       = null;
   $remarks_error        = null;
   $greater_startd_error = null;
   $budget_exist_error   = null;
@@ -34,7 +32,7 @@
     <form action="" method="post">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Income Sector Name</label>
-      <select name="expense_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+      <select name="income_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
         <?php foreach ( $income_sectors as $value) { ?>
         <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
         <?php } ?>

@@ -22,6 +22,18 @@ $noficaiton_message = null;
       $noficaiton_message = __("Expense Budget Deleted Successfully");
     }
 
+    if ( isset( $_GET['inserted_income'] ) ) {
+      $noficaiton_message = __("Income Saved Successfully");
+    }
+
+    if ( isset( $_GET['updateee_income'] ) ) {
+      $noficaiton_message = __("Income Updated Successfully");
+    }
+
+    if ( isset( $_GET['income_deleted'] ) ) {
+      $noficaiton_message = __("Income Deleted Successfully");
+    }
+
     
 
     if ( $noficaiton_message && $_SESSION && $_SESSION['alert_message'] ) { ?>

@@ -28,7 +28,7 @@ class Income {
         session_start();
 		$this->income_form_handler();
         
-        $this->delete_expense_budget();
+        $this->delete_income();
 
 		$this->income_page();
 		
@@ -43,15 +43,21 @@ class Income {
         $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
         $income_sectors = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
 
+        $income_sector_by_id = [];
+
+        foreach ($income_sectors as $value) {
+            $income_sector_by_id[$value->id] = $value->name;
+        }
+
         switch ( $action ) {
             case 'new':
                 $template        = WPCPF_PLUGIN_DIR . '/templates/income/create.php';
                 break;
 
             case 'edit':
-                $id                    = isset( $_GET['id'] ) ? $_GET['id'] : null;
-                $single_expense_budget = wpcpf_get_single_expense_budget( $id );
-                $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/edit.php';
+                $id            = isset( $_GET['id'] ) ? $_GET['id'] : null;
+                $single_income = wpcpf_get_single_income( $id );
+                $template      = WPCPF_PLUGIN_DIR . '/templates/income/edit.php';
                 break;
 
             case 'view':
@@ -125,18 +131,6 @@ class Income {
             return;
         }
 
-        // if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
-        //     $this->errors['greater_start_date'] = __( 'Start date will no be greater than end date', 'wpcodal-pf' );
-        //     return;
-        // }
-
-        // $check_data_in_this_range = wpcpf_check_data_in_this_range( $expense_sector_id, $entry_date, $id );
-
-        // if ( $check_data_in_this_range ) {
-        //     $this->errors['already_exist_budget'] = __( 'Expense budget in this sector and range exist already', 'wpcodal-pf' );
-        //     return;
-        // }
-
         if ( ! $id ) {
             $insert_id = wpcpf_insert_income( [
                 'income_sector_id' => $income_sector_id,
@@ -149,19 +143,19 @@ class Income {
                 wp_die( $insert_id->get_error_message() );
             }
 
-            $redirected_to = admin_url( "admin.php?page=expense_budget&inserted_expense_budget=true" );
+            $redirected_to = admin_url( "admin.php?page=income&inserted_income=true" );
         } else {
-            $update_data = wpcpf_update_expense_budget( [
-                'expense_sector_id' => $income_sector_id,
-                'amount'            => $amount,
-                'start_date'        => $entry_date,
-                'remarks'           => $remarks
+            $update_data = wpcpf_update_income( [
+                'income_sector_id' => $income_sector_id,
+                'amount'           => $amount,
+                'entry_date'       => $entry_date,
+                'remarks'          => $remarks
             ], $id );
     
             if ( is_wp_error( $update_data ) ) {
                 wp_die( $update_data->get_error_message() );
             }
-            $redirected_to = admin_url( "admin.php?page=expense_budget&updateee_expense_budget=true" );
+            $redirected_to = admin_url( "admin.php?page=income&updateee_income=true" );
         }
 
         $_SESSION["alert_message"] = true;
@@ -170,12 +164,12 @@ class Income {
         exit;
     }
 
-    public function delete_expense_budget() {
+    public function delete_income() {
         
-        if ( ! isset( $_REQUEST['delete_expense_budget_action'] ) ) {
+        if ( ! isset( $_REQUEST['delete_income_action'] ) ) {
             return;
         }
-        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-expense-budget' ) ) {
+        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-income' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
@@ -186,10 +180,10 @@ class Income {
         $id   = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
         $page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'income_sector';
 
-        if ( delete_expense_budget( $id ) ) {
-            $redirected_to = admin_url( "admin.php?page=expense_budget&expense_budget_deleted=true" );
+        if ( delete_income( $id ) ) {
+            $redirected_to = admin_url( "admin.php?page=income&income_deleted=true" );
         } else {
-            $redirected_to = admin_url( "admin.php?page=expense_budget&expense_budget_deleted_failed=true" );
+            $redirected_to = admin_url( "admin.php?page=expense_budget&income_deleted_failed=true" );
         }
         $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );

@@ -61,7 +61,7 @@ function wpcpf_insert_income( $args = [] ) {
 
 
     $defaults = [
-        'expense_sector_id'     => null,
+        'income_sector_id'     => null,
         'budget_for_expense_id' => null,
         'amount'            => 0,
         'entry_date'        => null,
@@ -103,20 +103,16 @@ function wpcpf_insert_income( $args = [] ) {
 function wpcpf_update_income( $args = [], $id ) {
     global $wpdb;
 
-    if ( empty( $args['expense_sector_id'] ) ) {
-        return new \WP_Error( 'no-expense-sector', __( 'You must expense sector name.', 'wpcodal-pf' ) );
+    if ( empty( $args['income_sector_id'] ) ) {
+        return new \WP_Error( 'no-income-sector', __( 'You must provide income sector name.', 'wpcodal-pf' ) );
     }
 
     if ( empty( $args['amount'] ) ) {
-        return new \WP_Error( 'no-budget-amount', __( 'You must provide budget amount.', 'wpcodal-pf' ) );
+        return new \WP_Error( 'no-income-amount', __( 'You must provide income amount.', 'wpcodal-pf' ) );
     }
 
-    if ( empty( $args['start_date'] ) ) {
-        return new \WP_Error( 'no-start-date', __( 'You must provide start date.', 'wpcodal-pf' ) );
-    }
-
-    if ( empty( $args['end_date'] ) ) {
-        return new \WP_Error( 'no-end-date', __( 'You must provide end date.', 'wpcodal-pf' ) );
+    if ( empty( $args['entry_date'] ) ) {
+        return new \WP_Error( 'no-entry-date', __( 'You must provide entry date.', 'wpcodal-pf' ) );
     }
 
     if ( empty( $args['remarks'] ) ) {
@@ -125,10 +121,10 @@ function wpcpf_update_income( $args = [], $id ) {
 
 
     $defaults = [
-        'expense_sector_id' => 0,
+        'income_sector_id'     => null,
+        'budget_for_expense_id' => null,
         'amount'            => 0,
-        'start_date'        => null,
-        'end_date'          => null,
+        'entry_date'        => null,
         'remarks'           => '',
         'created_by'        => get_current_user_id(),
     ];
@@ -136,13 +132,13 @@ function wpcpf_update_income( $args = [], $id ) {
     $data = wp_parse_args( $args, $defaults );
 
     $updated = $wpdb->update(
-        $wpdb->prefix . 'budget_for_expenses',
+        $wpdb->prefix . 'income_expenses',
         $data,
         [ 'id' => $id ],
         [
             '%d',
             '%d',
-            '%s',
+            '%d',
             '%s',
             '%s',
             '%d',
@@ -164,7 +160,7 @@ function wpcpf_get_single_income( $id ) {
     global $wpdb;
 
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE id = %d", $id )
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expenses WHERE id = %d", $id )
     );
 }
 
@@ -204,7 +200,7 @@ function delete_income( $id ) {
     global $wpdb;
 
     return $wpdb->delete(
-        $wpdb->prefix . 'budget_for_expenses',
+        $wpdb->prefix . 'income_expenses',
         [ 'id' => $id ],
         [ '%d' ]
     );
