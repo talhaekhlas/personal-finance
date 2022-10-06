@@ -100,6 +100,18 @@ class Menu {
         wp_enqueue_script( 'tailwind-script' );
         wp_enqueue_script( 'wpcpf-sweetalert-js' );
         wp_enqueue_script( 'wpcpf-admin-js' );
+
+        $action    = 'ajd_protected';
+			  $ajd_nonce = wp_create_nonce( $action );
+
+        wp_localize_script(
+          'wpcpf-admin-js',
+          'some_localize_info',
+          array(
+            'ajax_url'     => admin_url( 'admin-ajax.php' ),
+					  'ajd_nonce'    => $ajd_nonce,
+          )
+        );
     }
 
 }

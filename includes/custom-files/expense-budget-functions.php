@@ -212,3 +212,21 @@ function delete_expense_budget( $id ) {
         [ '%d' ]
     );
 }
+
+/**
+ * Expense budget id by date
+ *
+ * @param  string $entry_date
+ *
+ * @return object
+ */
+function wpcpf_expense_budget_id_by_date( $entry_date ) {
+    global $wpdb;
+
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
+        INNER JOIN {$wpdb->prefix}income_expense_sectors
+            ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
+        WHERE {$wpdb->prefix}budget_for_expenses.start_date <= %s AND {$wpdb->prefix}budget_for_expenses.end_date >=%s", $entry_date, $entry_date
+    ));
+}

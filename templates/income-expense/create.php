@@ -26,7 +26,10 @@
             <p class="text-base text-red-600 italic font-bold"><?php echo $budget_exist_error; ?></p>
     <?php } ?> -->
     <form action="" method="post">
-    <div class="mb-5">
+
+    <?php
+      if ( $page == 'income' ) {?>
+      <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
       <select name="income_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
         <?php foreach ( $income_sectors as $value) { ?>
@@ -37,6 +40,46 @@
             <p class="text-base text-red-600 italic font-bold"><?php echo $income_sector_error; ?></p>
       <?php } ?>
     </div>
+    <?php } ?>
+    
+    
+    <div class="mb-5">
+      <label
+              for="date"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+            <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Date
+            </label>
+            <input
+              type="date"
+              name="entry_date"
+              value="<?php echo $prev_entry_date; ?>"
+              id="entry_date"
+              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+            <?php if ( $entry_date_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $entry_date_error; ?></p>
+            <?php } ?>
+
+            <?php if ( $greater_entry_date_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $greater_entry_date_error; ?></p>
+            <?php } ?>
+    </div>
+
+    <?php
+      if ( $page == 'expense' ) {?>
+      <div class="mb-5">
+      <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
+      <select name="income_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+        <?php foreach ( $income_sectors as $value) { ?>
+        <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
+        <?php } ?>
+      </select>
+      <?php if ( $income_sector_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $income_sector_error; ?></p>
+      <?php } ?>
+    </div>
+    <?php } ?>
 
     <div class="mb-5">
         <label
@@ -57,28 +100,7 @@
             <p class="text-base text-red-600 italic font-bold"><?php echo $amount_error; ?></p>
         <?php } ?>
       </div>
-      <div class="mb-5">
-      <label
-              for="date"
-              class="mb-3 block text-base font-medium text-[#07074D]"
-            >
-              Income Date
-            </label>
-            <input
-              type="date"
-              name="entry_date"
-              value="<?php echo $prev_entry_date; ?>"
-              id="entry_date"
-              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-            />
-            <?php if ( $entry_date_error ) { ?>
-            <p class="text-base text-red-600 italic font-bold"><?php echo $entry_date_error; ?></p>
-            <?php } ?>
-
-            <?php if ( $greater_entry_date_error ) { ?>
-            <p class="text-base text-red-600 italic font-bold"><?php echo $greater_entry_date_error; ?></p>
-            <?php } ?>
-      </div>
+      
 
       <div class="mb-5">
       <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">

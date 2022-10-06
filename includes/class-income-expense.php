@@ -45,9 +45,6 @@ class Income_Expense {
         $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
 
-        // echo '<pre>';
-        print_r($budget_list_for_expense);
-
         $income_sector_by_id = [];
 
         foreach ($income_sectors as $value) {
