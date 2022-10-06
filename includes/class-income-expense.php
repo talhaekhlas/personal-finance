@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Add styles of scripts files inside this class.
  */
-class Income {
+class Income_Expense {
 
 	use Singleton;
 
@@ -30,7 +30,7 @@ class Income {
         
         $this->delete_income();
 
-		$this->income_page();
+		$this->income_expense_page();
 		
 	}
 
@@ -39,9 +39,14 @@ class Income {
      *
      * @return void
      */
-    public function income_page() {
-        $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
-        $income_sectors = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
+    public function income_expense_page() {
+        $action                  = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
+        $page                    = isset( $_GET['page'] ) ? $_GET['page'] : 'list';
+        $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
+        $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
+
+        echo '<pre>';
+        print_r($budget_list_for_expense);
 
         $income_sector_by_id = [];
 
@@ -51,13 +56,13 @@ class Income {
 
         switch ( $action ) {
             case 'new':
-                $template        = WPCPF_PLUGIN_DIR . '/templates/income/create.php';
+                $template        = WPCPF_PLUGIN_DIR . '/templates/income-expense/create.php';
                 break;
 
             case 'edit':
                 $id            = isset( $_GET['id'] ) ? $_GET['id'] : null;
                 $single_income = wpcpf_get_single_income( $id );
-                $template      = WPCPF_PLUGIN_DIR . '/templates/income/edit.php';
+                $template      = WPCPF_PLUGIN_DIR . '/templates/income-expense/edit.php';
                 break;
 
             case 'view':
@@ -65,8 +70,8 @@ class Income {
                 break;
 
             default:
-                $data     = wpcpf_get_income();
-                $template = WPCPF_PLUGIN_DIR . '/templates/income/list.php';
+                $data     = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
+                $template = WPCPF_PLUGIN_DIR . '/templates/income-expense/list.php';
                 break;
         }
 
@@ -129,8 +134,9 @@ class Income {
             return;
         }
 
-        if ( strtotime( $entry_date ) > strtotime( strtotime("now") ) ) {
+        if ( strtotime( $entry_date ) > strtotime("now") ) {
             $this->errors['greater_entry_date'] = __( 'Entry date should not be greater than present date.', 'wpcodal-pf' );
+            
             return;
         }
 

@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+
 /**
- * Fetch budget for expense.
+ * Fetch expense list.
  *
  * @param  array  $args
  *
@@ -32,6 +33,54 @@ function wpcpf_get_income() {
 
     return $items;
 }
+
+/**
+ * Fetch expene list.
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_expense() {
+    global $wpdb;
+    $order_by = 'id';
+    $order    = 'desc';
+
+    $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}income_expenses
+            WHERE budget_for_expense_id IS NOT NULL 
+            ORDER BY %s %s ", $order_by, $order
+    );
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+}
+
+/**
+ * Fetch expense list.
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_budget_list_for_expense() {
+    global $wpdb;
+    $order_by = 'id';
+    $order    = 'desc';
+
+    $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}budget_for_expenses
+            INNER JOIN {$wpdb->prefix}income_expense_sectors
+            ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
+            ORDER BY %s %s ", $order_by, $order
+    );
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+}
+
 
 /**
  * Insert a new expense budget.
