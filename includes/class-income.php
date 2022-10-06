@@ -119,8 +119,6 @@ class Income {
             $this->prev_data['entry_date'] = $entry_date;
         }
 
-       
-
         if ( empty( $remarks ) ) {
             $this->errors['remarks'] = __( 'Please Provide Remarks', 'wpcodal-pf' );
         } else {
@@ -130,6 +128,13 @@ class Income {
         if ( ! empty( $this->errors ) ) {
             return;
         }
+
+        if ( strtotime( $entry_date ) > strtotime( strtotime("now") ) ) {
+            $this->errors['greater_entry_date'] = __( 'Entry date should not be greater than present date.', 'wpcodal-pf' );
+            return;
+        }
+
+        
 
         if ( ! $id ) {
             $insert_id = wpcpf_insert_income( [

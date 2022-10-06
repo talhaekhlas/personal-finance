@@ -1,28 +1,20 @@
 <?php 
-  $expense_sector_error = null;
-  $amount_error         = null;
-  $start_date_error     = null;
-  $end_date_error       = null;
-  $remarks_error        = null;
-  $greater_startd_error = null;
-  $budget_exist_error   = null;
-
-  if ( isset( $this->errors ) ) {
-      $expense_sector_error = isset( $this->errors['expense_sector_id'] ) ? $this->errors['expense_sector_id'] : null;
-      $amount_error         = isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
-      $start_date_error     = isset( $this->errors['start_date'] ) ? $this->errors['start_date'] : null;
-      $end_date_error       = isset( $this->errors['end_date'] ) ? $this->errors['end_date'] : null;
-      $remarks_error        = isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
-      $greater_startd_error = isset( $this->errors['greater_start_date'] ) ? $this->errors['greater_start_date'] : null;
-      $budget_exist_error   = isset( $this->errors['already_exist_budget'] ) ? $this->errors['already_exist_budget'] : null;
-  }
-
+  //Nofication error message.
+  $expense_sector_error = isset( $this->errors ) && isset( $this->errors['expense_sector_id'] ) ? $this->errors['expense_sector_id'] : null;
+  $amount_error         = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
+  $start_date_error     = isset( $this->errors ) && isset( $this->errors['start_date'] ) ? $this->errors['start_date'] : null;
+  $end_date_error       = isset( $this->errors ) && isset( $this->errors['end_date'] ) ? $this->errors['end_date'] : null;
+  $remarks_error        = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
+  $greater_startd_error = isset( $this->errors ) && isset( $this->errors['greater_start_date'] ) ? $this->errors['greater_start_date'] : null;
+  $budget_exist_error   = isset( $this->errors ) && isset( $this->errors['already_exist_budget'] ) ? $this->errors['already_exist_budget'] : null;
   
-  $prev_expense_sector_id = isset( $this->prev_data ) && $this->prev_data['expense_sector_id'] ? $this->prev_data['expense_sector_id'] : null;
-  $prev_amount = isset( $this->prev_data ) && $this->prev_data['amount'] ? $this->prev_data['amount'] : null;
-  $prev_start_date = isset( $this->prev_data ) && $this->prev_data['start_date'] ? $this->prev_data['start_date'] : null;
-  $prev_end_date = isset( $this->prev_data ) && $this->prev_data['end_date'] ? $this->prev_data['end_date'] : null;
-  $prev_remarks = isset( $this->prev_data ) && $this->prev_data['remarks'] ? $this->prev_data['remarks'] : null;
+
+  //Previous form data.
+  $prev_expense_sector_id = isset( $this->prev_data ) && isset( $this->prev_data['expense_sector_id'] ) ? $this->prev_data['expense_sector_id'] : null;
+  $prev_amount            = isset( $this->prev_data ) && isset( $this->prev_data['amount'] ) ? $this->prev_data['amount'] : null;
+  $prev_start_date        = isset( $this->prev_data ) && isset( $this->prev_data['start_date'] ) ? $this->prev_data['start_date'] : null;
+  $prev_end_date          = isset( $this->prev_data ) && isset($this->prev_data['end_date'] ) ? $this->prev_data['end_date'] : null;
+  $prev_remarks           = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
 
 ?>
 <div class="flex items-center justify-center p-12">
@@ -72,6 +64,7 @@
             <input
               type="date"
               name="start_date"
+              value="<?php echo $prev_start_date; ?>"
               id="start_date"
               class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -94,6 +87,7 @@
             <input
               type="date"
               name="end_date"
+              value="<?php echo $prev_start_date; ?>"
               id="end_date"
               class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -106,14 +100,11 @@
       <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
         Remarks
       </label>
-      <textarea id="remarks" name="remarks" rows="4" class="block p-2.5 w-96 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+      <textarea id="remarks" name="remarks" rows="4" class="block p-2.5 w-96 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
       <?php if ( $remarks_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $remarks_error; ?></p>
       <?php } ?>
       </div>
-
-      
-      
       <div>
             <?php 
                 wp_nonce_field( 'expense-budget' ); 
