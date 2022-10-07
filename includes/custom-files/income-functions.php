@@ -47,8 +47,17 @@ function wpcpf_get_expense() {
     $order    = 'desc';
 
     $sql = $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}income_expenses
-            WHERE budget_for_expense_id IS NOT NULL 
+            "SELECT {$wpdb->prefix}income_expenses.id,
+            {$wpdb->prefix}income_expenses.amount,
+            {$wpdb->prefix}income_expenses.entry_date,
+            {$wpdb->prefix}income_expenses.remarks,
+            {$wpdb->prefix}income_expense_sectors.name
+            FROM {$wpdb->prefix}income_expenses
+            INNER JOIN {$wpdb->prefix}budget_for_expenses
+                ON {$wpdb->prefix}income_expenses.budget_for_expense_id = {$wpdb->prefix}budget_for_expenses.id
+            INNER JOIN {$wpdb->prefix}income_expense_sectors
+                ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
+            WHERE {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL 
             ORDER BY %s %s ", $order_by, $order
     );
 
