@@ -25,9 +25,16 @@ $noficaiton_message = null;
     if ( isset( $_GET['inserted_income'] ) ) {
       $noficaiton_message = __("Income Saved Successfully");
     }
+    if ( isset( $_GET['inserted_expense'] ) ) {
+      $noficaiton_message = __("Expense Saved Successfully");
+    }
 
     if ( isset( $_GET['updateee_income'] ) ) {
       $noficaiton_message = __("Income Updated Successfully");
+    }
+
+    if ( isset( $_GET['updateee_expense'] ) ) {
+      $noficaiton_message = __("Expense Updated Successfully");
     }
 
     if ( isset( $_GET['income_deleted'] ) ) {

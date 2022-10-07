@@ -1,20 +1,14 @@
 <?php 
-  $income_sector_error      = null;
-  $amount_error             = null;
-  $entry_date_error         = null;
-  $remarks_error            = null;
-  $greater_entry_date_error = null;
-
-  if ( isset( $this->errors ) ) {
-      $income_sector_error = isset( $this->errors['income_sector_id'] ) ? $this->errors['income_sector_id'] : null;
-      $amount_error        = isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
-      $entry_date_error    = isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
-      $remarks_error       = isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
-      $greater_entry_date_error       = isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null;  
-  }
-
+  //Error messages. 
+  $income_sector_error      = isset( $this->errors ) && isset( $this->errors['income_sector_id'] ) ? $this->errors['income_sector_id'] : null;
+  $expense_sector_error     = isset( $this->errors ) && isset( $this->errors['budget_for_expense_id'] ) ? $this->errors['budget_for_expense_id'] : null;
+  $amount_error             = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
+  $entry_date_error         = isset( $this->errors ) && isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
+  $remarks_error            = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
+  $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null;  
   
-  $prev_expense_sector_id = isset( $this->prev_data ) && $this->prev_data['income_sector_id'] ? $this->prev_data['income_sector_id'] : null;
+  //previous form data.
+  $prev_expense_sector_id = isset( $this->prev_data ) && isset( $this->prev_data['income_sector_id'] ) ? $this->prev_data['income_sector_id'] : null;
   $prev_amount            = isset( $this->prev_data ) && isset( $this->prev_data['amount'] ) ? $this->prev_data['amount'] : null;
   $prev_entry_date        = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : null;
   $prev_remarks           = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
@@ -54,7 +48,7 @@
               type="date"
               name="entry_date"
               value="<?php echo $prev_entry_date; ?>"
-              id="entry_date"
+              id="<?php echo $page ?>_entry_date"
               class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
             <?php if ( $entry_date_error ) { ?>
@@ -69,14 +63,17 @@
     <?php
       if ( $page == 'expense' ) {?>
       <div class="mb-5">
-      <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-      <select name="income_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-        <?php foreach ( $income_sectors as $value) { ?>
-        <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
-        <?php } ?>
+      <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Expense Sector Name", "wpcpf-pf"); ?></label>
+      
+      <select 
+        name  = "budget_for_expense_id"
+        id    = "budget_for_expense_id" 
+        class = "w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+      >
+        <option value="" disabled selected>Select Expense Sector</option>
       </select>
-      <?php if ( $income_sector_error ) { ?>
-            <p class="text-base text-red-600 italic font-bold"><?php echo $income_sector_error; ?></p>
+      <?php if ( $expense_sector_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $expense_sector_error; ?></p>
       <?php } ?>
     </div>
     <?php } ?>
@@ -111,23 +108,11 @@
             <p class="text-base text-red-600 italic font-bold"><?php echo $remarks_error; ?></p>
       <?php } ?>
       </div>
-
-      
-      <select 
-        id="pickone" 
-        class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-      >
-      <option value="" disabled selected>Select your option</option>
-      <option value="A">A</option>
-      <option value="B">B</option>
-      </select>
-
-      
-      
       <div>
             <?php 
-                wp_nonce_field( 'income' ); 
-                submit_button( __( 'Add Income', 'wpcodal-pf' ), 'primary hover:shadow-form rounded-md bg-[#6A64F1] py-2 px-8 text-base font-semibold text-white outline-none', 'submit_income' );
+                $button = $page == 'income' ? 'Add Income':'Add Expense';
+                wp_nonce_field( 'income_expense' ); 
+                submit_button( __( $button, 'wpcodal-pf' ), 'primary hover:shadow-form rounded-md bg-[#6A64F1] py-2 px-8 text-base font-semibold text-white outline-none', 'submit_income_expense' );
             ?>
       </div>
     </form>

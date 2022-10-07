@@ -89,11 +89,15 @@ function wpcpf_get_budget_list_for_expense() {
  *
  * @return int|WP_Error
  */
-function wpcpf_insert_income( $args = [] ) {
+function wpcpf_insert_income_expense( $args = [], $page ) {
     global $wpdb;
 
-    if ( empty( $args['income_sector_id'] ) ) {
+    if ( $page == 'income' && empty( $args['income_sector_id'] ) ) {
         return new \WP_Error( 'no-income-sector', __( 'You must provide income sector name.', 'wpcodal-pf' ) );
+    }
+
+    if ( $page == 'expense' && empty( $args['budget_for_expense_id'] ) ) {
+        return new \WP_Error( 'no-income-sector', __( 'You must provide expense sector name.', 'wpcodal-pf' ) );
     }
 
     if ( empty( $args['amount'] ) ) {
@@ -110,15 +114,19 @@ function wpcpf_insert_income( $args = [] ) {
 
 
     $defaults = [
-        'income_sector_id'     => null,
+        'income_sector_id'      => null,
         'budget_for_expense_id' => null,
-        'amount'            => 0,
-        'entry_date'        => null,
-        'remarks'           => '',
-        'created_by'        => get_current_user_id(),
+        'amount'                => 0,
+        'entry_date'            => null,
+        'remarks'               => '',
+        'created_by'            => get_current_user_id(),
     ];
 
     $data = wp_parse_args( $args, $defaults );
+
+    // echo '<pre>';
+    // print_r($data);
+    // die();
    
 
     $inserted = $wpdb->insert(
@@ -136,7 +144,7 @@ function wpcpf_insert_income( $args = [] ) {
     );
 
     if ( ! $inserted ) {
-        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', 'wpcodal-pf' ) );
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data1', 'wpcodal-pf' ) );
     }
 
     return $wpdb->insert_id;
@@ -149,11 +157,15 @@ function wpcpf_insert_income( $args = [] ) {
  *
  * @return int|WP_Error
  */
-function wpcpf_update_income( $args = [], $id ) {
+function wpcpf_update_income_expense( $args = [], $id, $page ) {
     global $wpdb;
 
-    if ( empty( $args['income_sector_id'] ) ) {
+    if ( $page == 'income' && empty( $args['income_sector_id'] ) ) {
         return new \WP_Error( 'no-income-sector', __( 'You must provide income sector name.', 'wpcodal-pf' ) );
+    }
+
+    if ( $page == 'expense' && empty( $args['budget_for_expense_id'] ) ) {
+        return new \WP_Error( 'no-income-sector', __( 'You must provide expense sector name.', 'wpcodal-pf' ) );
     }
 
     if ( empty( $args['amount'] ) ) {
@@ -170,12 +182,12 @@ function wpcpf_update_income( $args = [], $id ) {
 
 
     $defaults = [
-        'income_sector_id'     => null,
+        'income_sector_id'      => null,
         'budget_for_expense_id' => null,
-        'amount'            => 0,
-        'entry_date'        => null,
-        'remarks'           => '',
-        'created_by'        => get_current_user_id(),
+        'amount'                => 0,
+        'entry_date'            => null,
+        'remarks'               => '',
+        'created_by'            => get_current_user_id(),
     ];
 
     $data = wp_parse_args( $args, $defaults );

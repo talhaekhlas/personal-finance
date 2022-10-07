@@ -37,15 +37,15 @@ function JSconfirm( delete_url ){
         
     }, 3000)
 
-    $( "#entry_date" ).change(function() {
-      var entry_date = $('#entry_date').val();
+    $( "#expense_entry_date" ).change(function() {
+      var entry_date = $('#expense_entry_date').val();
       $.post( some_localize_info.ajax_url, { 'action': 'expense_budget_id_by_date', 'data': {entry_date}, '_ajax_nonce' : some_localize_info.ajd_nonce }, function ( response ) {
-        var str = "<option value='' disabled selected>" + "Select your option" + "</option>";
+        console.log('response data',response.data)
+        var str = "<option value='' disabled selected>" + "Select Expense Sector" + "</option>";
         for (var item of response.data) {
-          str += "<option>" + item.name + "</option>"
+          str += "<option value=" + item.budget_for_expense_id + ">" + item.expense_sector_name + "</option>"
         }
-        document.getElementById("pickone").innerHTML = str;
-        console.log('returned ajax response', response.data)
+        document.getElementById("budget_for_expense_id").innerHTML = str;
       });
     });
 
