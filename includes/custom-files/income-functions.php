@@ -226,7 +226,7 @@ function wpcpf_update_income_expense( $args = [], $id, $page ) {
  *
  * @return object
  */
-function wpcpf_get_single_income( $id ) {
+function wpcpf_get_single_income_expense( $id ) {
     global $wpdb;
 
     return $wpdb->get_row(

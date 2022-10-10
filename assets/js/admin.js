@@ -25,6 +25,15 @@ function JSconfirm( delete_url ){
       });
 }
 
+//Recent date as max date set for income and expense
+if ( document.querySelector("#expense_entry_date") ) {
+  expense_entry_date.max = new Date().toISOString().split("T")[0];
+}
+
+if ( document.querySelector("#income_entry_date") ) {
+  income_entry_date.max = new Date().toISOString().split("T")[0];
+}
+
 
 
 ;(function($) {
@@ -36,6 +45,7 @@ function JSconfirm( delete_url ){
         }
         
     }, 3000)
+
 
     $( "#expense_entry_date" ).change(function() {
       var entry_date = $('#expense_entry_date').val();

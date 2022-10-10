@@ -16,11 +16,7 @@
 ?>
 <div class="flex items-center justify-center p-12">
   <div class="mx-auto w-full max-w-[550px]">
-    <!-- <?php if ( $budget_exist_error ) { ?>
-            <p class="text-base text-red-600 italic font-bold"><?php echo $budget_exist_error; ?></p>
-    <?php } ?> -->
     <form action="" method="post">
-
     <?php
       if ( $page == 'income' ) {?>
       <div class="mb-5">

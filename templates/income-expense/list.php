@@ -43,7 +43,9 @@
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->entry_date; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->remarks; ?></td>
           <td class="py-4 px-6 border-b border-grey-light">
-          <?php $edit_url = admin_url( "admin.php?page=income&action=edit&id={$value->id}") ; ?>  
+          <?php 
+            $edit_url = admin_url( "admin.php?page={$page}&action=edit&id={$value->id}") ; 
+          ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
           <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=income&delete_income_action=wpcpf-delete-income&id=" . $value->id ), 'wpcpf-delete-income' ); ?>
           <a 

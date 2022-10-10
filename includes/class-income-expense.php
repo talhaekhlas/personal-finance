@@ -58,7 +58,12 @@ class Income_Expense {
 
             case 'edit':
                 $id            = isset( $_GET['id'] ) ? $_GET['id'] : null;
-                $single_income = wpcpf_get_single_income( $id );
+                $single_income_expense = wpcpf_get_single_income_expense( $id );
+                if ( $page == 'expense' ) {
+                    $expense_budget_id_by_date = wpcpf_expense_budget_id_by_date( $single_income_expense->entry_date );
+                    // echo '<pre>'; 
+                    // print_r($expense_budget_id_by_date); die();
+                }
                 $template      = WPCPF_PLUGIN_DIR . '/templates/income-expense/edit.php';
                 break;
 
@@ -89,7 +94,7 @@ class Income_Expense {
         }
 		
 
-        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'income_income' ) ) {
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'income_expense' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
