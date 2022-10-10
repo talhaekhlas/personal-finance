@@ -35,7 +35,7 @@
 
     <div class="mb-5">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Parent Source"); ?></label>
-        <select name="income_sector_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+        <select name="parent_source_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
             <?php foreach ( [1=>'Recieve', 'Pay'] as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
@@ -46,13 +46,13 @@
         <?php } ?>
     </div>
 
-    <div class="mb-5">
+    <div class="mb-5" id="loan_investment_source" style="display:none ;">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Source Name"); ?></label>
         <input
           type="text"
-          name="amount"
+          name="source_name"
           value="<?php echo $prev_amount; ?>"
-          id="amount"
+          id="source_name"
           placeholder="<?php _e("Enter Income Amount", "wpcodal-pf"); ?>"
           class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
@@ -135,9 +135,9 @@
       </div>
       <div>
             <?php 
-                $button = $page == 'income' ? 'Add Income':'Add Expense';
-                wp_nonce_field( 'income_expense' ); 
-                submit_button( __( $button, 'wpcodal-pf' ), 'primary hover:shadow-form rounded-md bg-[#6A64F1] py-2 px-8 text-base font-semibold text-white outline-none', 'submit_income_expense' );
+                $button = $page == 'loan' ? 'Add Loan':'Add Investment';
+                wp_nonce_field( 'loan_investment' ); 
+                submit_button( __( $button, 'wpcodal-pf' ), 'primary hover:shadow-form rounded-md bg-[#6A64F1] py-2 px-8 text-base font-semibold text-white outline-none', 'submit_loan_investment' );
             ?>
       </div>
     </form>

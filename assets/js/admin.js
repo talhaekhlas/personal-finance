@@ -59,6 +59,17 @@ if ( document.querySelector("#income_entry_date") ) {
       });
     });
 
+
+    $( "#parent_source_id" ).change(function() {
+      var parentId = $('#parent_source_id').val();
+
+      if ( parentId == 1 ) {
+        $("#loan_investment_source").css("display", "block");
+      } else {
+        $("#loan_investment_source").css("display", "none");
+      }
+    });
+
     
 
 })(jQuery);

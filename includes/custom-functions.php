@@ -154,4 +154,5 @@ function delete_sector( $id ) {
 
 include WPCPF_PLUGIN_DIR . '/includes/custom-files/expense-budget-functions.php';
 include WPCPF_PLUGIN_DIR . '/includes/custom-files/income-functions.php';
+include WPCPF_PLUGIN_DIR . '/includes/custom-files/loan-investment-functions.php';
 

@@ -53,7 +53,9 @@ class Loan_Investment {
 
         switch ( $action ) {
             case 'new':
-                $template        = WPCPF_PLUGIN_DIR . '/templates/loan-investment/create.php';
+                $type = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
+                $parent_data = wpcpf_get_parent_loan_investment_data( $type );
+                $template    = WPCPF_PLUGIN_DIR . '/templates/loan-investment/create.php';
                 break;
 
             case 'edit':
