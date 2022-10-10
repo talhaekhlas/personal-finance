@@ -28,6 +28,7 @@ class Menu {
 		require_once __DIR__ . '/class-income-expense-sector.php';
     require_once __DIR__ . '/class-expense-budget.php';
     require_once __DIR__ . '/class-income-expense.php';
+    require_once __DIR__ . '/class-loan-investment.php';
 		add_action( 'admin_menu', [$this, 'admin_menu'] );
 	}
 
@@ -44,11 +45,16 @@ class Menu {
         $expense_budget_hook = add_submenu_page( $parent_slug, __( 'Expense Budget', 'wpcodal-pf' ), __( 'Expense Budget', 'wpcodal-pf' ), $capability, 'expense_budget', [ $this, 'expense_budget' ] );
         $income_hook         = add_submenu_page( $parent_slug, __( 'Income', 'wpcodal-pf' ), __( 'Income', 'wpcodal-pf' ), $capability, 'income', [ $this, 'income' ] );
         $expense_hook        = add_submenu_page( $parent_slug, __( 'Expense', 'wpcodal-pf' ), __( 'Expense', 'wpcodal-pf' ), $capability, 'expense', [ $this, 'expense' ] );
+        $expense_hook        = add_submenu_page( $parent_slug, __( 'Expense', 'wpcodal-pf' ), __( 'Expense', 'wpcodal-pf' ), $capability, 'expense', [ $this, 'expense' ] );
+        $loan_hook           = add_submenu_page( $parent_slug, __( 'Loan', 'wpcodal-pf' ), __( 'Loan', 'wpcodal-pf' ), $capability, 'loan', [ $this, 'loan' ] );
+        $investment_hook     = add_submenu_page( $parent_slug, __( 'Investment', 'wpcodal-pf' ), __( 'Investment', 'wpcodal-pf' ), $capability, 'investment', [ $this, 'investment' ] );
         add_action( 'admin_head-' . $main_hook, [ $this, 'enqueue_assets' ] );
         add_action( 'admin_head-' . $expense_sector_hook, [ $this, 'enqueue_assets' ] );
         add_action( 'admin_head-' . $expense_budget_hook, [ $this, 'enqueue_assets' ] );
         add_action( 'admin_head-' . $income_hook, [ $this, 'enqueue_assets' ] );
         add_action( 'admin_head-' . $expense_hook, [ $this, 'enqueue_assets' ] );
+        add_action( 'admin_head-' . $loan_hook, [ $this, 'enqueue_assets' ] );
+        add_action( 'admin_head-' . $investment_hook, [ $this, 'enqueue_assets' ] );
     }
 
 	/**
@@ -80,17 +86,31 @@ class Menu {
      * Expense sector.
      */
     public function expense_sector() {
-		Income_Expense_Sector::instance('expense');
+		  Income_Expense_Sector::instance('expense');
     }
 
     /**
      * Expense budget.
      */
     public function expense_budget() {
-		Expense_Budget::instance();
+		  Expense_Budget::instance();
     }
 
-	/**
+    /**
+     * Loan page.
+     */
+    public function loan() {
+      Loan_Investment::instance();
+    }
+
+    /**
+     * Investment page.
+     */
+    public function investment() {
+      Loan_Investment::instance();
+    }
+
+	  /**
      * Enqueue scripts and styles
      *
      * @return void
