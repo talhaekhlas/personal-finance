@@ -21,7 +21,8 @@
       <thead>
         <tr>
           <th class="w-10 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Sl</th>
-          <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector</th>
+          <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light"><?php _e("Source Name"); ?></th>
+          <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light"><?php _e("Transaction Type"); ?></th>
           <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Amount</th>
           <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Entry Date</th>
           <th class="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Remarks</th>
@@ -30,16 +31,15 @@
       </thead>
       <tbody>
         <?php
+         $transaction_type = [1=>'Recieve', 'Pay', 'Investment', 'Earning'];
          $sl = 0;
          foreach($data as $value) { 
         ?>
         <tr class="hover:bg-grey-lighter">
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
-          <?php if ( $page == 'income' ) { ?>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $income_sector_by_id[ $value->income_sector_id ]; ?></td>
-          <?php } else { ?>
-            <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td>
-          <?php } ?>  
+          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->source_name; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light"><?php echo $transaction_type[$value->trn_type]; ?></td>
+           
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->entry_date; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->remarks; ?></td>

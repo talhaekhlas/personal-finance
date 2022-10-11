@@ -148,7 +148,7 @@ class Table_Creation {
           `parent_source_id` int(11) unsigned DEFAULT NULL,
           `source_name` varchar(200) DEFAULT NULL,
           `amount` int(11) unsigned NOT NULL,
-          `entry_date` date NOT NULL,
+          `entry_date` date DEFAULT NULL,
           `remarks` varchar(300) DEFAULT NULL,
           `created_by` bigint(20) unsigned NOT NULL,
           PRIMARY KEY (`id`),

@@ -74,7 +74,8 @@ class Loan_Investment {
                 break;
 
             default:
-                $data     = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
+                $type     = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
+                $data     = wpcpf_get_loan_investment_data( $type );
                 $template = WPCPF_PLUGIN_DIR . '/templates/loan-investment/list.php';
                 break;
         }
@@ -104,14 +105,15 @@ class Loan_Investment {
             wp_die( 'Are you cheating?' );
         }
 
-        $trn_type          = isset( $_POST['trn_type'] ) ? sanitize_text_field( $_POST['trn_type'] ) : '';
-        $parent_source_id  = isset( $_POST['parent_source_id'] ) ? sanitize_text_field( $_POST['parent_source_id'] ) : '';
-        $source_name       = isset( $_POST['source_name'] ) ? sanitize_text_field( $_POST['source_name'] ) : '';
-        $amount            = isset( $_POST['amount'] ) ? sanitize_textarea_field( $_POST['amount'] ) : '';
-        $entry_date        = isset( $_POST['entry_date'] ) ? sanitize_textarea_field( $_POST['entry_date'] ) : '';
-        $remarks           = isset( $_POST['remarks'] ) ? sanitize_textarea_field( $_POST['remarks'] ) : '';
-        $id                = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
-        $page              = $_GET['page'];
+        $trn_type           = isset( $_POST['trn_type'] ) ? sanitize_text_field( $_POST['trn_type'] ) : '';
+        $loan_or_investment = isset( $_POST['loan_or_investment'] ) ? sanitize_text_field( $_POST['loan_or_investment'] ) : '';
+        $parent_source_id   = isset( $_POST['parent_source_id'] ) ? sanitize_text_field( $_POST['parent_source_id'] ) : '';
+        $source_name        = isset( $_POST['source_name'] ) ? sanitize_text_field( $_POST['source_name'] ) : '';
+        $amount             = isset( $_POST['amount'] ) ? sanitize_textarea_field( $_POST['amount'] ) : '';
+        $entry_date         = isset( $_POST['entry_date'] ) ? sanitize_textarea_field( $_POST['entry_date'] ) : '';
+        $remarks            = isset( $_POST['remarks'] ) ? sanitize_textarea_field( $_POST['remarks'] ) : '';
+        $id                 = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
+        $page               = $_GET['page'];
         
         if ( $parent_source_id == 'no_parent' && empty( $source_name ) ) {
             $this->errors['source_name'] = __( 'Please Provide Source Name', 'wpcodal-pf' );
@@ -147,18 +149,26 @@ class Loan_Investment {
             return;
         }
 
-        $data['amount']     = $amount;
-        $data['entry_date'] = $entry_date;
-        $data['remarks']    = $remarks;
+        $data['trn_type']           = $trn_type;
+        $data['parent_source_id']   = $parent_source_id == 'no_parent' ? null : $parent_source_id;
+        $data['source_name']        = $source_name;
+        $data['loan_or_investment'] = $loan_or_investment;
+        $data['amount']             = $amount;
+        $data['entry_date']         = $entry_date;
+        $data['remarks']            = $remarks;
+
+        // echo '<pre>';
+        // print_r($data);
+        // die();
 
         if ( ! $id ) {
-            $insert_id = wpcpf_insert_income_expense( $data, $page );
+            $insert_id = wpcpf_insert_loan_investment( $data, $page );
             if ( is_wp_error( $insert_id ) ) {
                 wp_die( $insert_id->get_error_message() );
             }
             $redirected_to = admin_url( "admin.php?page={$page}&inserted_{$page}=true" );
         } else {
-            $update_data = wpcpf_update_income_expense( $data, $id, $page );
+            $update_data = wpcpf_update_loan_investment( $data, $id, $page );
     
             if ( is_wp_error( $update_data ) ) {
                 wp_die( $update_data->get_error_message() );
