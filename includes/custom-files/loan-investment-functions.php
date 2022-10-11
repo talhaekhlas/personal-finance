@@ -230,11 +230,11 @@ function wpcpf_update_loan_investment( $args = [], $id, $page ) {
  *
  * @return object
  */
-function wpcpf_get_single_income_expense1( $id ) {
+function wpcpf_get_single_loan_investment( $id ) {
     global $wpdb;
 
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expenses WHERE id = %d", $id )
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE id = %d", $id )
     );
 }
 

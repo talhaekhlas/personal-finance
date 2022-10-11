@@ -49,11 +49,11 @@ class Loan_Investment {
 
         foreach ($income_sectors as $value) {
             $income_sector_by_id[$value->id] = $value->name;
+            $type = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
         }
 
         switch ( $action ) {
             case 'new':
-                $type = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
                 $parent_data = wpcpf_get_parent_loan_investment_data( $type );
                 // echo '<pre>';
                 // print_r($parent_data);die();
@@ -61,12 +61,10 @@ class Loan_Investment {
                 break;
 
             case 'edit':
-                $id            = isset( $_GET['id'] ) ? $_GET['id'] : null;
-                $single_income_expense = wpcpf_get_single_income_expense( $id );
-                if ( $page == 'expense' ) {
-                    $expense_budget_id_by_date = wpcpf_expense_budget_id_by_date( $single_income_expense->entry_date );
-                }
-                $template      = WPCPF_PLUGIN_DIR . '/templates/income-expense/edit.php';
+                $id                     = isset( $_GET['id'] ) ? $_GET['id'] : null;
+                $parent_data = wpcpf_get_parent_loan_investment_data( $type );
+                $single_loan_investment = wpcpf_get_single_loan_investment( $id );
+                $template               = WPCPF_PLUGIN_DIR . '/templates/loan-investment/edit.php';
                 break;
 
             case 'view':
@@ -121,6 +119,14 @@ class Loan_Investment {
             $this->prev_data['source_name'] = $source_name;
         }
 
+        if ( $parent_source_id != 'no_parent' ) {
+            $this->prev_data['parent_source_id'] = $parent_source_id;
+        }
+
+        if ( empty( $source_name ) ) {
+            $this->prev_data['trn_type'] = $trn_type;
+        }
+
         if ( empty( $amount ) ) {
             $this->errors['amount'] = __( 'Please Provide Budget Amount', 'wpcodal-pf' );
         } else {
@@ -143,8 +149,12 @@ class Loan_Investment {
             return;
         }
 
-        if ( strtotime( $entry_date ) > strtotime("now") ) {
-            $this->errors['greater_entry_date'] = __( 'Entry date should not be greater than present date.', 'wpcodal-pf' );
+        if ( $parent_source_id != 'no_parent' ) {
+            $parent_data = wpcpf_get_single_loan_investment( $parent_source_id );
+        }
+
+        if ( strtotime( $parent_data->entry_date ) > strtotime( $entry_date ) ) {
+            $this->errors['greater_entry_date'] = __( 'Entry date should be greater than entry date of parent source.', 'wpcodal-pf' );
             
             return;
         }

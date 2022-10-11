@@ -7,12 +7,12 @@
   $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null;  
   
   //previous form data.
-  $prev_source_name      = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : null;
-  $prev_amount           = isset( $this->prev_data ) && isset( $this->prev_data['amount'] ) ? $this->prev_data['amount'] : null;
-  $prev_entry_date       = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : null;
-  $prev_remarks          = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
-  $prev_parent_source_id = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) ? $this->prev_data['parent_source_id'] : null;
-  $prev_trn_type         = isset( $this->prev_data ) && isset( $this->prev_data['trn_type'] ) ? $this->prev_data['trn_type'] : null;
+  $prev_source_name      = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : $single_loan_investment->source_name;
+  $prev_amount           = isset( $this->prev_data ) && isset( $this->prev_data['amount'] ) ? $this->prev_data['amount'] : $single_loan_investment->amount;
+  $prev_entry_date       = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : $single_loan_investment->entry_date;
+  $prev_remarks          = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] :$single_loan_investment->remarks;
+  $prev_parent_source_id = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) ? $this->prev_data['parent_source_id'] : $single_loan_investment->parent_source_id;
+  $prev_trn_type         = isset( $this->prev_data ) && isset( $this->prev_data['trn_type'] ) ? $this->prev_data['trn_type'] : $single_loan_investment->trn_type;
 
 ?>
 <div class="flex items-center justify-center p-12">
@@ -35,7 +35,7 @@
     <div class="mb-5">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Parent Source"); ?></label>
         <select name="parent_source_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-            <option value="no_parent"><?php _e("No Parent Source"); ?></option>
+            <option value="no_parent"><?php _e("No Parent Source{$prev_parent_source_id}"); ?></option>
             <?php foreach ( $parent_data as $key => $value) {
                  $selected = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) && $this->prev_data['parent_source_id'] == $value->id ? 'selected' : null;
 
