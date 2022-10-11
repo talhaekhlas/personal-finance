@@ -1,14 +1,13 @@
 <?php 
   //Error messages. 
-  $income_sector_error      = isset( $this->errors ) && isset( $this->errors['income_sector_id'] ) ? $this->errors['income_sector_id'] : null;
-  $expense_sector_error     = isset( $this->errors ) && isset( $this->errors['budget_for_expense_id'] ) ? $this->errors['budget_for_expense_id'] : null;
+  $source_name_error        = isset( $this->errors ) && isset( $this->errors['source_name'] ) ? $this->errors['source_name'] : null;
   $amount_error             = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
   $entry_date_error         = isset( $this->errors ) && isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
   $remarks_error            = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
   $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null;  
   
   //previous form data.
-  $prev_expense_sector_id = isset( $this->prev_data ) && isset( $this->prev_data['income_sector_id'] ) ? $this->prev_data['income_sector_id'] : null;
+  $prev_source_name = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : null;
   $prev_amount            = isset( $this->prev_data ) && isset( $this->prev_data['amount'] ) ? $this->prev_data['amount'] : null;
   $prev_entry_date        = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : null;
   $prev_remarks           = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
@@ -18,46 +17,39 @@
   <div class="mx-auto w-full max-w-[550px]">
     <form action="" method="post">
     <input type="hidden" name="loan_or_investment" value="<?php echo $page == 'loan' ? 1 : 2; ?>">
-    <?php
-      if ( $page == 'loan' ) {?>
-      <div class="mb-5">
-        <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Loan"); ?></label>
-        <select name="income_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-            <?php foreach ( [1=>'Recieve', 'Pay'] as $key => $value) { ?>
-            <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-            <?php } ?>
-        </select>
-        <?php if ( $income_sector_error ) { ?>
-                <p class="text-base text-red-600 italic font-bold"><?php echo $income_sector_error; ?></p>
-        <?php } ?>
-      </div>
-    <?php } ?>
+    <div class="mb-5">
+      <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'loan' ? _e("Loan Transaction Type") : _e("Investment Transaction Type"); ?></label>
+      <select name="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          <?php 
+          $transaction_type = $page == 'loan' ? [1=>'Recieve', 'Pay'] : [3=>'Investment', 'Earning'];
+          foreach ( $transaction_type as $key => $value) { ?>
+          <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+          <?php } ?>
+      </select>
+    </div>
 
     <div class="mb-5">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Parent Source"); ?></label>
         <select name="parent_source_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-            <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-            <?php foreach ( [1=>'Recieve', 'Pay'] as $key => $value) { ?>
-                <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+            <option value="no_parent"><?php _e("No Parent Source"); ?></option>
+            <?php foreach ( $parent_data as $key => $value) { ?>
+                <option value="<?php echo $key; ?>"><?php echo $value->source_name; ?></option>
             <?php } ?>
         </select>
-        <?php if ( $income_sector_error ) { ?>
-                <p class="text-base text-red-600 italic font-bold"><?php echo $income_sector_error; ?></p>
-        <?php } ?>
     </div>
 
-    <div class="mb-5" id="loan_investment_source" style="display:none ;">
+    <div class="mb-5" id="loan_investment_source">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Source Name"); ?></label>
         <input
           type="text"
           name="source_name"
-          value="<?php echo $prev_amount; ?>"
+          value="<?php echo $prev_source_name; ?>"
           id="source_name"
           placeholder="<?php _e("Enter Income Amount", "wpcodal-pf"); ?>"
           class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
-        <?php if ( $income_sector_error ) { ?>
-                <p class="text-base text-red-600 italic font-bold"><?php echo $income_sector_error; ?></p>
+        <?php if ( $source_name_error ) { ?>
+                <p class="text-base text-red-600 italic font-bold"><?php echo $source_name_error; ?></p>
         <?php } ?>
     </div>
     
@@ -67,13 +59,13 @@
               for="date"
               class="mb-3 block text-base font-medium text-[#07074D]"
             >
-            <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Date
+            <?php $page == 'loan'? _e("Loan") : _e("Investment"); ?> Date
             </label>
             <input
               type="date"
               name="entry_date"
               value="<?php echo $prev_entry_date; ?>"
-              id="<?php echo $page ?>_entry_date"
+              id="loan_investment_entry_date"
               class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
             <?php if ( $entry_date_error ) { ?>
@@ -85,23 +77,6 @@
             <?php } ?>
     </div>
 
-    <?php
-      if ( $page == 'expense' ) {?>
-      <div class="mb-5">
-      <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Expense Sector Name", "wpcpf-pf"); ?></label>
-      
-      <select 
-        name  = "budget_for_expense_id"
-        id    = "budget_for_expense_id" 
-        class = "w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-      >
-        <option value="" disabled selected>Select Expense Sector</option>
-      </select>
-      <?php if ( $expense_sector_error ) { ?>
-            <p class="text-base text-red-600 italic font-bold"><?php echo $expense_sector_error; ?></p>
-      <?php } ?>
-    </div>
-    <?php } ?>
 
     <div class="mb-5">
         <label

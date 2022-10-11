@@ -26,7 +26,7 @@ class Loan_Investment {
 	 */
 	private function __construct() {
         session_start();
-		$this->income_expense_form_handler();
+		$this->loan_investment_form_handler();
         
         $this->delete_income();
 
@@ -55,6 +55,8 @@ class Loan_Investment {
             case 'new':
                 $type = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
                 $parent_data = wpcpf_get_parent_loan_investment_data( $type );
+                // echo '<pre>';
+                // print_r($parent_data);die();
                 $template    = WPCPF_PLUGIN_DIR . '/templates/loan-investment/create.php';
                 break;
 
@@ -87,14 +89,14 @@ class Loan_Investment {
      *
      * @return void
      */
-    public function income_expense_form_handler() {
+    public function loan_investment_form_handler() {
         
-        if ( ! isset( $_POST['submit_income_expense'] ) ) {
+        if ( ! isset( $_POST['submit_loan_investment'] ) ) {
             return;
         }
 		
 
-        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'income_expense' ) ) {
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'loan_investment' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
@@ -102,24 +104,19 @@ class Loan_Investment {
             wp_die( 'Are you cheating?' );
         }
 
-        $income_sector_id       = isset( $_POST['income_sector_id'] ) ? sanitize_text_field( $_POST['income_sector_id'] ) : '';
-        $budget_for_expense_id  = isset( $_POST['budget_for_expense_id'] ) ? sanitize_text_field( $_POST['budget_for_expense_id'] ) : '';
-        $amount                 = isset( $_POST['amount'] ) ? sanitize_textarea_field( $_POST['amount'] ) : '';
-        $entry_date             = isset( $_POST['entry_date'] ) ? sanitize_textarea_field( $_POST['entry_date'] ) : '';
-        $remarks                = isset( $_POST['remarks'] ) ? sanitize_textarea_field( $_POST['remarks'] ) : '';
-        $id                     = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
-        $page                   = $_GET['page'];
+        $trn_type          = isset( $_POST['trn_type'] ) ? sanitize_text_field( $_POST['trn_type'] ) : '';
+        $parent_source_id  = isset( $_POST['parent_source_id'] ) ? sanitize_text_field( $_POST['parent_source_id'] ) : '';
+        $source_name       = isset( $_POST['source_name'] ) ? sanitize_text_field( $_POST['source_name'] ) : '';
+        $amount            = isset( $_POST['amount'] ) ? sanitize_textarea_field( $_POST['amount'] ) : '';
+        $entry_date        = isset( $_POST['entry_date'] ) ? sanitize_textarea_field( $_POST['entry_date'] ) : '';
+        $remarks           = isset( $_POST['remarks'] ) ? sanitize_textarea_field( $_POST['remarks'] ) : '';
+        $id                = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
+        $page              = $_GET['page'];
         
-        if ( $page == 'income' && empty( $income_sector_id ) ) {
-            $this->errors['income_sector_id'] = __( 'Please Provide Income Sector', 'wpcodal-pf' );
+        if ( $parent_source_id == 'no_parent' && empty( $source_name ) ) {
+            $this->errors['source_name'] = __( 'Please Provide Source Name', 'wpcodal-pf' );
         } else {
-            $this->prev_data['income_sector_id'] = $income_sector_id;
-        }
-
-        if ( $page == 'expense' && empty( $budget_for_expense_id ) ) {
-            $this->errors['budget_for_expense_id'] = __( 'Please Provide Expense Sector', 'wpcodal-pf' );
-        } else {
-            $this->prev_data['budget_for_expense_id'] = $budget_for_expense_id;
+            $this->prev_data['source_name'] = $source_name;
         }
 
         if ( empty( $amount ) ) {
@@ -150,25 +147,15 @@ class Loan_Investment {
             return;
         }
 
-        if ( $page =='income' ) {
-            $data['income_sector_id'] = $income_sector_id;
-        } else {
-            $data['budget_for_expense_id'] = $budget_for_expense_id;
-        }
-
         $data['amount']     = $amount;
         $data['entry_date'] = $entry_date;
         $data['remarks']    = $remarks;
 
-        
-
         if ( ! $id ) {
             $insert_id = wpcpf_insert_income_expense( $data, $page );
-    
             if ( is_wp_error( $insert_id ) ) {
                 wp_die( $insert_id->get_error_message() );
             }
-
             $redirected_to = admin_url( "admin.php?page={$page}&inserted_{$page}=true" );
         } else {
             $update_data = wpcpf_update_income_expense( $data, $id, $page );

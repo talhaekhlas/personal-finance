@@ -283,10 +283,13 @@ function delete_income1( $id ) {
  *
  * @return int|boolean
  */
-function wpcpf_get_parent_loan_investment_data( $type ) {
+function wpcpf_get_parent_loan_investment_data( $type_id ) {
     global $wpdb;
 
-   return $type;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE loan_or_investment = %d 
+        AND parent_source_id IS NULL", $type_id )
+    );
 }
 
 

@@ -34,7 +34,10 @@ if ( document.querySelector("#income_entry_date") ) {
   income_entry_date.max = new Date().toISOString().split("T")[0];
 }
 
-
+//Recent date as max date set for loan and investment
+if ( document.querySelector("#loan_investment_entry_date") ) {
+  loan_investment_entry_date.max = new Date().toISOString().split("T")[0];
+}
 
 ;(function($) {
     var success_message = document.querySelector('.success-message');
