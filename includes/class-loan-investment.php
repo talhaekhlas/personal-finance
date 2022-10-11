@@ -28,7 +28,7 @@ class Loan_Investment {
         session_start();
 		$this->loan_investment_form_handler();
         
-        $this->delete_income();
+        $this->delete_loan_investment();
 
 		$this->income_expense_page();
 		
@@ -182,12 +182,12 @@ class Loan_Investment {
         exit;
     }
 
-    public function delete_income() {
+    public function delete_loan_investment() {
         
-        if ( ! isset( $_REQUEST['delete_income_action'] ) ) {
+        if ( ! isset( $_REQUEST['delete_loan_invest_action'] ) ) {
             return;
         }
-        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-income' ) ) {
+        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-loan-investment' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
@@ -196,12 +196,12 @@ class Loan_Investment {
         }
 
         $id   = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
-        $page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'income_sector';
+        $page = $_REQUEST['page'];
 
-        if ( delete_income( $id ) ) {
-            $redirected_to = admin_url( "admin.php?page=income&income_deleted=true" );
+        if ( delete_loan_investment( $id ) ) {
+            $redirected_to = admin_url( "admin.php?page={$page}&{$page}_deleted=true" );
         } else {
-            $redirected_to = admin_url( "admin.php?page=expense_budget&income_deleted_failed=true" );
+            $redirected_to = admin_url( "admin.php?page={$page}&{$page}_deleted_failed=true" );
         }
         $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );

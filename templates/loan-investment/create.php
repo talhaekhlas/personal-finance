@@ -33,7 +33,7 @@
         <select name="parent_source_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="no_parent"><?php _e("No Parent Source"); ?></option>
             <?php foreach ( $parent_data as $key => $value) { ?>
-                <option value="<?php echo $key; ?>"><?php echo $value->source_name; ?></option>
+                <option value="<?php echo $value->id; ?>"><?php echo $value->source_name; ?></option>
             <?php } ?>
         </select>
     </div>

@@ -49,6 +49,14 @@ $noficaiton_message = null;
       $noficaiton_message = __("Loan Updated Successfully");
     }
 
+    if ( isset( $_GET['loan_deleted'] ) ) {
+      $noficaiton_message = __("Loan Deleted Successfully");
+    }
+
+    if ( isset( $_GET['investment_deleted'] ) ) {
+      $noficaiton_message = __("Investment Deleted Successfully");
+    }
+
     if ( $noficaiton_message && $_SESSION && $_SESSION['alert_message'] ) { ?>
         <div class="success-message notice notice-success">
           <p class="text-base text-emerald-900 italic font-bold"><?php echo $noficaiton_message; ?></p>

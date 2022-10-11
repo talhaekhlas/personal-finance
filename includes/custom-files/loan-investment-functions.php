@@ -270,11 +270,11 @@ function wpcpf_check_income_data_in_this_range1( $expense_sector_id, $start_date
  *
  * @return int|boolean
  */
-function delete_income1( $id ) {
+function delete_loan_investment( $id ) {
     global $wpdb;
 
     return $wpdb->delete(
-        $wpdb->prefix . 'income_expenses',
+        $wpdb->prefix . 'loan_investments',
         [ 'id' => $id ],
         [ '%d' ]
     );
@@ -307,8 +307,7 @@ function wpcpf_get_loan_investment_data( $type_id ) {
     global $wpdb;
 
     return $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE loan_or_investment = %d 
-        AND parent_source_id IS NULL", $type_id )
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE loan_or_investment = %d", $type_id )
     );
 }
 

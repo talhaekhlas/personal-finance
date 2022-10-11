@@ -2,6 +2,12 @@
   <?php 
     include WPCPF_PLUGIN_DIR . '/templates/notification.php'; 
 
+    $source_name_by_id = [];
+
+    foreach ( $data as $value ) {
+      $source_name_by_id[ $value->id ] = $value->source_name;
+    }
+
    ?>
 
   <div>
@@ -37,7 +43,9 @@
         ?>
         <tr class="hover:bg-grey-lighter">
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->source_name; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light">
+            <?php echo $value->source_name ? $value->source_name : $source_name_by_id[ $value->parent_source_id ]. ' ( <span style="color:red; font-weight:bold">as parent source</span> )'; ?>
+          </td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $transaction_type[$value->trn_type]; ?></td>
            
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
@@ -48,7 +56,7 @@
             $edit_url = admin_url( "admin.php?page={$page}&action=edit&id={$value->id}") ; 
           ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
-          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=income&delete_income_action=wpcpf-delete-income&id=" . $value->id ), 'wpcpf-delete-income' ); ?>
+          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page={$page}&delete_loan_invest_action=wpcpf-delete-loan-investment&id=" . $value->id ), "wpcpf-delete-loan-investment" ); ?>
           <a 
             href="#" 
             onclick="JSconfirm('<?php echo $delete_url;  ?>')" 
