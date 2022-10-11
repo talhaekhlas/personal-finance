@@ -66,7 +66,7 @@ if ( document.querySelector("#loan_investment_entry_date") ) {
     $( "#parent_source_id" ).change(function() {
       var parentId = $('#parent_source_id').val();
 
-      if ( parentId == 1 ) {
+      if ( parentId == 'no_parent' ) {
         $("#loan_investment_source").css("display", "block");
       } else {
         $("#loan_investment_source").css("display", "none");

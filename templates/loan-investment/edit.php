@@ -19,6 +19,7 @@
   <div class="mx-auto w-full max-w-[550px]">
     <form action="" method="post">
     <input type="hidden" name="loan_or_investment" value="<?php echo $page == 'loan' ? 1 : 2; ?>">
+    <input type="hidden" name="id" value="<?php echo $single_loan_investment->id; ?>">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'loan' ? _e("Loan Transaction Type") : _e("Investment Transaction Type"); ?></label>
       <select name="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
@@ -40,13 +41,13 @@
                  $selected = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) && $this->prev_data['parent_source_id'] == $value->id ? 'selected' : null;
 
                 ?>
-                <option value="<?php echo $value->id; ?>" <?php echo $selected; ?>><?php echo $value->source_name; ?></option>
+                <option value="<?php echo $value->id; ?>" <?php echo $selected; ?>><?php echo $value->source_name;  ?></option>
             <?php } ?>
         </select>
     </div>
     
     <?php 
-      if ( isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) && $this->prev_data['parent_source_id'] == 'no_parent' ) {
+      if ( $prev_parent_source_id == 'no_parent' || ! $prev_parent_source_id) {
     ?>
     <div class="mb-5" id="loan_investment_source">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Source Name"); ?></label>

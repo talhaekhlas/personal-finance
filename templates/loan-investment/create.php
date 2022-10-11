@@ -46,7 +46,7 @@
     </div>
     
     <?php 
-      if ( isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) && $this->prev_data['parent_source_id'] == 'no_parent' ) {
+      if ( $prev_parent_source_id == 'no_parent' || count($parent_data) == 0 || ! $prev_parent_source_id ) {
     ?>
     <div class="mb-5" id="loan_investment_source">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Source Name"); ?></label>

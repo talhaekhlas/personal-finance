@@ -54,15 +54,13 @@ class Loan_Investment {
 
         switch ( $action ) {
             case 'new':
-                $parent_data = wpcpf_get_parent_loan_investment_data( $type );
-                // echo '<pre>';
-                // print_r($parent_data);die();
+                $parent_data = wpcpf_get_parent_loan_investment_data( $type, null );
                 $template    = WPCPF_PLUGIN_DIR . '/templates/loan-investment/create.php';
                 break;
 
             case 'edit':
                 $id                     = isset( $_GET['id'] ) ? $_GET['id'] : null;
-                $parent_data = wpcpf_get_parent_loan_investment_data( $type );
+                $parent_data            = wpcpf_get_parent_loan_investment_data( $type, $id );
                 $single_loan_investment = wpcpf_get_single_loan_investment( $id );
                 $template               = WPCPF_PLUGIN_DIR . '/templates/loan-investment/edit.php';
                 break;
@@ -178,7 +176,7 @@ class Loan_Investment {
             }
             $redirected_to = admin_url( "admin.php?page={$page}&inserted_{$page}=true" );
         } else {
-            $update_data = wpcpf_update_loan_investment( $data, $id, $page );
+            $update_data = wpcpf_update_loan_investment( $data, $page, $id );
     
             if ( is_wp_error( $update_data ) ) {
                 wp_die( $update_data->get_error_message() );

@@ -170,7 +170,7 @@ function wpcpf_insert_loan_investment( $args = [], $page ) {
  *
  * @return int|WP_Error
  */
-function wpcpf_update_loan_investment( $args = [], $id, $page ) {
+function wpcpf_update_loan_investment( $args = [], $page, $id ) {
     global $wpdb;
 
     if ( $page == 'income' && empty( $args['income_sector_id'] ) ) {
@@ -195,22 +195,26 @@ function wpcpf_update_loan_investment( $args = [], $id, $page ) {
 
 
     $defaults = [
-        'income_sector_id'      => null,
-        'budget_for_expense_id' => null,
-        'amount'                => 0,
-        'entry_date'            => null,
-        'remarks'               => '',
-        'created_by'            => get_current_user_id(),
+        'trn_type'           => null,
+        'parent_source_id'   => null,
+        'source_name'        => null,
+        'loan_or_investment' => null,
+        'amount'             => 0,
+        'entry_date'         => null,
+        'remarks'            => '',
+        'created_by'         => get_current_user_id(),
     ];
 
     $data = wp_parse_args( $args, $defaults );
 
     $updated = $wpdb->update(
-        $wpdb->prefix . 'income_expenses',
+        $wpdb->prefix . 'loan_investments',
         $data,
         [ 'id' => $id ],
         [
             '%d',
+            '%d',
+            '%s',
             '%d',
             '%d',
             '%s',
@@ -287,12 +291,12 @@ function delete_loan_investment( $id ) {
  *
  * @return int|boolean
  */
-function wpcpf_get_parent_loan_investment_data( $type_id ) {
+function wpcpf_get_parent_loan_investment_data( $type_id, $id ) {
     global $wpdb;
 
     return $wpdb->get_results(
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE loan_or_investment = %d 
-        AND parent_source_id IS NULL", $type_id )
+        AND parent_source_id IS NULL AND id!=%d", $type_id, $id )
     );
 }
 
