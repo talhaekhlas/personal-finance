@@ -249,6 +249,22 @@ function wpcpf_get_single_loan_investment( $id ) {
  *
  * @return object
  */
+function wpcpf_get_is_parent_check( $id ) {
+    global $wpdb;
+
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE parent_source_id = %d", $id )
+    );
+}
+
+
+/**
+ * Fetch a single expense budget from the DB
+ *
+ * @param  int $id
+ *
+ * @return object
+ */
 function wpcpf_check_income_data_in_this_range1( $expense_sector_id, $start_date, $id ) {
     global $wpdb;
     $date    = new DateTime($start_date);

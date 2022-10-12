@@ -4,7 +4,9 @@
   $amount_error             = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
   $entry_date_error         = isset( $this->errors ) && isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
   $remarks_error            = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
-  $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null;  
+  $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null; 
+  $invalid_parent_source_error = isset( $this->errors ) && isset( $this->errors['invalid_parent_source'] ) ? $this->errors['invalid_parent_source'] : null; 
+  
   
   //previous form data.
   $prev_source_name      = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : $single_loan_investment->source_name;
@@ -36,14 +38,23 @@
     <div class="mb-5">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Parent Source"); ?></label>
         <select name="parent_source_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-            <option value="no_parent"><?php _e("No Parent Source{$prev_parent_source_id}"); ?></option>
-            <?php foreach ( $parent_data as $key => $value) {
-                 $selected = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) && $this->prev_data['parent_source_id'] == $value->id ? 'selected' : null;
+            <option value="no_parent"><?php _e("No Parent Source"); ?></option>
+            <?php 
+            if ( count( $is_parent ) == 0 ) {
+            foreach ( $parent_data as $key => $value) {
+                 $selected = (isset( $this->prev_data ) 
+                 && isset( $this->prev_data['parent_source_id'] ) 
+                 && $this->prev_data['parent_source_id'] == $value->id) 
+                 || ( $single_loan_investment->parent_source_id == $value->id) ? 'selected' : null;
 
                 ?>
                 <option value="<?php echo $value->id; ?>" <?php echo $selected; ?>><?php echo $value->source_name;  ?></option>
-            <?php } ?>
+            <?php } }?>
         </select>
+
+        <?php if ( $invalid_parent_source_error ) { ?>
+                <p class="text-base text-red-600 italic font-bold"><?php echo $invalid_parent_source_error; ?></p>
+        <?php } ?>
     </div>
     
     <?php 

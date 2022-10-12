@@ -62,6 +62,7 @@ class Loan_Investment {
                 $id                     = isset( $_GET['id'] ) ? $_GET['id'] : null;
                 $parent_data            = wpcpf_get_parent_loan_investment_data( $type, $id );
                 $single_loan_investment = wpcpf_get_single_loan_investment( $id );
+                $is_parent              = wpcpf_get_is_parent_check( $id );
                 $template               = WPCPF_PLUGIN_DIR . '/templates/loan-investment/edit.php';
                 break;
 
@@ -153,6 +154,12 @@ class Loan_Investment {
 
         if ( strtotime( $parent_data->entry_date ) > strtotime( $entry_date ) ) {
             $this->errors['greater_entry_date'] = __( 'Entry date should be greater than entry date of parent source.', 'wpcodal-pf' );
+            
+            return;
+        }
+
+        if ( $id == $parent_source_id ) {
+            $this->errors['invalid_parent_source'] = __( 'Parent source and child source can not be same.', 'wpcodal-pf' );
             
             return;
         }
