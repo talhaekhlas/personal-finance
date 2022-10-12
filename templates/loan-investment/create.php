@@ -46,6 +46,10 @@
                 <option value="<?php echo $value->id; ?>" <?php echo $selected; ?>><?php echo $value->source_name; ?></option>
             <?php } ?>
         </select>
+
+        <?php if ( $missing_parent_investment_earning_error ) { ?>
+                <p class="text-base text-red-600 italic font-bold"><?php echo $missing_parent_investment_earning_error; ?></p>
+        <?php } ?>
     </div>
     
     <?php 

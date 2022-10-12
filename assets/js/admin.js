@@ -67,6 +67,9 @@ if ( document.querySelector("#loan_investment_entry_date") ) {
       var parentId = $('#parent_source_id').val();
       var trnType  = $('#trn_type').val();
 
+      console.log('parentId', parentId);
+      console.log('trnType', trnType);
+
       if ( parentId == 'no_parent' && trnType != 4 ) {
         $("#loan_investment_source").css("display", "block");
       } else {

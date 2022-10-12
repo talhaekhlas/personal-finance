@@ -166,20 +166,22 @@ class Loan_Investment {
 
         if ( $parent_source_id == 'no_parent' && $trn_type == 4 ) { //trn type 4 means earning from investment.
             $this->errors['missing_parent_investment_earning'] = __( 'Earning should have parent source.', 'wpcodal-pf' );
-            
             return;
         }
+
+        
 
         $amount_validation = $this->expense_or_loan_pay_capability_check( $entry_date, $amount );
 
         if ( ($trn_type == 1 || $trn_type == 3) &&  ! $amount_validation) {
-            $this->errors['amount_validation_failed'] = __( "You don't have sufficient amount.", 'wpcodal-pf' );
+            $message = "You don't have sufficient amount.You have just <span style='font-size: 20px;color:#88200A'>{$this->total_amount_in_hand}</span> in your hand";
+            $this->errors['amount_validation_failed'] = __($message , 'wpcodal-pf' );
             return;
         }
 
         $data['trn_type']           = $trn_type;
         $data['parent_source_id']   = $parent_source_id == 'no_parent' ? null : $parent_source_id;
-        $data['source_name']        = $source_name;
+        $data['source_name']        = $parent_source_id == 'no_parent' ? $source_name : null;
         $data['loan_or_investment'] = $loan_or_investment;
         $data['amount']             = $amount;
         $data['entry_date']         = $entry_date;
@@ -247,6 +249,7 @@ class Loan_Investment {
         $total_out_amount = $total_expense + $loan_recieve_and_investment + $submit_amount;
 
         if ( $total_in_amount < $total_out_amount ) {
+            $this->total_amount_in_hand = $total_in_amount;
             return false;
         }
         

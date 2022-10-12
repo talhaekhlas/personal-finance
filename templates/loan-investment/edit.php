@@ -26,7 +26,7 @@
     <input type="hidden" name="id" value="<?php echo $single_loan_investment->id; ?>">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'loan' ? _e("Loan Transaction Type") : _e("Investment Transaction Type"); ?></label>
-      <select name="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+      <select name="trn_type" id="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
           <?php 
           $transaction_type = $page == 'loan' ? [1=>'Recieve', 'Pay'] : [3=>'Investment', 'Earning'];
           foreach ( $transaction_type as $key => $value) {
@@ -56,6 +56,10 @@
 
         <?php if ( $invalid_parent_source_error ) { ?>
                 <p class="text-base text-red-600 italic font-bold"><?php echo $invalid_parent_source_error; ?></p>
+        <?php } ?>
+
+        <?php if ( $missing_parent_investment_earning_error ) { ?>
+                <p class="text-base text-red-600 italic font-bold"><?php echo $missing_parent_investment_earning_error; ?></p>
         <?php } ?>
     </div>
     
