@@ -172,10 +172,16 @@ class Loan_Investment {
 
         
 
-        $income_expense_info = $this->expense_or_loan_pay_capability_check( $entry_date );
+        $amount_validation = $this->expense_or_loan_pay_capability_check( $entry_date, $amount );
+
+        if ( ($trn_type == 1 || $trn_type == 3) &&  ! $amount_validation) {
+            $message = `You don't have sufficient amount.`;
+            $this->errors['amount_validation_failed'] = __( $message, 'wpcodal-pf' );
+            return;
+        }
 
        
-        print_r($income_expense_info);
+        
         die();
 
         $data['trn_type']           = $trn_type;
@@ -233,35 +239,13 @@ class Loan_Investment {
         exit;
     }
 
-    public function expense_or_loan_pay_capability_check( $entry_date ) {
+    public function expense_or_loan_pay_capability_check( $entry_date, $submit_amount ) {
         $total_income  = wpcpf_total_income_till_given_date( $entry_date );
         $total_expense = wpcpf_total_expense_till_given_date( $entry_date );
         $total_loan_recieve_and_investment = wpcpf_total_loan_recieve_and_investment( $entry_date );
+        $total_loan_pay_and_investment_earning = wpcpf_total_loan_pay_and_investment_earning( $entry_date );
         
-
-        // $total_income             = 0;
-        // $total_expense            = 0;
-        // $total_loan_recieve       = 0;
-        // $total_loan_pay           = 0;
-        // $total_investment         = 0;
-        // $total_investment_earning = 0;
-
-        // foreach ( $income_expense_info as $value ) {
-        //     if ( $value->income_sector_id ) {
-        //         $total_income += $value->amount;
-        //     } elseif ( $value->budget_for_expense_id ) {
-        //         $total_expense += $value->amount;
-        //     }
-        // }
-
-
-
-        
-
-        echo '<pre>';
-        print_r($total_loan_recieve_and_investment);
-        print_r($total_expense);
-        die();
+        return false;
 
     }
 }
