@@ -170,9 +170,11 @@ class Loan_Investment {
             return;
         }
 
-        $income_expense_info = wpcpf_income_expense_info_till_given_date( $entry_date );
+        
 
-        echo '<pre>';
+        $income_expense_info = $this->expense_or_loan_pay_capability_check( $entry_date );
+
+       
         print_r($income_expense_info);
         die();
 
@@ -229,6 +231,38 @@ class Loan_Investment {
         $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );
         exit;
+    }
+
+    public function expense_or_loan_pay_capability_check( $entry_date ) {
+        $total_income  = wpcpf_total_income_till_given_date( $entry_date );
+        $total_expense = wpcpf_total_expense_till_given_date( $entry_date );
+        $total_loan_recieve_and_investment = wpcpf_total_loan_recieve_and_investment( $entry_date );
+        
+
+        // $total_income             = 0;
+        // $total_expense            = 0;
+        // $total_loan_recieve       = 0;
+        // $total_loan_pay           = 0;
+        // $total_investment         = 0;
+        // $total_investment_earning = 0;
+
+        // foreach ( $income_expense_info as $value ) {
+        //     if ( $value->income_sector_id ) {
+        //         $total_income += $value->amount;
+        //     } elseif ( $value->budget_for_expense_id ) {
+        //         $total_expense += $value->amount;
+        //     }
+        // }
+
+
+
+        
+
+        echo '<pre>';
+        print_r($total_loan_recieve_and_investment);
+        print_r($total_expense);
+        die();
+
     }
 }
 

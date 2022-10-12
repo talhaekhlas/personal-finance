@@ -264,10 +264,25 @@ function wpcpf_check_income_data_in_this_range( $expense_sector_id, $start_date,
  *
  * @return object
  */
-function wpcpf_income_expense_info_till_given_date( $date ) {
+function wpcpf_total_income_till_given_date( $date ) {
     global $wpdb;
-    return $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expenses WHERE entry_date <= %s", $date
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_income FROM {$wpdb->prefix}income_expenses WHERE entry_date <= %s AND income_sector_id is not null", $date
+    ));
+    
+}
+
+/**
+ * Fetch a single expense budget from the DB
+ *
+ * @param  string $date
+ *
+ * @return object
+ */
+function wpcpf_total_expense_till_given_date( $date ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_expense FROM {$wpdb->prefix}income_expenses WHERE entry_date <= %s AND budget_for_expense_id is not null", $date
     ));
     
 }
