@@ -1,10 +1,12 @@
 <?php 
   //Error messages. 
-  $source_name_error        = isset( $this->errors ) && isset( $this->errors['source_name'] ) ? $this->errors['source_name'] : null;
-  $amount_error             = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
-  $entry_date_error         = isset( $this->errors ) && isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
-  $remarks_error            = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
-  $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null;  
+  $source_name_error                       = isset( $this->errors ) && isset( $this->errors['source_name'] ) ? $this->errors['source_name'] : null;
+  $amount_error                            = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
+  $entry_date_error                        = isset( $this->errors ) && isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
+  $remarks_error                           = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
+  $greater_entry_date_error                = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null; 
+  $missing_parent_investment_earning_error = isset( $this->errors ) && isset( $this->errors['missing_parent_investment_earning'] ) ? $this->errors['missing_parent_investment_earning'] : null; 
+  
   
   //previous form data.
   $prev_source_name      = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : null;
@@ -21,7 +23,7 @@
     <input type="hidden" name="loan_or_investment" value="<?php echo $page == 'loan' ? 1 : 2; ?>">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'loan' ? _e("Loan Transaction Type") : _e("Investment Transaction Type"); ?></label>
-      <select name="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+      <select name="trn_type" id="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
           <?php 
           $transaction_type = $page == 'loan' ? [1=>'Recieve', 'Pay'] : [3=>'Investment', 'Earning'];
           foreach ( $transaction_type as $key => $value) {
@@ -97,7 +99,7 @@
           name="amount"
           value="<?php echo $prev_amount; ?>"
           id="amount"
-          placeholder="<?php _e("Enter Income Amount", "wpcodal-pf"); ?>"
+          placeholder="<?php _e("Enter Amount", "wpcodal-pf"); ?>"
           class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
         <?php if ( $amount_error ) { ?>

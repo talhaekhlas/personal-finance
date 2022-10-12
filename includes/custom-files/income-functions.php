@@ -257,6 +257,23 @@ function wpcpf_check_income_data_in_this_range( $expense_sector_id, $start_date,
     
 }
 
+/**
+ * Fetch a single expense budget from the DB
+ *
+ * @param  string $date
+ *
+ * @return object
+ */
+function wpcpf_income_expense_info_till_given_date( $date ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expenses WHERE entry_date <= %s", $date
+    ));
+    
+}
+
+
+
 
 
 /**

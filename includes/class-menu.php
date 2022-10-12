@@ -45,7 +45,6 @@ class Menu {
         $expense_budget_hook = add_submenu_page( $parent_slug, __( 'Expense Budget', 'wpcodal-pf' ), __( 'Expense Budget', 'wpcodal-pf' ), $capability, 'expense_budget', [ $this, 'expense_budget' ] );
         $income_hook         = add_submenu_page( $parent_slug, __( 'Income', 'wpcodal-pf' ), __( 'Income', 'wpcodal-pf' ), $capability, 'income', [ $this, 'income' ] );
         $expense_hook        = add_submenu_page( $parent_slug, __( 'Expense', 'wpcodal-pf' ), __( 'Expense', 'wpcodal-pf' ), $capability, 'expense', [ $this, 'expense' ] );
-        $expense_hook        = add_submenu_page( $parent_slug, __( 'Expense', 'wpcodal-pf' ), __( 'Expense', 'wpcodal-pf' ), $capability, 'expense', [ $this, 'expense' ] );
         $loan_hook           = add_submenu_page( $parent_slug, __( 'Loan', 'wpcodal-pf' ), __( 'Loan', 'wpcodal-pf' ), $capability, 'loan', [ $this, 'loan' ] );
         $investment_hook     = add_submenu_page( $parent_slug, __( 'Investment', 'wpcodal-pf' ), __( 'Investment', 'wpcodal-pf' ), $capability, 'investment', [ $this, 'investment' ] );
         add_action( 'admin_head-' . $main_hook, [ $this, 'enqueue_assets' ] );

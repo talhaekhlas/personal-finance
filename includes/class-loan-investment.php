@@ -152,7 +152,7 @@ class Loan_Investment {
             $parent_data = wpcpf_get_single_loan_investment( $parent_source_id );
         }
 
-        if ( strtotime( $parent_data->entry_date ) > strtotime( $entry_date ) ) {
+        if ( isset($parent_data) && (strtotime( $parent_data->entry_date ) > strtotime( $entry_date )) ) {
             $this->errors['greater_entry_date'] = __( 'Entry date should be greater than entry date of parent source.', 'wpcodal-pf' );
             
             return;
@@ -164,6 +164,18 @@ class Loan_Investment {
             return;
         }
 
+        if ( $parent_source_id == 'no_parent' && $trn_type == 4 ) { //trn type 4 means earning from investment.
+            $this->errors['missing_parent_investment_earning'] = __( 'Earning should have parent source.', 'wpcodal-pf' );
+            
+            return;
+        }
+
+        $income_expense_info = wpcpf_income_expense_info_till_given_date( $entry_date );
+
+        echo '<pre>';
+        print_r($income_expense_info);
+        die();
+
         $data['trn_type']           = $trn_type;
         $data['parent_source_id']   = $parent_source_id == 'no_parent' ? null : $parent_source_id;
         $data['source_name']        = $source_name;
@@ -171,10 +183,6 @@ class Loan_Investment {
         $data['amount']             = $amount;
         $data['entry_date']         = $entry_date;
         $data['remarks']            = $remarks;
-
-        // echo '<pre>';
-        // print_r($data);
-        // die();
 
         if ( ! $id ) {
             $insert_id = wpcpf_insert_loan_investment( $data, $page );

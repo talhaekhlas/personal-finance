@@ -65,13 +65,27 @@ if ( document.querySelector("#loan_investment_entry_date") ) {
 
     $( "#parent_source_id" ).change(function() {
       var parentId = $('#parent_source_id').val();
+      var trnType  = $('#trn_type').val();
 
-      if ( parentId == 'no_parent' ) {
+      if ( parentId == 'no_parent' && trnType != 4 ) {
         $("#loan_investment_source").css("display", "block");
       } else {
         $("#loan_investment_source").css("display", "none");
       }
     });
+
+    $( "#trn_type" ).change(function() {
+      var trnType = $('#trn_type').val();
+      var trnType  = $('#trn_type').val();
+
+      if ( trnType != 4 && parentId == 'no_parent' ) { //trn type 4 means earning from investment.
+        $("#loan_investment_source").css("display", "block"); 
+      } else {
+        $("#loan_investment_source").css("display", "none");
+      }
+    });
+
+    
 
     
 
