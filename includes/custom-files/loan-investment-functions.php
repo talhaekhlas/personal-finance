@@ -341,7 +341,7 @@ function wpcpf_get_loan_investment_data( $type_id ) {
 function wpcpf_total_loan_recieve_and_investment( $date ) {
     global $wpdb;
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT sum(amount) as total_loan_recieve_and_investment FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(1,3)", $date
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(1,3)", $date
     ));
     
 }
@@ -356,7 +356,7 @@ function wpcpf_total_loan_recieve_and_investment( $date ) {
 function wpcpf_total_loan_pay_and_investment_earning( $date ) {
     global $wpdb;
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT sum(amount) as total_loan_pay_and_investment_earning FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(2,4)", $date
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(2,4)", $date
     ));
     
 }

@@ -1,12 +1,14 @@
 <?php 
+  $error = isset( $this->errors ) ? $this->errors : null;
   //Error messages. 
-  $source_name_error        = isset( $this->errors ) && isset( $this->errors['source_name'] ) ? $this->errors['source_name'] : null;
-  $amount_error             = isset( $this->errors ) && isset( $this->errors['amount'] ) ? $this->errors['amount'] : null;
-  $entry_date_error         = isset( $this->errors ) && isset( $this->errors['entry_date'] ) ? $this->errors['entry_date'] : null;
-  $remarks_error            = isset( $this->errors ) && isset( $this->errors['remarks'] ) ? $this->errors['remarks'] : null;
-  $greater_entry_date_error = isset( $this->errors ) && isset( $this->errors['greater_entry_date'] ) ? $this->errors['greater_entry_date'] : null; 
-  $invalid_parent_source_error = isset( $this->errors ) && isset( $this->errors['invalid_parent_source'] ) ? $this->errors['invalid_parent_source'] : null; 
-  
+  $source_name_error                       = $error && isset( $error['source_name'] ) ? $error['source_name'] : null;
+  $amount_error                            = $error && isset( $error['amount'] ) ? $error['amount'] : null;
+  $entry_date_error                        = $error && isset( $error['entry_date'] ) ? $error['entry_date'] : null;
+  $remarks_error                           = $error && isset( $error['remarks'] ) ? $error['remarks'] : null;
+  $greater_entry_date_error                = $error && isset( $error['greater_entry_date'] ) ? $error['greater_entry_date'] : null; 
+  $missing_parent_investment_earning_error = $error && isset( $error['missing_parent_investment_earning'] ) ? $error['missing_parent_investment_earning'] : null; 
+  $amount_validation_failed_error          = $error && isset( $error['amount_validation_failed'] ) ? $error['amount_validation_failed'] : null;
+  $invalid_parent_source_error             = $error && isset( $error['invalid_parent_source'] ) ? $error['invalid_parent_source'] : null;   
   
   //previous form data.
   $prev_source_name      = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : $single_loan_investment->source_name;
@@ -114,6 +116,10 @@
         />
         <?php if ( $amount_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $amount_error; ?></p>
+        <?php } ?>
+
+        <?php if ( $amount_validation_failed_error ) { ?>
+            <p class="text-base text-red-600 italic font-bold"><?php echo $amount_validation_failed_error; ?></p>
         <?php } ?>
       </div>
       

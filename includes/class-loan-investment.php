@@ -170,19 +170,12 @@ class Loan_Investment {
             return;
         }
 
-        
-
         $amount_validation = $this->expense_or_loan_pay_capability_check( $entry_date, $amount );
 
         if ( ($trn_type == 1 || $trn_type == 3) &&  ! $amount_validation) {
-            $message = `You don't have sufficient amount.`;
-            $this->errors['amount_validation_failed'] = __( $message, 'wpcodal-pf' );
+            $this->errors['amount_validation_failed'] = __( "You don't have sufficient amount.", 'wpcodal-pf' );
             return;
         }
-
-       
-        
-        die();
 
         $data['trn_type']           = $trn_type;
         $data['parent_source_id']   = $parent_source_id == 'no_parent' ? null : $parent_source_id;
@@ -240,12 +233,24 @@ class Loan_Investment {
     }
 
     public function expense_or_loan_pay_capability_check( $entry_date, $submit_amount ) {
-        $total_income  = wpcpf_total_income_till_given_date( $entry_date );
-        $total_expense = wpcpf_total_expense_till_given_date( $entry_date );
-        $total_loan_recieve_and_investment = wpcpf_total_loan_recieve_and_investment( $entry_date );
-        $total_loan_pay_and_investment_earning = wpcpf_total_loan_pay_and_investment_earning( $entry_date );
+        $total_income_info                   = wpcpf_total_income_till_given_date( $entry_date );
+        $total_expense_info                  = wpcpf_total_expense_till_given_date( $entry_date );
+        $loan_recieve_and_investment_earning = wpcpf_total_loan_recieve_and_investment( $entry_date );
+        $loan_pay_and_investment             = wpcpf_total_loan_pay_and_investment_earning( $entry_date );
+
+        $total_income                    = $total_income_info ? $total_income_info->total_income : 0;
+        $total_expense                   = $total_expense_info ? $total_expense_info->total_expense : 0;
+        $loan_pay_and_investment_earning = $loan_recieve_and_investment_earning ? $loan_recieve_and_investment_earning->total_amount : 0;
+        $loan_recieve_and_investment     = $loan_pay_and_investment ? $loan_pay_and_investment->total_amount : 0;
+
+        $total_in_amount  = $total_income + $loan_pay_and_investment_earning;
+        $total_out_amount = $total_expense + $loan_recieve_and_investment + $submit_amount;
+
+        if ( $total_in_amount < $total_out_amount ) {
+            return false;
+        }
         
-        return false;
+        return true;
 
     }
 }
