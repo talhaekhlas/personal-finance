@@ -288,9 +288,6 @@ function wpcpf_total_expense_till_given_date( $date ) {
 }
 
 
-
-
-
 /**
  * Delete expense budget
  *
@@ -306,4 +303,19 @@ function delete_income( $id ) {
         [ 'id' => $id ],
         [ '%d' ]
     );
+}
+
+/**
+ * Expense by budget id.
+ *
+ * @param  int $budget_id.
+ *
+ * @return object
+ */
+function wpcpf_expense_by_budget_id( $budget_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_expense FROM {$wpdb->prefix}income_expenses WHERE budget_for_expense_id = %d", $budget_id
+    ));
+    
 }

@@ -123,13 +123,13 @@ class Income_Expense {
         }
 
         if ( empty( $amount ) ) {
-            $this->errors['amount'] = __( 'Please Provide Budget Amount', 'wpcodal-pf' );
+            $this->errors['amount'] = __( 'Please Provide Amount', 'wpcodal-pf' );
         } else {
             $this->prev_data['amount'] = $amount;
         }
 
         if ( empty( $entry_date ) ) {
-            $this->errors['entry_date'] = __( 'Please Provide Income Date', 'wpcodal-pf' );
+            $this->errors['entry_date'] = __( 'Please Provide Date', 'wpcodal-pf' );
         } else {
             $this->prev_data['entry_date'] = $entry_date;
         }
@@ -140,27 +140,28 @@ class Income_Expense {
             $this->prev_data['remarks'] = $remarks;
         }
 
-        if ( ! empty( $this->errors ) ) {
-            return;
-        }
-
         if ( strtotime( $entry_date ) > strtotime("now") ) {
             $this->errors['greater_entry_date'] = __( 'Entry date should not be greater than present date.', 'wpcodal-pf' );
-            
+        }
+
+        if ( ! empty( $this->errors ) ) {
             return;
         }
 
         if ( $page =='income' ) {
             $data['income_sector_id'] = $income_sector_id;
         } else {
+            $expense_by_budget_id = wpcpf_expense_by_budget_id( $budget_for_expense_id );
+            $single_budget = wpcpf_get_single_expense_budget( $budget_for_expense_id );
+            print_r($expense_by_budget_id);
+            print_r($single_budget);
+            die();
             $data['budget_for_expense_id'] = $budget_for_expense_id;
         }
 
         $data['amount']     = $amount;
         $data['entry_date'] = $entry_date;
         $data['remarks']    = $remarks;
-
-        
 
         if ( ! $id ) {
             $insert_id = wpcpf_insert_income_expense( $data, $page );

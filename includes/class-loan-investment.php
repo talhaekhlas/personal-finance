@@ -122,6 +122,11 @@ class Loan_Investment {
             $this->prev_data['parent_source_id'] = $parent_source_id;
         }
 
+        
+        if ( $trn_type == 4 ) {
+            $source_name = null;
+        }
+
         if ( empty( $source_name ) ) {
             $this->prev_data['trn_type'] = $trn_type;
         }
@@ -144,38 +149,30 @@ class Loan_Investment {
             $this->prev_data['remarks'] = $remarks;
         }
 
-        if ( ! empty( $this->errors ) ) {
-            return;
-        }
-
         if ( $parent_source_id != 'no_parent' ) {
             $parent_data = wpcpf_get_single_loan_investment( $parent_source_id );
         }
 
         if ( isset($parent_data) && (strtotime( $parent_data->entry_date ) > strtotime( $entry_date )) ) {
             $this->errors['greater_entry_date'] = __( 'Entry date should be greater than entry date of parent source.', 'wpcodal-pf' );
-            
-            return;
         }
 
         if ( $id == $parent_source_id ) {
             $this->errors['invalid_parent_source'] = __( 'Parent source and child source can not be same.', 'wpcodal-pf' );
-            
-            return;
         }
 
         if ( $parent_source_id == 'no_parent' && $trn_type == 4 ) { //trn type 4 means earning from investment.
-            $this->errors['missing_parent_investment_earning'] = __( 'Earning should have parent source.', 'wpcodal-pf' );
-            return;
+            $this->errors['missing_parent_investment_earning'] = __( 'Earning should have parent source.', 'wpcodal-pf' ); 
         }
-
-        
 
         $amount_validation = $this->expense_or_loan_pay_capability_check( $entry_date, $amount );
 
         if ( ($trn_type == 1 || $trn_type == 3) &&  ! $amount_validation) {
             $message = "You don't have sufficient amount.You have just <span style='font-size: 20px;color:#88200A'>{$this->total_amount_in_hand}</span> in your hand";
             $this->errors['amount_validation_failed'] = __($message , 'wpcodal-pf' );
+        }
+
+        if ( ! empty( $this->errors ) ) {
             return;
         }
 
@@ -240,16 +237,16 @@ class Loan_Investment {
         $loan_recieve_and_investment_earning = wpcpf_total_loan_recieve_and_investment( $entry_date );
         $loan_pay_and_investment             = wpcpf_total_loan_pay_and_investment_earning( $entry_date );
 
-        $total_income                    = $total_income_info ? $total_income_info->total_income : 0;
-        $total_expense                   = $total_expense_info ? $total_expense_info->total_expense : 0;
-        $loan_pay_and_investment_earning = $loan_recieve_and_investment_earning ? $loan_recieve_and_investment_earning->total_amount : 0;
-        $loan_recieve_and_investment     = $loan_pay_and_investment ? $loan_pay_and_investment->total_amount : 0;
+        $total_income                        = $total_income_info ? $total_income_info->total_income : 0;
+        $total_expense                       = $total_expense_info ? $total_expense_info->total_expense : 0;
+        $loan_recieve_and_investment_earning = $loan_recieve_and_investment_earning ? $loan_recieve_and_investment_earning->total_amount : 0;
+        $loan_pay_and_investment             = $loan_pay_and_investment ? $loan_pay_and_investment->total_amount : 0;
 
-        $total_in_amount  = $total_income + $loan_pay_and_investment_earning;
-        $total_out_amount = $total_expense + $loan_recieve_and_investment + $submit_amount;
+        $total_in_amount  = $total_income + $loan_recieve_and_investment_earning;
+        $total_out_amount = $total_expense + $loan_pay_and_investment + $submit_amount;
 
         if ( $total_in_amount < $total_out_amount ) {
-            $this->total_amount_in_hand = $total_in_amount;
+            $this->total_amount_in_hand = $total_in_amount - $total_out_amount;
             return false;
         }
         

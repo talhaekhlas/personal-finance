@@ -11,12 +11,13 @@
   $invalid_parent_source_error             = $error && isset( $error['invalid_parent_source'] ) ? $error['invalid_parent_source'] : null;   
   
   //previous form data.
-  $prev_source_name      = isset( $this->prev_data ) && isset( $this->prev_data['source_name'] ) ? $this->prev_data['source_name'] : $single_loan_investment->source_name;
-  $prev_amount           = isset( $this->prev_data ) && isset( $this->prev_data['amount'] ) ? $this->prev_data['amount'] : $single_loan_investment->amount;
-  $prev_entry_date       = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : $single_loan_investment->entry_date;
-  $prev_remarks          = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] :$single_loan_investment->remarks;
-  $prev_parent_source_id = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) ? $this->prev_data['parent_source_id'] : $single_loan_investment->parent_source_id;
-  $prev_trn_type         = isset( $this->prev_data ) && isset( $this->prev_data['trn_type'] ) ? $this->prev_data['trn_type'] : $single_loan_investment->trn_type;
+  $prev_data = isset( $this->prev_data ) ? $this->prev_data : null;
+  $prev_source_name      = $prev_data && isset( $prev_data['source_name'] ) ? $prev_data['source_name'] : $single_loan_investment->source_name;
+  $prev_amount           = $prev_data && isset( $prev_data['amount'] ) ? $prev_data['amount'] : $single_loan_investment->amount;
+  $prev_entry_date       = $prev_data && isset( $prev_data['entry_date'] ) ? $prev_data['entry_date'] : $single_loan_investment->entry_date;
+  $prev_remarks          = $prev_data && isset( $prev_data['remarks'] ) ? $prev_data['remarks'] :$single_loan_investment->remarks;
+  $prev_parent_source_id = $prev_data && isset( $prev_data['parent_source_id'] ) ? $prev_data['parent_source_id'] : $single_loan_investment->parent_source_id;
+  $prev_trn_type         = $prev_data && isset( $prev_data['trn_type'] ) ? $prev_data['trn_type'] : $single_loan_investment->trn_type;
 
 ?>
 <div class="flex items-center justify-center p-12">
