@@ -347,6 +347,68 @@ function wpcpf_total_loan_recieve_and_investment( $date ) {
 }
 
 /**
+ * Fetch total loan recieve by till date.
+ *
+ * @param  string $date
+ *
+ * @return object
+ */
+function wpcpf_total_loan_recieve( $date ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type = 1", $date
+    ));
+    
+}
+
+/**
+ * Fetch total loan pay by till date.
+ *
+ * @param  string $date
+ *
+ * @return object
+ */
+function wpcpf_total_loan_pay( $date ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type = 2", $date
+    ));
+    
+}
+
+/**
+ * Fetch total investment earning by till date.
+ *
+ * @param  string $date
+ *
+ * @return object
+ */
+function wpcpf_total_investment( $date ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type = 3", $date
+    ));
+    
+}
+
+/**
+ * Fetch total investment earning by till date.
+ *
+ * @param  string $date
+ *
+ * @return object
+ */
+function wpcpf_total_investment_earning( $date ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type = 4", $date
+    ));
+    
+}
+
+
+
+/**
  * Fetch a single expense budget from the DB
  *
  * @param  string $date

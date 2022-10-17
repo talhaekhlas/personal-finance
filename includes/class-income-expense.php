@@ -152,9 +152,54 @@ class Income_Expense {
             $data['income_sector_id'] = $income_sector_id;
         } else {
             $expense_by_budget_id = wpcpf_expense_by_budget_id( $budget_for_expense_id );
-            $single_budget = wpcpf_get_single_expense_budget( $budget_for_expense_id );
-            print_r($expense_by_budget_id);
-            print_r($single_budget);
+            $single_budget        = wpcpf_get_single_expense_budget( $budget_for_expense_id );
+            $loan_recieve         = wpcpf_total_loan_recieve( $entry_date );
+            $loan_pay             = wpcpf_total_loan_pay( $entry_date );
+            $investment           = wpcpf_total_investment( $entry_date );
+            $investment_earning   = wpcpf_total_investment_earning( $entry_date );
+            $total_income         = wpcpf_total_income_till_given_date( $entry_date );
+
+            $expense_except_budget_id = wpcpf_total_expense_till_given_date_except_given_budget_id( $entry_date, $budget_for_expense_id);
+
+            
+
+            $total_expense_from_budget_amount = $expense_by_budget_id ? $expense_by_budget_id->total_expense : 0;
+            $total_income_amount       = $total_income ? $total_income->total_income : 0;
+            $budget_amount             = $single_budget ? $single_budget->amount : 0;
+            $loan_recieve_amount       = $loan_recieve ? $loan_recieve->total_amount : 0;
+            $loan_pay_amount           = $loan_pay ? $loan_pay->total_amount : 0;
+            $investment_amount         = $investment ? $investment->total_amount : 0;
+            $investment_earning_amount = $investment_earning ? $investment_earning->total_amount : 0;
+            $expense_except_budget_id_amount = $expense_except_budget_id ? $expense_except_budget_id->total_expense : 0;
+            
+
+            $total_in_amount  = $total_income_amount + $loan_recieve_amount + $investment_earning_amount;
+            $total_out_amount = $total_expense_from_budget_amount + $loan_pay_amount + $investment_amount + $amount;
+
+            if( $total_in_amount < $total_out_amount ) {
+                // $this->expense_validation['remarks'] = 
+            }
+
+            // if () {
+
+            // }
+            echo '<pre>';
+            echo "budget amount: {$budget_amount} <br>";
+            echo "total income: {$total_income_amount} <br>";
+            echo "total expense: {$total_expense_from_budget_amount} <br>";
+            echo "total expense except budget id: {$total_expense_from_budget_amount} <br>";
+            // print_r($total_expense_amount);
+            // print_r($budget_amount);
+            
+            echo "loan recive: {$loan_recieve_amount} <br>";
+            echo "loan pay: {$loan_pay_amount} <br>";
+            echo "investment: {$investment_amount} <br>";
+            echo "investment earning: {$investment_earning_amount} <br>";
+            echo "submit amount: {$amount} <br>";
+            // print_r($loan_recieve_and_earning_amount);
+            // print_r($loan_pay_and_investment_amount);
+            // print_r($total_income_amount);
+            echo $amount;
             die();
             $data['budget_for_expense_id'] = $budget_for_expense_id;
         }
