@@ -13,13 +13,14 @@
   $prev_entry_date        = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : null;
   $prev_remarks           = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
 
-  $income_expense_list_width = isset( $this->expense_validation_info ) ? 'w-3/5' : 'w-3/5';
-  $income_expense_list_float = isset( $this->expense_validation_info ) ? 'float-left' : null;
+  $income_expense_list_width = isset( $this->expense_validation_info ) ? 'w-[1000px]' : 'w-[1000px]';
+  $income_expense_list_float = isset( $this->expense_validation_info ) ? 'float-left' : 'float-left';
+
 
 
 ?>
-<div class="flex items-center justify-center p-12">
-  <div class="mx-auto w-full max-w-[550px]">
+<div class="flex p-12 <?php echo $income_expense_list_width; ?> bg-indigo-500 float-left mr-10">
+  <div class="">
     <form action="" method="post">
     <?php
       if ( $page == 'income' ) {?>
@@ -68,7 +69,8 @@
       <select 
         name  = "budget_for_expense_id"
         id    = "budget_for_expense_id" 
-        class = "w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+        class = "w-[10000px] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+        style="width:1000px"
       >
         <option value="" disabled selected>Select Expense Sector</option>
       </select>
@@ -117,12 +119,12 @@
       </div>
     </form>
   </div>
-</div>
+</div> 
 
 <?php 
-    if ( isset( $this->expense_validation_info ) ) {
+    if ( ! isset( $this->expense_validation_info ) ) {
 ?>
-<div class="w-2/6 mx-auto float-left ml-10">
+<div class="float-left w-[500px] bg-red-500">
   <div class="bg-white shadow-md rounded mt-20">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
       <caption>
@@ -139,35 +141,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php
-         $sl = 0;
-         foreach([] as $value) { 
-        ?>
-        <tr class="hover:bg-grey-lighter">
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
-          <?php if ( $page == 'income' ) { ?>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $income_sector_by_id[ $value->income_sector_id ]; ?></td>
-          <?php } else { ?>
-            <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td>
-          <?php } ?>  
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->entry_date; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->remarks; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light">
-          <?php 
-            $edit_url = admin_url( "admin.php?page={$page}&action=edit&id={$value->id}") ; 
-          ?>  
-          <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
-          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=income&delete_income_action=wpcpf-delete-income&id=" . $value->id ), 'wpcpf-delete-income' ); ?>
-          <a 
-            href="#" 
-            onclick="JSconfirm('<?php echo $delete_url;  ?>')" 
-            class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">
-              Delete
-          </a>
-          </td>
-        </tr>
-        <?php } ?>
+       
       </tbody>
     </table>
   </div>
