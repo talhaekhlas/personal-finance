@@ -152,8 +152,11 @@ class Income_Expense {
             $data['income_sector_id'] = $income_sector_id;
         } else {
             $expense_validation = $this->expense_validation( $budget_for_expense_id, $entry_date, $amount );
+            
 
             if ( ! $expense_validation ) {
+                echo '<pre>';
+                print_r($this->expense_validation_info);
                 return;
             }
             $data['budget_for_expense_id'] = $budget_for_expense_id;
@@ -235,12 +238,12 @@ class Income_Expense {
         $total_in_amount  = $total_income_amount + $loan_recieve_amount + $investment_earning_amount;
         $total_out_amount = $total_expense_from_budget_amount + $loan_pay_amount + $investment_amount + $expense_except_budget_id_amount + $amount;
 
-        if ( $budget_amount < $total_expense_from_budget_amount + $amount) {
-            $this->expense_validation_info['budget_amount']                    = $budget_amount;
-            $this->expense_validation_info['total_expense_from_budget_amount'] = $total_expense_from_budget_amount;
-            $this->expense_validation_info['submit_amount']                    = $amount;
-            return false;
-        }
+        // if ( $budget_amount < $total_expense_from_budget_amount + $amount) {
+        //     $this->expense_validation_info['budget_amount']                    = $budget_amount;
+        //     $this->expense_validation_info['total_expense_from_budget_amount'] = $total_expense_from_budget_amount;
+        //     $this->expense_validation_info['submit_amount']                    = $amount;
+        //     return false;
+        // }
 
         if( $total_in_amount < $total_out_amount ) {
             $this->expense_validation_info['total_income']                     = $total_income_amount;
