@@ -13,13 +13,12 @@
   $prev_entry_date        = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : null;
   $prev_remarks           = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
 
-  $income_expense_list_width = isset( $this->expense_validation_info ) ? 'w-[50%]' : 'w-[50%]';
-  $income_expense_list_float = isset( $this->expense_validation_info ) ? 'float-left' : 'float-left';
+  $income_expense_list_float = isset( $this->expense_validation_info ) ? 'float-left' : 'mx-auto';
 
 
 
 ?>
-<div class="p-12 <?php echo $income_expense_list_width; ?> bg-indigo-500 float-left mr-[50px]">
+<div class="p-12 w-[50%] bg-indigo-500  <?php echo $income_expense_list_float; ?>">
   <div class="">
     <form action="" method="post">
     <?php
@@ -44,13 +43,13 @@
               class="mb-3 block text-base font-medium text-[#07074D]"
             >
             <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Date
-            </label>
+      </label>
             <input
               type="date"
               name="entry_date"
               value="<?php echo $prev_entry_date; ?>"
               id="<?php echo $page ?>_entry_date"
-              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
             <?php if ( $entry_date_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $entry_date_error; ?></p>
@@ -104,7 +103,7 @@
       <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
         Remarks
       </label>
-      <textarea id="remarks" name="remarks" rows="4" class="block p-2.5 w-96 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
+      <textarea id="remarks" name="remarks" rows="4" class="w-[100%] block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
       <?php if ( $remarks_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $remarks_error; ?></p>
       <?php } ?>
@@ -121,7 +120,7 @@
 </div> 
 
 <?php 
-    if ( ! isset( $this->expense_validation_info ) ) {
+    if ( isset( $this->expense_validation_info ) ) {
       include WPCPF_PLUGIN_DIR . '/templates/income-expense/expense-validation-info.php'; 
     }  
 ?>
