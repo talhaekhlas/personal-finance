@@ -152,8 +152,6 @@ class Income_Expense {
             $data['income_sector_id'] = $income_sector_id;
         } else {
             $expense_validation = $this->expense_validation( $budget_for_expense_id, $entry_date, $amount );
-            
-
             if ( ! $expense_validation ) {
                 return;
             }
@@ -234,7 +232,7 @@ class Income_Expense {
         
 
         $total_in_amount  = $total_income_amount + $loan_recieve_amount + $investment_earning_amount;
-        $total_out_amount = $total_expense_from_budget_amount + $loan_pay_amount + $investment_amount + $expense_except_budget_id_amount + $amount;
+        $total_out_amount = $total_expense_from_budget_amount + $loan_pay_amount + $investment_amount + $expense_except_budget_id_amount;
 
         if ( $budget_amount < ($total_expense_from_budget_amount + $amount)) {
             $this->expense_validation_info['budget_amount']                    = $budget_amount;
@@ -244,7 +242,7 @@ class Income_Expense {
             return false;
         }
 
-        if( $total_in_amount < $total_out_amount ) {
+        if( $total_in_amount < $total_out_amount + $amount ) {
             $this->expense_validation_info['total_income']                     = $total_income_amount;
             $this->expense_validation_info['loan_recieve_amount']              = $loan_recieve_amount;
             $this->expense_validation_info['investment_earning_amount']        = $investment_earning_amount;
@@ -252,6 +250,9 @@ class Income_Expense {
             $this->expense_validation_info['loan_pay_amount']                  = $loan_pay_amount;
             $this->expense_validation_info['investment_amount']                = $investment_amount;
             $this->expense_validation_info['expense_except_budget_id_amount']  = $expense_except_budget_id_amount;
+            $this->expense_validation_info['total_in_amount']                  = $total_in_amount;
+            $this->expense_validation_info['total_out_amount']                 = $total_out_amount;
+            $this->expense_validation_info['total_in_hand']                    = $total_in_amount - $total_out_amount;
             $this->expense_validation_info['submit_amount']                    = $amount;
             return false;
             

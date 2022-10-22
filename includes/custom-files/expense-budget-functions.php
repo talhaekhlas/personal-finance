@@ -167,8 +167,12 @@ function wpcpf_get_single_expense_budget( $id ) {
     global $wpdb;
 
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id as budget_for_expense_id,
+        $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id,
+        {$wpdb->prefix}budget_for_expenses.expense_sector_id,
          {$wpdb->prefix}budget_for_expenses.amount, 
+         {$wpdb->prefix}budget_for_expenses.start_date,
+         {$wpdb->prefix}budget_for_expenses.end_date,
+         {$wpdb->prefix}budget_for_expenses.remarks,
          {$wpdb->prefix}income_expense_sectors.name as expense_sector_name
          FROM {$wpdb->prefix}budget_for_expenses 
         INNER JOIN {$wpdb->prefix}income_expense_sectors
