@@ -6,9 +6,9 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
 <div class="float-left w-[45%] ml-[50px]">
   <div class="bg-white shadow-md rounded mt-20">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
-      <caption>
+      <!-- <caption>
         <p class="text-2xl text-emerald-900 font-bold"><?php _e("Transaction Summary"); ?></p>
-      </caption>
+      </caption> -->
       <thead>
         <?php 
             if ( isset( $this->expense_validation_info['budget_amount'] ) ) { ?>
@@ -52,7 +52,7 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
                 </tr>
             <?php } else { ?>
         <tr>
-          <td class="<?php echo $trn_head_class ?> text-rose-700" colspan="2" align="center">Cash in Summary</td>
+          <td class="<?php echo $trn_head_class ?> text-lg text-emerald-900 font-bold" colspan="2" align="center">Cash in Summary</td>
         </tr>
         <tr>
           <td class="<?php echo $trn_head_class ?>">Total Income</td>
@@ -67,15 +67,11 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
           <td class="<?php echo $trn_amount_class ?>"><?php echo $this->expense_validation_info['investment_earning_amount']; ?></td>
         </tr>
         <tr>
-          <td class="<?php echo $trn_head_class ?> text-rose-700" colspan="2" align="center">Cash Out Summary</td>
+          <td class="<?php echo $trn_head_class ?> text-lg text-emerald-900 font-bold" colspan="2" align="center">Cash Out Summary</td>
         </tr>
         <tr>
-          <td class="<?php echo $trn_head_class ?>">Expense From Budget</td>
-          <td class="<?php echo $trn_amount_class ?>"><?php echo $this->expense_validation_info['total_expense_from_budget_amount']; ?></td>
-        </tr>
-        <tr>
-          <td class="<?php echo $trn_head_class ?>">Expense Out From Budget</td>
-          <td class="<?php echo $trn_amount_class ?>"><?php echo $this->expense_validation_info['expense_except_budget_id_amount']; ?></td>
+          <td class="<?php echo $trn_head_class ?>">Total Expense</td>
+          <td class="<?php echo $trn_amount_class ?>"><?php echo $this->expense_validation_info['total_expense_amount']; ?></td>
         </tr>
         <tr>
           <td class="<?php echo $trn_head_class ?>">Loan Pay</td>
@@ -102,6 +98,9 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
           <td class="<?php echo $trn_amount_class ?>"><?php echo $this->expense_validation_info['submit_amount']; ?></td>
         </tr>
         <?php } ?>
+        <tr>
+          <td class="<?php echo $trn_head_class ?> text-rose-700" colspan="2" align="center">You don't have sufficient amount to complete this transaction</td>
+        </tr>
       </thead>
       <tbody>
        

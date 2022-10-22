@@ -287,21 +287,6 @@ function wpcpf_total_expense_till_given_date( $date ) {
     
 }
 
-/**
- * Fetch a single expense budget from the DB
- *
- * @param  string $date
- *
- * @return object
- */
-function wpcpf_total_expense_till_given_date_except_given_budget_id( $date, $budget_id ) {
-    global $wpdb;
-    return $wpdb->get_row(
-        $wpdb->prepare( "SELECT sum(amount) as total_expense FROM {$wpdb->prefix}income_expenses WHERE entry_date <= %s AND budget_for_expense_id !=%d", $date, $budget_id
-    ));
-    
-}
-
 
 /**
  * Delete expense budget
