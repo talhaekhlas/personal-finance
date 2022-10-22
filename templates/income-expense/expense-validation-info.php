@@ -14,10 +14,10 @@ $trn_amount_class = "w-10 py-4 px-6 bg-grey-lightest text-sm text-black border-b
             if ( isset( $this->expense_validation_info['budget_amount'] ) ) { ?>
                 <tr>
                     <td class="<?php echo $trn_head_class ?>">
-                        Expense Source
+                        Expense Source <?php echo $this->expense_validation_info['budget_amount']; ?>
                     </td>
                     <td class="<?php echo $trn_amount_class ?>">
-                        Demo
+                        <?php echo $this->expense_validation_info['expense_sector_name']; ?>
                     </td>
                 </tr>
 

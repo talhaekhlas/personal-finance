@@ -204,9 +204,9 @@ class Income_Expense {
         $page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'income_sector';
 
         if ( delete_income( $id ) ) {
-            $redirected_to = admin_url( "admin.php?page=income&income_deleted=true" );
+            $redirected_to = admin_url( "admin.php?page={$page}&income_deleted=true" );
         } else {
-            $redirected_to = admin_url( "admin.php?page=expense_budget&income_deleted_failed=true" );
+            $redirected_to = admin_url( "admin.php?page={$page}_budget&{$page}_deleted_failed=true" );
         }
         $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );
@@ -236,10 +236,11 @@ class Income_Expense {
         $total_in_amount  = $total_income_amount + $loan_recieve_amount + $investment_earning_amount;
         $total_out_amount = $total_expense_from_budget_amount + $loan_pay_amount + $investment_amount + $expense_except_budget_id_amount + $amount;
 
-        if ( $budget_amount < $total_expense_from_budget_amount + $amount) {
+        if ( $budget_amount < ($total_expense_from_budget_amount + $amount)) {
             $this->expense_validation_info['budget_amount']                    = $budget_amount;
             $this->expense_validation_info['total_expense_from_budget_amount'] = $total_expense_from_budget_amount;
             $this->expense_validation_info['submit_amount']                    = $amount;
+            $this->expense_validation_info['expense_sector_name']              = $single_budget->expense_sector_name;
             return false;
         }
 

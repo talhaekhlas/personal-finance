@@ -18,7 +18,7 @@
 
 
 ?>
-<div class="p-12 w-[50%] bg-indigo-500  <?php echo $income_expense_list_float; ?>">
+<div class="p-12 w-[50%]  <?php echo $income_expense_list_float; ?>">
   <div class="">
     <form action="" method="post">
     <?php
