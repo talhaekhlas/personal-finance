@@ -14,41 +14,74 @@
   </div>
 
   <div class="-mx-3 flex flex-wrap">
-        <div class="w-full px-3 sm:w-1/2">
+
+      <?php if ( $page == 'expense' ) { ?>
+        <div class="w-full px-3 sm:w-1/4">
           <div class="mb-5">
-            <label
-              for="fName"
+          <label
+              for="date"
               class="mb-3 block text-base font-medium text-[#07074D]"
             >
-              First Name
-            </label>
+            <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Date
+          </label>
             <input
-              type="text"
-              name="fName"
-              id="fName"
-              placeholder="First Name"
-              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              type="date"
+              name="entry_date"
+              value=""
+              id="<?php echo $page ?>_entry_date"
+              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
         </div>
-        <div class="w-full px-3 sm:w-1/2">
+        <?php } ?>
+
+        <div class="w-full px-3 sm:w-1/4">
           <div class="mb-5">
-            <label
-              for="lName"
+          <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
+          <select name="income_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+
+            <?php 
+            $income_expense_sectors = $page == 'income'? $income_sectors : [];
+            foreach ( $income_expense_sectors as $value) { 
+            ?>
+            <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
+            <?php } ?>
+          </select>
+          </div>
+        </div>
+              
+      
+
+        <?php if ( $page == 'income' ) { ?>
+        <div class="w-full px-3 sm:w-1/4">
+          <div class="mb-5">
+          <label
+              for="date"
               class="mb-3 block text-base font-medium text-[#07074D]"
             >
-              Last Name
-            </label>
+            <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Date
+          </label>
             <input
-              type="text"
-              name="lName"
-              id="lName"
-              placeholder="Last Name"
-              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              type="date"
+              name="entry_date"
+              value=""
+              id="<?php echo $page ?>_entry_date"
+              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
         </div>
-      </div>
+        <?php } ?>
+
+        <div class="w-full px-3 sm:w-1/4 mt-1">
+          <div class="mb-5 ">
+          <?php 
+                $button = $page == 'income' ? 'Add Income':'Add Expense';
+                wp_nonce_field( 'income_expense' ); 
+                submit_button( __( $button, 'wpcodal-pf' ), 'primary hover:shadow-form rounded-md bg-[#6A64F1] px-8 text-base font-semibold text-white outline-none mt-[12px]', 'submit_income_expense' );
+            ?>
+          </div>
+        </div>
+  </div>
   
   <div class="bg-white shadow-md rounded my-6">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
