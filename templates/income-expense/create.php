@@ -16,7 +16,6 @@
   $income_expense_list_float = isset( $this->expense_validation_info ) ? 'float-left' : 'mx-auto';
 
 
-
 ?>
 <div class="p-12 w-[50%]  <?php echo $income_expense_list_float; ?>">
   <div class="">
@@ -25,7 +24,7 @@
       if ( $page == 'income' ) {?>
       <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-      <select name="income_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+      <select name="income_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
         <?php foreach ( $income_sectors as $value) { ?>
         <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
         <?php } ?>
@@ -70,7 +69,16 @@
         id    = "budget_for_expense_id" 
         class = "w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
       >
-        <option value="" disabled selected>Select Expense Sector</option>
+         
+        <?php $default_selected = isset( $this->expense_validation_info ) ? null : 'selected'; ?>
+        <option value="" disabled <?php echo $default_selected; ?>>Select Expense Sector</option>
+        <?php if (isset($this->expense_validation_info)) { 
+            foreach ( $this->expense_validation_info['budgets_by_date'] as $value ) {
+              $selected = $value->budget_for_expense_id == $this->expense_validation_info['prev_budget_id'] ? 'selected' : null;
+
+        ?>
+            <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo $selected; ?>><?php echo $value->expense_sector_name; ?></option>
+        <?php } } ?>
       </select>
       <?php if ( $expense_sector_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $expense_sector_error; ?></p>

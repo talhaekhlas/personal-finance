@@ -230,12 +230,7 @@ class Income_Expense {
         $investment_earning_amount        = $investment_earning ? $investment_earning->total_amount : 0;
         $total_expense_amount  = $total_expense ? $total_expense->total_expense : 0;
 
-        $budget_id_by_date = wpcpf_expense_budget_id_by_date($entry_date);
-
-        echo '<pre>';
-        print_r($budget_id_by_date);
-        die();
-        
+        $budget_ids_by_date = wpcpf_expense_budget_id_by_date($entry_date);
 
         $total_in_amount  = $total_income_amount + $loan_recieve_amount + $investment_earning_amount;
         $total_out_amount = $total_expense_amount + $loan_pay_amount + $investment_amount;
@@ -245,6 +240,8 @@ class Income_Expense {
             $this->expense_validation_info['total_expense_from_budget_amount'] = $total_expense_from_budget_amount;
             $this->expense_validation_info['submit_amount']                    = $amount;
             $this->expense_validation_info['expense_sector_name']              = $single_budget->expense_sector_name;
+            $this->expense_validation_info['budgets_by_date']                  = $budget_ids_by_date;
+            $this->expense_validation_info['prev_budget_id']                   = $budget_for_expense_id;
             return false;
         }
 
@@ -259,24 +256,14 @@ class Income_Expense {
             $this->expense_validation_info['total_out_amount']           = $total_out_amount;
             $this->expense_validation_info['total_in_hand']              = $total_in_amount - $total_out_amount;
             $this->expense_validation_info['submit_amount']              = $amount;
+
+            $this->expense_validation_info['budgets_by_date']                  = $budget_ids_by_date;
+            $this->expense_validation_info['prev_budget_id']                   = $budget_for_expense_id;
             return false;
             
         }
+        return true;
 
-      
-        echo '<pre>';
-        echo "budget amount: {$budget_amount} <br>";
-        echo "total income: {$total_income_amount} <br>";
-        echo "total expense: {$total_expense_from_budget_amount} <br>";
-        echo "total expense except budget id: {$total_expense_from_budget_amount} <br>";
-      
-        echo "loan recive: {$loan_recieve_amount} <br>";
-        echo "loan pay: {$loan_pay_amount} <br>";
-        echo "investment: {$investment_amount} <br>";
-        echo "investment earning: {$investment_earning_amount} <br>";
-        echo "submit amount: {$amount} <br>";
-       
-        die();
     }
 }
 

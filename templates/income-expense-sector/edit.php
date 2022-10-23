@@ -23,7 +23,7 @@
           value="<?php echo $single_income_expense->name; ?>"
           id="name"
           placeholder="<?php echo $placeholder; ?>"
-          class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
 
         <?php if ( $name_error ) { ?>

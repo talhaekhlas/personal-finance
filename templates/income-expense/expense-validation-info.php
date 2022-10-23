@@ -97,10 +97,11 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
           <td class="<?php echo $trn_head_class ?>">Submit amount</td>
           <td class="<?php echo $trn_amount_class ?>"><?php echo $this->expense_validation_info['submit_amount']; ?></td>
         </tr>
-        <?php } ?>
         <tr>
           <td class="<?php echo $trn_head_class ?> text-rose-700" colspan="2" align="center">You don't have sufficient amount to complete this transaction</td>
         </tr>
+        <?php } ?>
+        
       </thead>
       <tbody>
        
