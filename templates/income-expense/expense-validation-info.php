@@ -14,7 +14,7 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
             if ( isset( $this->expense_validation_info['budget_amount'] ) ) { ?>
                 <tr>
                     <td class="<?php echo $trn_head_class ?>">
-                        Expense Source <?php echo $this->expense_validation_info['budget_amount']; ?>
+                        Expense Source
                     </td>
                     <td class="<?php echo $trn_amount_class ?>">
                         <?php echo $this->expense_validation_info['expense_sector_name']; ?>
@@ -39,9 +39,17 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
                 </tr>
                 <tr>
                     <td class="<?php echo $trn_head_class ?>">
+                        Rest amount for this sector
+                    </td>
+                    <td class="<?php echo $trn_amount_class ?> text-xl text-green-500 italic">
+                        <?php echo $this->expense_validation_info['budget_amount'] - $this->expense_validation_info['total_expense_from_budget_amount']; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="<?php echo $trn_head_class ?>">
                         Submit Amount
                     </td>
-                    <td class="<?php echo $trn_amount_class ?>">
+                    <td class="<?php echo $trn_amount_class ?> text-xl text-red-500 italic">
                         <?php echo $this->expense_validation_info['submit_amount']; ?>
                     </td>
                 </tr>

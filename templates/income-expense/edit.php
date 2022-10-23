@@ -67,11 +67,28 @@
         name  = "budget_for_expense_id"
         id    = "budget_for_expense_id"  
         class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+
+        <?php 
+          if ( isset($this->expense_validation_info) ) {
+          $default_selected = isset( $this->expense_validation_info ) ? null : 'selected';
+         ?>
+        <option value="" disabled <?php echo $default_selected; ?>>Select Expense Sector</option>
+        <?php if (isset($this->expense_validation_info)) { 
+            foreach ( $this->expense_validation_info['budgets_by_date'] as $value ) {
+              $selected = $value->budget_for_expense_id == $this->expense_validation_info['prev_budget_id'] ? 'selected' : null;
+
+        ?>
+            <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo $selected; ?>><?php echo $value->expense_sector_name; ?></option>
+        <?php } } } else { ?>
+
+        <!-- abc -->
         <?php foreach ( $expense_budget_id_by_date as $value) {
           $selected  = $single_income_expense->budget_for_expense_id == $value->budget_for_expense_id ? 'selected' : null;
         ?>
         <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo $selected; ?> ><?php echo $value->expense_sector_name; ?></option>
-        <?php } ?>
+        <?php } } ?>
+
+
       </select>
       <?php if ( $expense_sector_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $expense_sector_error; ?></p>

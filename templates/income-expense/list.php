@@ -12,6 +12,44 @@
     </button>
     </a>
   </div>
+
+  <div class="-mx-3 flex flex-wrap">
+        <div class="w-full px-3 sm:w-1/2">
+          <div class="mb-5">
+            <label
+              for="fName"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              name="fName"
+              id="fName"
+              placeholder="First Name"
+              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
+        </div>
+        <div class="w-full px-3 sm:w-1/2">
+          <div class="mb-5">
+            <label
+              for="lName"
+              class="mb-3 block text-base font-medium text-[#07074D]"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              name="lName"
+              id="lName"
+              placeholder="Last Name"
+              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
+        </div>
+      </div>
+  
   <div class="bg-white shadow-md rounded my-6">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
       <caption>
@@ -30,7 +68,9 @@
       <tbody>
         <?php
          $sl = 0;
+         $total_amount = 0;
          foreach($data as $value) { 
+          $total_amount = $total_amount + $value->amount;
         ?>
         <tr class="hover:bg-grey-lighter">
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
@@ -57,6 +97,10 @@
           </td>
         </tr>
         <?php } ?>
+        <tr>
+          <td class="py-4 px-6 border-b border-grey-light text-lg" colspan="2">Total <?php echo $page; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light text-lg" colspan="3"><?php echo $total_amount; ?></td>
+        </tr>
       </tbody>
     </table>
   </div>
