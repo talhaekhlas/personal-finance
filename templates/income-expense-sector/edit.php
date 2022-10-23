@@ -2,10 +2,8 @@
     $button_title = $sector_type == 'income' ? 'Update Income Sector' : 'Update Expense Sector';
     $placeholder  = $sector_type == 'income' ? 'Please Enter Income Sector' : 'Please Enter Expense Sector';
     $type         = $sector_type == 'income' ? 1 : 2;
-
-    if ( isset( $this->errors ) ) {
-        $name_error = isset( $this->errors ) ? $this->errors['name'] : null;
-    }
+    $name_error = isset( $this->errors ) && isset($this->errors['name']) ? $this->errors['name'] : null;
+    
 ?>
 <div class="flex items-center justify-center p-12">
   <div class="mx-auto w-full max-w-[550px]">

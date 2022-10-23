@@ -27,6 +27,7 @@ class Income_Expense {
 	private function __construct() {
         session_start();
 		$this->income_expense_form_handler();
+        $this->search_income_expense_form_handler();
         
         $this->delete_income();
 
@@ -184,6 +185,114 @@ class Income_Expense {
         wp_redirect( $redirected_to );
         exit;
     }
+
+    /**
+     * Handle the form
+     *
+     * @return void
+     */
+    public function search_income_expense_form_handler() {
+        
+        if ( ! isset( $_POST['submit_search_income_expense'] ) ) {
+            return;
+        }
+		
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'search_income_expense' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        echo '<pre>';
+        print_r($_POST);
+        die();
+
+        $income_sector_id       = isset( $_POST['income_sector_id'] ) ? sanitize_text_field( $_POST['income_sector_id'] ) : '';
+        $budget_for_expense_id  = isset( $_POST['budget_for_expense_id'] ) ? sanitize_text_field( $_POST['budget_for_expense_id'] ) : '';
+        $amount                 = isset( $_POST['amount'] ) ? sanitize_textarea_field( $_POST['amount'] ) : '';
+        $entry_date             = isset( $_POST['entry_date'] ) ? sanitize_textarea_field( $_POST['entry_date'] ) : '';
+        $remarks                = isset( $_POST['remarks'] ) ? sanitize_textarea_field( $_POST['remarks'] ) : '';
+        $id                     = isset( $_POST['id'] ) ? sanitize_textarea_field( $_POST['id'] ) : null;
+        $page                   = $_GET['page'];
+        
+        if ( $page == 'income' && empty( $income_sector_id ) ) {
+            $this->errors['income_sector_id'] = __( 'Please Provide Income Sector', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['income_sector_id'] = $income_sector_id;
+        }
+
+        if ( $page == 'expense' && empty( $budget_for_expense_id ) ) {
+            $this->errors['budget_for_expense_id'] = __( 'Please Provide Expense Sector', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['budget_for_expense_id'] = $budget_for_expense_id;
+        }
+
+        if ( empty( $amount ) ) {
+            $this->errors['amount'] = __( 'Please Provide Amount', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['amount'] = $amount;
+        }
+
+        if ( empty( $entry_date ) ) {
+            $this->errors['entry_date'] = __( 'Please Provide Date', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['entry_date'] = $entry_date;
+        }
+
+        if ( empty( $remarks ) ) {
+            $this->errors['remarks'] = __( 'Please Provide Remarks', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['remarks'] = $remarks;
+        }
+
+        if ( strtotime( $entry_date ) > strtotime("now") ) {
+            $this->errors['greater_entry_date'] = __( 'Entry date should not be greater than present date.', 'wpcodal-pf' );
+        }
+
+        if ( ! empty( $this->errors ) ) {
+            return;
+        }
+
+        if ( $page =='income' ) {
+            $data['income_sector_id'] = $income_sector_id;
+        } else {
+            $expense_validation = $this->expense_validation( $budget_for_expense_id, $entry_date, $amount );
+            if ( ! $expense_validation ) {
+                return;
+            }
+            $data['budget_for_expense_id'] = $budget_for_expense_id;
+        }
+
+        $data['amount']     = $amount;
+        $data['entry_date'] = $entry_date;
+        $data['remarks']    = $remarks;
+
+        if ( ! $id ) {
+            $insert_id = wpcpf_insert_income_expense( $data, $page );
+    
+            if ( is_wp_error( $insert_id ) ) {
+                wp_die( $insert_id->get_error_message() );
+            }
+
+            $redirected_to = admin_url( "admin.php?page={$page}&inserted_{$page}=true" );
+        } else {
+            $update_data = wpcpf_update_income_expense( $data, $id, $page );
+    
+            if ( is_wp_error( $update_data ) ) {
+                wp_die( $update_data->get_error_message() );
+            }
+            $redirected_to = admin_url( "admin.php?page={$page}&updateee_{$page}=true" );
+        }
+
+        $_SESSION["alert_message"] = true;
+
+        wp_redirect( $redirected_to );
+        exit;
+    }
+
 
     public function delete_income() {
         
