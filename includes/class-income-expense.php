@@ -43,10 +43,14 @@ class Income_Expense {
     public function income_expense_page() {
         $action                  = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
         $page                    = isset( $_GET['page'] ) ? $_GET['page'] : 'list';
+        $start_date              = isset( $_GET['start_date'] ) ? $_GET['start_date'] : null;
+        $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
+        $income_sector_id        = isset( $_GET['income_sector_id'] ) ? $_GET['income_sector_id'] : null;
+        $budget_for_expense_id   = isset( $_GET['budget_for_expense_id'] ) ? $_GET['budget_for_expense_id'] : null;
+        $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
         $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
-
-        $income_sector_by_id = [];
+        $income_sector_by_id     = [];
 
         foreach ($income_sectors as $value) {
             $income_sector_by_id[$value->id] = $value->name;
@@ -62,8 +66,6 @@ class Income_Expense {
                 $single_income_expense = wpcpf_get_single_income_expense( $id );
                 if ( $page == 'expense' ) {
                     $expense_budget_id_by_date = wpcpf_expense_budget_id_by_date( $single_income_expense->entry_date );
-                    // echo '<pre>'; 
-                    // print_r($expense_budget_id_by_date); die();
                 }
                 $template      = WPCPF_PLUGIN_DIR . '/templates/income-expense/edit.php';
                 break;
@@ -73,7 +75,14 @@ class Income_Expense {
                 break;
 
             default:
-                $data     = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
+                $data = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
+                if ( $start_date && $income_sector_id ) {
+                    
+                    $data = wpcpf_get_income_by_date_range_and_sector_id( $start_date, $end_date, $income_sector_id );
+                }
+                if ( $start_date && $budget_for_expense_id ) {
+                    // $data = wpcpf_get_expense_by_date_range_and_budget_id( $start_date, $end_date, $income_sector_id );
+                }
                 $template = WPCPF_PLUGIN_DIR . '/templates/income-expense/list.php';
                 break;
         }
@@ -240,35 +249,21 @@ class Income_Expense {
             return;
         }
 
-        die();
+        $date_range = "start_date={$start_date}&end_date={$end_date}";
+        if ( $page == 'income' ) {
+            $extra_parameter = "$date_range&income_sector_id={$income_sector_id}";
+        } else {
+            $extra_parameter = "$date_range&budget_for_expense_id={$budget_id_for_expense}";
+        }
 
        
 
-        // $data['amount']     = $amount;
-        // $data['entry_date'] = $entry_date;
-        // $data['remarks']    = $remarks;
+        
+        $redirected_to = admin_url( "admin.php?page={$page}&{$extra_parameter}" );
+        
 
-        // if ( ! $id ) {
-        //     $insert_id = wpcpf_insert_income_expense( $data, $page );
-    
-        //     if ( is_wp_error( $insert_id ) ) {
-        //         wp_die( $insert_id->get_error_message() );
-        //     }
-
-        //     $redirected_to = admin_url( "admin.php?page={$page}&inserted_{$page}=true" );
-        // } else {
-        //     $update_data = wpcpf_update_income_expense( $data, $id, $page );
-    
-        //     if ( is_wp_error( $update_data ) ) {
-        //         wp_die( $update_data->get_error_message() );
-        //     }
-        //     $redirected_to = admin_url( "admin.php?page={$page}&updateee_{$page}=true" );
-        // }
-
-        // $_SESSION["alert_message"] = true;
-
-        // wp_redirect( $redirected_to );
-        // exit;
+        wp_redirect( $redirected_to );
+        exit;
     }
 
 

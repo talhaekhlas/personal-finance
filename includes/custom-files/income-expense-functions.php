@@ -317,3 +317,38 @@ function wpcpf_expense_by_budget_id( $budget_id ) {
     ));
     
 }
+
+/**
+ * Expense by budget id.
+ *
+ * @param  int $start_date.
+ * @param  int $end_date.
+ * @param  int $income_sector_id.
+ * @return object
+ */
+function wpcpf_get_income_by_date_range_and_sector_id( $start_date, $end_date, $income_sector_id ) {
+    global $wpdb;
+    $order_by = 'id';
+    $order    = 'desc';
+
+    $common_sql = "SELECT {$wpdb->prefix}income_expenses.id,
+    {$wpdb->prefix}income_expenses.amount,
+    {$wpdb->prefix}income_expenses.entry_date,
+    {$wpdb->prefix}income_expenses.remarks,
+    {$wpdb->prefix}income_expense_sectors.name
+    FROM {$wpdb->prefix}income_expenses";
+
+    $sql = $wpdb->prepare(
+            "{$common_sql}
+            INNER JOIN {$wpdb->prefix}income_expense_sectors
+                ON {$wpdb->prefix}income_expenses.income_sector_id = {$wpdb->prefix}income_expense_sectors.id
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s AND {$wpdb->prefix}income_expenses.entry_date <= %s", $start_date, $end_date
+    );
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+    
+}
+
+

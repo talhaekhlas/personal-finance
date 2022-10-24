@@ -41,11 +41,7 @@
         ?>
         <tr class="hover:bg-grey-lighter">
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
-          <?php if ( $page == 'income' ) { ?>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $income_sector_by_id[ $value->income_sector_id ]; ?></td>
-          <?php } else { ?>
-            <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td>
-          <?php } ?>  
+          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td> 
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->entry_date; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->remarks; ?></td>

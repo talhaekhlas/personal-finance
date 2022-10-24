@@ -96,6 +96,6 @@
       }
   ?>
   <div class="w-full mb-2">
-    <p class="text-base text-red-600 italic font-bold"><?php echo $error; ?></p>
+    <p class="text-lg text-red-600 italic font-bold text-center"><?php echo $error; ?></p>
   </div>
   <?php } ?>
