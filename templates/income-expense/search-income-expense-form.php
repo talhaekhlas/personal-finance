@@ -1,5 +1,3 @@
-
-https://larainfo.com/blogs/tailwind-css-multiselect-dropdown-example
 <form action="" method="post">
   <div class="-mx-3 flex flex-wrap">
       
@@ -14,7 +12,7 @@ https://larainfo.com/blogs/tailwind-css-multiselect-dropdown-example
             <input
               type="date"
               name="start_date"
-              value=""
+              value="<?php echo isset( $this->prev_data['start_date'] ) ? $this->prev_data['start_date']: null ?>"
               id="<?php echo $page ?>_start_date"
               class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -32,7 +30,7 @@ https://larainfo.com/blogs/tailwind-css-multiselect-dropdown-example
             <input
               type="date"
               name="end_date"
-              value=""
+              value="<?php echo isset( $this->prev_data['end_date'] ) ? $this->prev_data['end_date']: null ?>"
               id="<?php echo $page ?>_end_date"
               class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -45,24 +43,28 @@ https://larainfo.com/blogs/tailwind-css-multiselect-dropdown-example
           if ( $page == 'expense' ) {
           ?> 
           <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-          <select name="<?php echo $page?>_sector_id" id="budget_for_expense_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-            <option value="All"><?php echo _e("All Sector");; ?></option>
+          <select name="budget_for_expense_id" id="budget_for_expense_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+            <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['budget_for_expense_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector");; ?></option>
             <?php 
             
             foreach ( $budget_list_for_expense as $value ) { 
             ?>
-            <option value="<?php echo $value->budget_for_expense_id; ?>"><?php echo $value->expense_sector_name; ?></option>
+            <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo isset($this->prev_data) && $this->prev_data['income_sector_id'] == $value->budget_for_expense_id ? 'selected' : null; ?> >
+              <?php echo $value->expense_sector_name; ?>
+            </option>
             <?php } ?>
           </select>
           <?php } else { ?>
             <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-          <select name="<?php echo $page?>_sector_id" id="<?php echo $page?>_sector_id" multiple class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-            <option value="All"><?php echo _e("All Sector");; ?></option>
+          <select name="income_sector_id" id="income_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+            <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['income_sector_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector"); ?></option>
             <?php 
             
             foreach ( $income_sector_by_id as $sector_id => $sector_name ) { 
             ?>
-            <option value="<?php echo $sector_id; ?>"><?php echo $sector_name; ?></option>
+            <option value="<?php echo $sector_id; ?>" <?php echo isset( $this->prev_data) &&  $this->prev_data['income_sector_id'] == $sector_id ? 'selected' : null; ?>>
+              <?php echo $sector_name; ?>
+            </option>
             <?php } ?>
           </select>
           <?php } ?>
@@ -79,3 +81,21 @@ https://larainfo.com/blogs/tailwind-css-multiselect-dropdown-example
         </div>
   </div>
   </form>
+  <?php 
+    if ( isset( $this->errors ) ) {
+      if ( isset( $this->errors['greater_start_date'] ) ) {
+        $error = $this->errors['greater_start_date'];
+      }
+
+      if ( isset( $this->errors['end_date'] ) ) {
+        $error = $this->errors['end_date'];
+      }
+
+      if ( isset( $this->errors['start_date'] ) ) {
+        $error = $this->errors['start_date'];
+      }
+  ?>
+  <div class="w-full mb-2">
+    <p class="text-base text-red-600 italic font-bold"><?php echo $error; ?></p>
+  </div>
+  <?php } ?>
