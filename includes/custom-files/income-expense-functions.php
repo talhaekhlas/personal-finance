@@ -67,6 +67,63 @@ function wpcpf_get_expense() {
 }
 
 /**
+ * Fetch expene list.
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_for_expense_id = null ) {
+    global $wpdb;
+    $order_by = 'id';
+    $order    = 'desc';
+    $common_sql = "SELECT {$wpdb->prefix}income_expenses.id,
+    {$wpdb->prefix}income_expenses.amount,
+    {$wpdb->prefix}income_expenses.entry_date,
+    {$wpdb->prefix}income_expenses.remarks,
+    {$wpdb->prefix}income_expense_sectors.name
+    FROM {$wpdb->prefix}income_expenses
+    INNER JOIN {$wpdb->prefix}budget_for_expenses
+        ON {$wpdb->prefix}income_expenses.budget_for_expense_id = {$wpdb->prefix}budget_for_expenses.id
+    INNER JOIN {$wpdb->prefix}income_expense_sectors
+        ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id";
+
+    if ( $start_date && $end_date && $budget_for_expense_id == 'All') {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+            AND {$wpdb->prefix}income_expenses.entry_date <= %s
+            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL", 
+            $start_date, $end_date
+        );
+    }
+
+    if ( $start_date && $end_date && $budget_for_expense_id != 'All') {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+            AND {$wpdb->prefix}income_expenses.entry_date <= %s
+            AND {$wpdb->prefix}income_expenses.budget_for_expense_id = %d
+            ", $start_date, $end_date, $budget_for_expense_id
+        );
+    }
+
+    if ( !$start_date || !$end_date ) {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL 
+            ORDER BY %s %s ", $order_by, $order
+        );
+    }
+
+    
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
+}
+
+/**
  * Fetch expense list.
  *
  * @param  array  $args
@@ -326,7 +383,7 @@ function wpcpf_expense_by_budget_id( $budget_id ) {
  * @param  int $income_sector_id.
  * @return object
  */
-function wpcpf_get_income_by_date_range_and_sector_id( $start_date, $end_date, $income_sector_id ) {
+function wpcpf_get_income_data( $start_date = null, $end_date = null, $income_sector_id = null ) {
     global $wpdb;
     $order_by = 'id';
     $order    = 'desc';
@@ -336,15 +393,37 @@ function wpcpf_get_income_by_date_range_and_sector_id( $start_date, $end_date, $
     {$wpdb->prefix}income_expenses.entry_date,
     {$wpdb->prefix}income_expenses.remarks,
     {$wpdb->prefix}income_expense_sectors.name
-    FROM {$wpdb->prefix}income_expenses";
+    FROM {$wpdb->prefix}income_expenses
+    INNER JOIN {$wpdb->prefix}income_expense_sectors
+        ON {$wpdb->prefix}income_expenses.income_sector_id = {$wpdb->prefix}income_expense_sectors.id";
 
-    $sql = $wpdb->prepare(
+    if ( $start_date && $end_date && $income_sector_id == 'All') {
+        $sql = $wpdb->prepare(
             "{$common_sql}
-            INNER JOIN {$wpdb->prefix}income_expense_sectors
-                ON {$wpdb->prefix}income_expenses.income_sector_id = {$wpdb->prefix}income_expense_sectors.id
-            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s AND {$wpdb->prefix}income_expenses.entry_date <= %s", $start_date, $end_date
-    );
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+            AND {$wpdb->prefix}income_expenses.entry_date <= %s", 
+            $start_date, $end_date
+        );
+    }
 
+    if ( $start_date && $end_date && $income_sector_id != 'All') {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+            AND {$wpdb->prefix}income_expenses.entry_date <= %s
+            AND {$wpdb->prefix}income_expenses.income_sector_id = %d
+            ", $start_date, $end_date, $income_sector_id
+        );
+    }
+
+    if ( !$start_date || !$end_date ) {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            ORDER BY %s %s
+            ", $order_by, $order
+        );
+    }
+    
     $items = $wpdb->get_results( $sql );
 
     return $items;

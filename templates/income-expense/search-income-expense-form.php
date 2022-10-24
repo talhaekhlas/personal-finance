@@ -12,7 +12,7 @@
             <input
               type="date"
               name="start_date"
-              value="<?php echo isset( $this->prev_data['start_date'] ) ? $this->prev_data['start_date']: null ?>"
+              value="<?php echo isset( $this->prev_data['start_date'] ) ? $this->prev_data['start_date']: $start_date ?>"
               id="<?php echo $page ?>_start_date"
               class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -30,7 +30,7 @@
             <input
               type="date"
               name="end_date"
-              value="<?php echo isset( $this->prev_data['end_date'] ) ? $this->prev_data['end_date']: null ?>"
+              value="<?php echo isset( $this->prev_data['end_date'] ) ? $this->prev_data['end_date']: $end_date ?>"
               id="<?php echo $page ?>_end_date"
               class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -48,8 +48,15 @@
             <?php 
             
             foreach ( $budget_list_for_expense as $value ) { 
+              $selected = null;
+              if ( isset( $this->prev_data) &&  $this->prev_data['budget_for_expense_id'] == $value->budget_for_expense_id ) {
+                $selected = 'selected';
+              }
+              if ( $budget_for_expense_id == $value->budget_for_expense_id ) {
+                $selected = 'selected';
+              }
             ?>
-            <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo isset($this->prev_data) && $this->prev_data['income_sector_id'] == $value->budget_for_expense_id ? 'selected' : null; ?> >
+            <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo $selected; ?> >
               <?php echo $value->expense_sector_name; ?>
             </option>
             <?php } ?>
@@ -61,8 +68,15 @@
             <?php 
             
             foreach ( $income_sector_by_id as $sector_id => $sector_name ) { 
+              $selected = null;
+              if ( isset( $this->prev_data) &&  $this->prev_data['income_sector_id'] == $sector_id ) {
+                $selected = 'selected';
+              }
+              if ( $income_sector_id == $sector_id ) {
+                $selected = 'selected';
+              }
             ?>
-            <option value="<?php echo $sector_id; ?>" <?php echo isset( $this->prev_data) &&  $this->prev_data['income_sector_id'] == $sector_id ? 'selected' : null; ?>>
+            <option value="<?php echo $sector_id; ?>" <?php echo $selected; ?>>
               <?php echo $sector_name; ?>
             </option>
             <?php } ?>
@@ -73,7 +87,7 @@
         <div class="w-full px-3 sm:w-1/4 mt-11">
           <div>
           <?php 
-                $button = $page == 'income' ? 'Search Income':'Expense Expense';
+                $button = $page == 'income' ? 'Search Income':'Search Expense';
                 wp_nonce_field( 'search_income_expense' ); 
                 submit_button( __( $button, 'wpcodal-pf' ), 'primary hover:shadow-form rounded-md bg-[#6A64F1] px-8 text-base font-semibold text-white outline-none mt-[12px]', 'submit_search_income_expense' );
             ?>

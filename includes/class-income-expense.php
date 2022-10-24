@@ -75,11 +75,16 @@ class Income_Expense {
                 break;
 
             default:
+                // $data = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
                 $data = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
-                if ( $start_date && $income_sector_id ) {
-                    
-                    $data = wpcpf_get_income_by_date_range_and_sector_id( $start_date, $end_date, $income_sector_id );
+                if ( $page == 'income' ) {
+                    $data = wpcpf_get_income_data( $start_date, $end_date, $income_sector_id );
                 }
+
+                if ( $page == 'expense' ) {
+                    $data = wpcpf_get_expense_data( $start_date, $end_date, $budget_for_expense_id );
+                }
+                
                 if ( $start_date && $budget_for_expense_id ) {
                     // $data = wpcpf_get_expense_by_date_range_and_budget_id( $start_date, $end_date, $income_sector_id );
                 }
