@@ -1,3 +1,5 @@
+
+https://larainfo.com/blogs/tailwind-css-multiselect-dropdown-example
 <form action="" method="post">
   <div class="-mx-3 flex flex-wrap">
       
@@ -13,7 +15,7 @@
               type="date"
               name="start_date"
               value=""
-              id="<?php echo $page ?>_entry_date"
+              id="<?php echo $page ?>_start_date"
               class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
@@ -31,7 +33,7 @@
               type="date"
               name="end_date"
               value=""
-              id="<?php echo $page ?>_entry_date"
+              id="<?php echo $page ?>_end_date"
               class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
@@ -44,12 +46,20 @@
           ?> 
           <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
           <select name="<?php echo $page?>_sector_id" id="budget_for_expense_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+            <option value="All"><?php echo _e("All Sector");; ?></option>
+            <?php 
+            
+            foreach ( $budget_list_for_expense as $value ) { 
+            ?>
+            <option value="<?php echo $value->budget_for_expense_id; ?>"><?php echo $value->expense_sector_name; ?></option>
+            <?php } ?>
           </select>
           <?php } else { ?>
             <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-          <select name="<?php echo $page?>_sector_id" id="<?php echo $page?>_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-
+          <select name="<?php echo $page?>_sector_id" id="<?php echo $page?>_sector_id" multiple class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+            <option value="All"><?php echo _e("All Sector");; ?></option>
             <?php 
+            
             foreach ( $income_sector_by_id as $sector_id => $sector_name ) { 
             ?>
             <option value="<?php echo $sector_id; ?>"><?php echo $sector_name; ?></option>

@@ -34,6 +34,22 @@ if ( document.querySelector("#income_entry_date") ) {
   income_entry_date.max = new Date().toISOString().split("T")[0];
 }
 
+//Start date and end date for expense sector id
+if ( document.querySelector("#expense_start_date") ) {
+  expense_start_date.max = new Date().toISOString().split("T")[0];
+}
+if ( document.querySelector("#expense_end_date") ) {
+  expense_end_date.max = new Date().toISOString().split("T")[0];
+}
+
+if ( document.querySelector("#income_start_date") ) {
+  income_start_date.max = new Date().toISOString().split("T")[0];
+}
+if ( document.querySelector("#income_end_date") ) {
+  income_end_date.max = new Date().toISOString().split("T")[0];
+}
+
+
 //Recent date as max date set for loan and investment
 if ( document.querySelector("#loan_investment_entry_date") ) {
   loan_investment_entry_date.max = new Date().toISOString().split("T")[0];
