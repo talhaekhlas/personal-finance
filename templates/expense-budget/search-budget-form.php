@@ -40,7 +40,7 @@
         <div class="w-full px-3 sm:w-1/4 mt-10">
           <div>
           <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Sector Name</label>
-          <select name="budget_id" id="budget_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          <select name="expense_sector_id" id="expense_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['budget_for_expense_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector");; ?></option>
             <?php 
             
