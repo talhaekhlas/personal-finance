@@ -59,11 +59,14 @@
           </a>
           </td>
         </tr>
-        <?php } ?>
+        <?php }
+        if ( $total_amount ) {
+        ?>
         <tr>
           <td class="py-4 px-6 border-b border-grey-light text-lg" colspan="2">Total <?php echo $page; ?></td>
           <td class="py-4 px-6 border-b border-grey-light text-lg" colspan="3"><?php echo $total_amount; ?></td>
         </tr>
+        <?php } ?>
       </tbody>
     </table>
   </div>

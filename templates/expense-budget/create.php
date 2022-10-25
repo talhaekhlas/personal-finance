@@ -25,7 +25,7 @@
     <form action="" method="post">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Expense Sector Name</label>
-      <select name="expense_sector_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+      <select name="expense_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
         <?php foreach ( $expense_sectors as $value) { ?>
         <option value="<?php echo $value->id; ?>"><?php echo $value->name; ?></option>
         <?php } ?>
@@ -48,7 +48,7 @@
           value="<?php echo $prev_amount; ?>"
           id="amount"
           placeholder="<?php _e("Enter Budget Amount", "wpcodal-pf"); ?>"
-          class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
         <?php if ( $amount_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $amount_error; ?></p>
@@ -66,7 +66,7 @@
               name="start_date"
               value="<?php echo $prev_start_date; ?>"
               id="start_date"
-              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
             <?php if ( $start_date_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $start_date_error; ?></p>
@@ -89,7 +89,7 @@
               name="end_date"
               value="<?php echo $prev_start_date; ?>"
               id="end_date"
-              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
             <?php if ( $end_date_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $end_date_error; ?></p>
@@ -100,7 +100,7 @@
       <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
         Remarks
       </label>
-      <textarea id="remarks" name="remarks" rows="4" class="block p-2.5 w-96 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
+      <textarea id="remarks" name="remarks" rows="4" class="w-[100%] block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
       <?php if ( $remarks_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $remarks_error; ?></p>
       <?php } ?>

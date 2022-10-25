@@ -99,12 +99,19 @@ class Income_Expense_Sector {
             $this->errors['name'] = __( 'Please provide a name', 'wpcodal-pf' );
         }
 
+
         if ( ! empty( $this->errors ) ) {
             return;
         }
-
+        $check_exist = wpcpf_income_expense_sector_check( $name, $type );
+        $name = trim($name);
         if ( ! $id ) {
-            $insert_id = wpcpf_insert_income_expense_sector( [
+            if ( $check_exist ) {
+                $this->errors['duplicate_name'] = __( 'Duplicate name', 'wpcodal-pf' );
+                $this->priv_data['name'] = $name;
+                return;
+            }
+            $insert_id   = wpcpf_insert_income_expense_sector( [
                 'name'    => $name,
                 'type'    => (int) $type,
             ] );
@@ -115,6 +122,12 @@ class Income_Expense_Sector {
 
             $redirected_to = admin_url( "admin.php?page={$page_url}&inserted=true" );
         } else {
+            if ( $check_exist && $check_exist->id != $id ) {
+                $this->errors['duplicate_name'] = __( 'Duplicate name', 'wpcodal-pf' );
+                $this->priv_data['name'] = $name;
+                return;
+            }
+
             $update_data = wpcpf_update_income_expense_sector( [
                 'name'    => $name,
                 'type'    => (int) $type,

@@ -151,6 +151,24 @@ function delete_sector( $id ) {
     );
 }
 
+/**
+ * Check income expense sector exist.
+ *
+ * @param  string $name
+ * @param int $type
+ *
+ * @return object
+ */
+function wpcpf_income_expense_sector_check( $name, $type ) {
+    global $wpdb;
+
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}income_expense_sectors 
+        WHERE name = %s
+        AND type = %d", $name, $type )
+    );
+}
+
 
 include WPCPF_PLUGIN_DIR . '/includes/custom-files/expense-budget-functions.php';
 include WPCPF_PLUGIN_DIR . '/includes/custom-files/income-expense-functions.php';
