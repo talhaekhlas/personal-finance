@@ -24,7 +24,7 @@ function wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id ) 
     if ( !$start_date || !$end_date || !$expense_sector_id) {
         $sql = $wpdb->prepare(
             "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
-            ORDER BY %s %s ", $order_by, $order
+            ORDER BY %s %s , %s %s", 'expense_sector_id','asc' ,$order_by, $order
         );
     }
 
