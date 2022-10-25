@@ -47,7 +47,6 @@ class Income_Expense {
         $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
         $income_sector_id        = isset( $_GET['income_sector_id'] ) ? $_GET['income_sector_id'] : null;
         $budget_for_expense_id   = isset( $_GET['budget_for_expense_id'] ) ? $_GET['budget_for_expense_id'] : null;
-        $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
         $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
         $income_sector_by_id     = [];

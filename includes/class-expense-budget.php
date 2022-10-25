@@ -27,6 +27,7 @@ class Expense_Budget {
 	private function __construct() {
         session_start();
 		$this->budget_form_handler();
+        $this->budget_search_form_handler();
         
         $this->delete_expense_budget();
 
@@ -42,6 +43,9 @@ class Expense_Budget {
     public function expense_budget_page() {
         $action = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
         $expense_sectors = wpcpf_get_income_expense_sector( 2 ); // 2 means expense sector.
+        $start_date      = isset( $_GET['start_date'] ) ? $_GET['start_date'] : null;
+        $end_date        = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
+        $budget_id       = isset( $_GET['budget_id'] ) ? $_GET['budget_id'] : null;
 
         $expense_sector_by_id = [];
 
@@ -65,7 +69,7 @@ class Expense_Budget {
                 break;
 
             default:
-                $data     = wpcpf_get_expense_budget();
+                $data     = wpcpf_get_expense_budget( $start_date, $end_date, $budget_id );
                 $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
                 break;
         }
@@ -178,6 +182,61 @@ class Expense_Budget {
         }
 
         $_SESSION["alert_message"] = true;
+
+        wp_redirect( $redirected_to );
+        exit;
+    }
+
+    /**
+     * Handle the form
+     *
+     * @return void
+     */
+    public function budget_search_form_handler() {
+        
+        if ( ! isset( $_POST['submit_search_budget'] ) ) {
+            return;
+        }
+		
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'search_budget' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        $start_date  = isset( $_POST['start_date'] ) ? sanitize_textarea_field( $_POST['start_date'] ) : '';
+        $end_date    = isset( $_POST['end_date'] ) ? sanitize_textarea_field( $_POST['end_date'] ) : '';
+        $budget_id   = isset( $_POST['budget_id'] ) ? sanitize_text_field( $_POST['budget_id'] ) : '';
+
+        if ( empty( $start_date ) ) {
+            $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['start_date'] = $start_date;
+        }
+
+        if ( empty( $end_date ) ) {
+            $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
+        } else {
+            $this->prev_data['end_date'] = $end_date;
+        }
+
+        if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
+            $this->errors['greater_start_date'] = __( 'Start date should not be less than end date.', 'wpcodal-pf' );
+        }
+
+        if ( ! empty( $this->errors ) ) {
+            return;
+        }
+
+        if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
+            $this->errors['greater_start_date'] = __( 'Start date will no be greater than end date', 'wpcodal-pf' );
+            return;
+        }
+        $extra_parameter = "start_date={$start_date}&end_date={$end_date}&budget_id={$budget_id}";
+        $redirected_to = admin_url( "admin.php?page=expense_budget&$extra_parameter" );
 
         wp_redirect( $redirected_to );
         exit;

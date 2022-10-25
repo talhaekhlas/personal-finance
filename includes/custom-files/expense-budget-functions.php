@@ -17,15 +17,37 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return array
  */
-function wpcpf_get_expense_budget() {
+function wpcpf_get_expense_budget( $start_date, $end_date, $budget_id ) {
     global $wpdb;
     $order_by = 'id';
     $order    = 'desc';
-
-    $sql = $wpdb->prepare(
+    if ( !$start_date || !$end_date || !$budget_id) {
+        $sql = $wpdb->prepare(
             "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
             ORDER BY %s %s ", $order_by, $order
-    );
+        );
+    }
+
+    if ( $start_date && $end_date && $budget_id =='All' ) {
+        
+        $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
+            WHERE start_date >= %s 
+            AND end_date <= %s
+            ORDER BY %s %s ", $start_date, $end_date, $order_by, $order
+        );
+    }
+
+    if ( $start_date && $end_date && $budget_id !='All' ) {
+        $sql = $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}budget_for_expenses
+            WHERE start_date >= %s 
+            AND end_date <= %s
+            AND id = %d 
+            ORDER BY %s %s ", $start_date, $end_date, $budget_id, $order_by, $order
+        );
+    }
+    
 
     $items = $wpdb->get_results( $sql );
 
