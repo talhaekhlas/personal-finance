@@ -43,7 +43,7 @@
           <select name="expense_sector_id" id="expense_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['expense_sector_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector");; ?></option>
             <?php 
-            
+            $expense_ids = [];
             foreach ( $data_for_dropdown as $value ) { 
               $selected = null;
               if ( isset( $this->prev_data) &&  $this->prev_data['expense_sector_id'] == $value->expense_sector_id ) {
@@ -52,11 +52,16 @@
               if ( $expense_sector_id == $value->expense_sector_id ) {
                 $selected = 'selected';
               }
+
+              if ( !in_array( $value->expense_sector_id, $expense_ids ) ) {
             ?>
             <option value="<?php echo $value->expense_sector_id; ?>" <?php echo $selected; ?> >
               <?php echo $expense_sector_by_id[ $value->expense_sector_id ]; ?>
             </option>
-            <?php } ?>
+            <?php 
+            $expense_ids[] = $value->expense_sector_id;
+            } }
+            ?>
           </select>
           </div>
         </div>
