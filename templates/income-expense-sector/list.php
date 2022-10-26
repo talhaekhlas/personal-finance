@@ -29,10 +29,12 @@
         <?php
          $sl = 0;
          foreach($data as $value) { 
+
+          $color = in_array($value->id, $all_used_income_ids) ? 'text-blue-500':null;
         ?>
         <tr class="hover:bg-grey-lighter">
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light <?php echo $color; ?>"><?php echo $value->name; ?></td>
           <td class="py-4 px-6 border-b border-grey-light">
           <?php $edit_url = admin_url( "admin.php?page={$sector_type}_sector&action=edit&id={$value->id}") ; ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
