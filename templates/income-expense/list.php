@@ -43,7 +43,7 @@
           <td class="py-4 px-6 border-b border-grey-light"><?php echo ++$sl; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td> 
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->entry_date; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light text-red-400 italic font-extrabold"><?php echo $value->entry_date; ?></td>
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->remarks; ?></td>
           <td class="py-4 px-6 border-b border-grey-light">
           <?php 

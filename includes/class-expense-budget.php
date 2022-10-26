@@ -70,9 +70,6 @@ class Expense_Budget {
 
             default:
                 $data     = wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id );
-                echo '<pre>';
-                print_r($data);
-                die();
                 $data_for_dropdown = wpcpf_get_expense_budget(null, null, null);
                 $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
                 break;
