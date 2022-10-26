@@ -20,11 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id ) {
     global $wpdb;
     $order_by = 'id';
-    $order    = 'desc';
+    $order    = 'DESC';
     if ( !$start_date || !$end_date || !$expense_sector_id) {
         $sql = $wpdb->prepare(
             "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
-            ORDER BY %s %s , %s %s", 'expense_sector_id','asc' ,$order_by, $order
+            WHERE id >= %d
+            ORDER BY expense_sector_id ASC, id DESC",1
         );
     }
 
