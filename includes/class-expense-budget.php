@@ -70,6 +70,7 @@ class Expense_Budget {
 
             default:
                 $data     = wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id );
+                $data_for_dropdown = wpcpf_get_expense_budget(null, null, null);
                 $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
                 break;
         }
@@ -210,7 +211,7 @@ class Expense_Budget {
         $start_date  = isset( $_POST['start_date'] ) ? sanitize_textarea_field( $_POST['start_date'] ) : '';
         $end_date    = isset( $_POST['end_date'] ) ? sanitize_textarea_field( $_POST['end_date'] ) : '';
         $expense_sector_id   = isset( $_POST['expense_sector_id'] ) ? sanitize_text_field( $_POST['expense_sector_id'] ) : '';
-
+        $this->prev_data['expense_sector_id'] = $expense_sector_id;
         if ( empty( $start_date ) ) {
             $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
         } else {

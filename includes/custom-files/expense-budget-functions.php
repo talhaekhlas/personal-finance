@@ -35,7 +35,7 @@ function wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id ) 
             "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
             WHERE start_date >= %s 
             AND end_date <= %s
-            ORDER BY %s %s ", $start_date, $end_date, $order_by, $order
+            ORDER BY id DESC ", $start_date, $end_date
         );
     }
 
