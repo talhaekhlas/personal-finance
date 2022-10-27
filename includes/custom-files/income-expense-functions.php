@@ -137,7 +137,8 @@ function wpcpf_get_budget_list_for_expense() {
 
     return $wpdb->get_results(
         $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id as budget_for_expense_id,
-         {$wpdb->prefix}income_expense_sectors.name as expense_sector_name
+         {$wpdb->prefix}income_expense_sectors.name as expense_sector_name,
+         {$wpdb->prefix}budget_for_expenses.expense_sector_id
          FROM {$wpdb->prefix}budget_for_expenses 
         INNER JOIN {$wpdb->prefix}income_expense_sectors
             ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id

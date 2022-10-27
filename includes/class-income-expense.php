@@ -263,12 +263,7 @@ class Income_Expense {
             $extra_parameter = "$date_range&budget_for_expense_id={$budget_id_for_expense}";
         }
 
-       
-
-        
         $redirected_to = admin_url( "admin.php?page={$page}&{$extra_parameter}" );
-        
-
         wp_redirect( $redirected_to );
         exit;
     }
