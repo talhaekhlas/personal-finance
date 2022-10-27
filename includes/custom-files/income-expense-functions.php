@@ -99,7 +99,7 @@ function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_i
     }
 
     if ( $start_date && $end_date && $budget_ids_by_expense_sector != 'All') {
-        $budget_ids = implode(",",$budget_ids_by_expense_sector);
+        $budget_ids = implode(",",$budget_ids_by_expense_sector); 
         $sql = $wpdb->prepare(
             "{$common_sql}
             WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 

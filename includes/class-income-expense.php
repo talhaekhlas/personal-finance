@@ -93,7 +93,7 @@ class Income_Expense {
                     $budgets_by_expense_sector = wpcpf_budgets_by_expense_sector($expense_sector_id);
                     $budget_ids_by_expense_sector = [];
                     foreach ( $budgets_by_expense_sector as $value) {
-                        $budget_ids_by_expense_sector[] = $value->id;
+                        $budget_ids_by_expense_sector[] = $value->id; 
                     }
                     
                     $data = wpcpf_get_expense_data( $start_date, $end_date, $budget_ids_by_expense_sector );
