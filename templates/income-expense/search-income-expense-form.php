@@ -47,7 +47,7 @@
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['budget_for_expense_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector");; ?></option>
             <?php 
             
-            foreach ( $budget_list_for_expense as $value ) { 
+            foreach ( $active_expense_ids as $expense_sector_id => $expense_sector_name ) { 
               $selected = null;
               if ( isset( $this->prev_data) &&  $this->prev_data['budget_for_expense_id'] == $value->budget_for_expense_id ) {
                 $selected = 'selected';

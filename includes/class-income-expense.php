@@ -49,9 +49,15 @@ class Income_Expense {
         $budget_for_expense_id   = isset( $_GET['budget_for_expense_id'] ) ? $_GET['budget_for_expense_id'] : null;
         $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
-        echo '<pre>';
-        print_r($budget_list_for_expense);
-        die();
+
+        $active_expense_ids = [];
+
+        foreach ($budget_list_for_expense as $value) {
+            $active_expense_ids[$value->expense_sector_id] = $value->expense_sector_name;
+        }
+
+        $active_expense_ids = array_unique($active_expense_ids);
+
         $income_sector_by_id     = [];
 
         foreach ($income_sectors as $value) {
