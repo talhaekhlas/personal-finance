@@ -46,7 +46,7 @@ class Income_Expense {
         $start_date              = isset( $_GET['start_date'] ) ? $_GET['start_date'] : null;
         $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
         $income_sector_id        = isset( $_GET['income_sector_id'] ) ? $_GET['income_sector_id'] : null;
-        $budget_for_expense_id   = isset( $_GET['budget_for_expense_id'] ) ? $_GET['budget_for_expense_id'] : null;
+        $expense_sector_id       = isset( $_GET['expense_sector_id'] ) ? $_GET['expense_sector_id'] : null;
         $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
 
@@ -90,10 +90,16 @@ class Income_Expense {
                 }
 
                 if ( $page == 'expense' ) {
-                    $data = wpcpf_get_expense_data( $start_date, $end_date, $budget_for_expense_id );
+                    $budgets_by_expense_sector = wpcpf_budgets_by_expense_sector($expense_sector_id);
+                    $budget_ids_by_expense_sector = [];
+                    foreach ( $budgets_by_expense_sector as $value) {
+                        $budget_ids_by_expense_sector[] = $value->id;
+                    }
+                    
+                    $data = wpcpf_get_expense_data( $start_date, $end_date, $budget_ids_by_expense_sector );
                 }
                 
-                if ( $start_date && $budget_for_expense_id ) {
+                if ( $start_date && $expense_sector_id ) {
                     // $data = wpcpf_get_expense_by_date_range_and_budget_id( $start_date, $end_date, $income_sector_id );
                 }
                 $template = WPCPF_PLUGIN_DIR . '/templates/income-expense/list.php';
@@ -230,7 +236,7 @@ class Income_Expense {
 
         $start_date            = isset( $_POST['start_date'] ) ? sanitize_text_field( $_POST['start_date'] ) : '';
         $end_date              = isset( $_POST['end_date'] ) ? sanitize_text_field( $_POST['end_date'] ) : '';
-        $budget_id_for_expense = isset( $_POST['budget_for_expense_id'] ) ? sanitize_textarea_field( $_POST['budget_for_expense_id'] ) : '';
+        $expense_sector_id = isset( $_POST['expense_sector_id'] ) ? sanitize_textarea_field( $_POST['expense_sector_id'] ) : '';
         $income_sector_id      = isset( $_POST['income_sector_id'] ) ? sanitize_textarea_field( $_POST['income_sector_id'] ) : '';
         $page                  = $_GET['page'];
         
@@ -242,7 +248,7 @@ class Income_Expense {
         }
 
         if ( $page == 'expense' ) {
-            $this->prev_data['budget_for_expense_id'] = $budget_id_for_expense;
+            $this->prev_data['expense_sector_id'] = $expense_sector_id;
         }
 
         if ( empty( $start_date ) ) {
@@ -269,7 +275,7 @@ class Income_Expense {
         if ( $page == 'income' ) {
             $extra_parameter = "$date_range&income_sector_id={$income_sector_id}";
         } else {
-            $extra_parameter = "$date_range&budget_for_expense_id={$budget_id_for_expense}";
+            $extra_parameter = "$date_range&expense_sector_id={$expense_sector_id}";
         }
 
         $redirected_to = admin_url( "admin.php?page={$page}&{$extra_parameter}" );

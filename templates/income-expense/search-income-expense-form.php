@@ -43,21 +43,21 @@
           if ( $page == 'expense' ) {
           ?> 
           <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-          <select name="budget_for_expense_id" id="budget_for_expense_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          <select name="expense_sector_id" id="expense_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['budget_for_expense_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector");; ?></option>
             <?php 
             
-            foreach ( $active_expense_ids as $expense_sector_id => $expense_sector_name ) { 
+            foreach ( $active_expense_ids as $sector_id => $expense_sector_name ) { 
               $selected = null;
-              if ( isset( $this->prev_data) &&  $this->prev_data['budget_for_expense_id'] == $value->budget_for_expense_id ) {
+              if ( isset( $this->prev_data) &&  $this->prev_data['expense_sector_id'] == $sector_id ) {
                 $selected = 'selected';
               }
-              if ( $budget_for_expense_id == $value->budget_for_expense_id ) {
+              if ( $expense_sector_id == $sector_id ) {
                 $selected = 'selected';
               }
             ?>
-            <option value="<?php echo $value->budget_for_expense_id; ?>" <?php echo $selected; ?> >
-              <?php echo $value->expense_sector_name; ?>
+            <option value="<?php echo $sector_id; ?>" <?php echo $selected; ?> >
+              <?php echo $expense_sector_name; ?>
             </option>
             <?php } ?>
           </select>

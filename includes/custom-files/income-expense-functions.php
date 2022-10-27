@@ -73,7 +73,7 @@ function wpcpf_get_expense() {
  *
  * @return array
  */
-function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_for_expense_id = null ) {
+function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_ids_by_expense_sector ) {
     global $wpdb;
     $order_by = 'id';
     $order    = 'desc';
@@ -88,7 +88,7 @@ function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_f
     INNER JOIN {$wpdb->prefix}income_expense_sectors
         ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id";
 
-    if ( $start_date && $end_date && $budget_for_expense_id == 'All') {
+    if ( $start_date && $end_date && $budget_ids_by_expense_sector == 'All') {
         $sql = $wpdb->prepare(
             "{$common_sql}
             WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
@@ -98,13 +98,14 @@ function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_f
         );
     }
 
-    if ( $start_date && $end_date && $budget_for_expense_id != 'All') {
+    if ( $start_date && $end_date && $budget_ids_by_expense_sector != 'All') {
+        $budget_ids = implode(",",$budget_ids_by_expense_sector);
         $sql = $wpdb->prepare(
             "{$common_sql}
             WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
             AND {$wpdb->prefix}income_expenses.entry_date <= %s
-            AND {$wpdb->prefix}income_expenses.budget_for_expense_id = %d
-            ", $start_date, $end_date, $budget_for_expense_id
+            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IN ($budget_ids)
+            ", $start_date, $end_date 
         );
     }
 

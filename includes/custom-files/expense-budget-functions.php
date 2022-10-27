@@ -303,6 +303,22 @@ function wpcpf_expense_budget_id_by_date( $entry_date ) {
     ));
 }
 
+/**
+ * Expense budget id by date
+ *
+ * @param  string $entry_date
+ *
+ * @return object
+ */
+function wpcpf_budgets_by_expense_sector( $expense_sector_id ) {
+    global $wpdb;
+
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}budget_for_expenses WHERE expense_sector_id=%d", $expense_sector_id
+    ));
+}
+
+
 function test(){
     // global $wpdb;
     // return $wpdb->get_results(
