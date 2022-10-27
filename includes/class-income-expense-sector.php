@@ -64,9 +64,10 @@ class Income_Expense_Sector {
                 $all_used_income_ids = [];
 
                 foreach ( $all_income as $value ){
-                    $all_used_income_ids[] = $value->id;
+                    $all_used_income_ids[] = $value->income_expense_sector_id;
                 }
-                
+
+                $all_used_income_ids = array_unique( $all_used_income_ids );
                 $data  = wpcpf_get_income_expense_sector( $sector_type_id );
                 $title = $sector_type == 'income' ? 'List of Income Sectors' : 'List of Expense Sectors';
                 $template = WPCPF_PLUGIN_DIR . '/templates/income-expense-sector/list.php';

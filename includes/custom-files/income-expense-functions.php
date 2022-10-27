@@ -392,7 +392,8 @@ function wpcpf_get_income_data( $start_date = null, $end_date = null, $income_se
     {$wpdb->prefix}income_expenses.amount,
     {$wpdb->prefix}income_expenses.entry_date,
     {$wpdb->prefix}income_expenses.remarks,
-    {$wpdb->prefix}income_expense_sectors.name
+    {$wpdb->prefix}income_expense_sectors.name,
+    {$wpdb->prefix}income_expense_sectors.id as income_expense_sector_id
     FROM {$wpdb->prefix}income_expenses
     INNER JOIN {$wpdb->prefix}income_expense_sectors
         ON {$wpdb->prefix}income_expenses.income_sector_id = {$wpdb->prefix}income_expense_sectors.id";
@@ -416,11 +417,19 @@ function wpcpf_get_income_data( $start_date = null, $end_date = null, $income_se
         );
     }
 
-    if ( !$start_date || !$end_date ) {
+    if ( !$start_date && !$end_date && !$income_sector_id ) {
         $sql = $wpdb->prepare(
             "{$common_sql}
             ORDER BY %s %s
             ", $order_by, $order
+        );
+    }
+
+    if ( $start_date == 'not_defined' && $end_date == 'not_defined' &&  ($income_sector_id != 'All' && $income_sector_id) ) {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.income_sector_id = %d
+            ",$income_sector_id
         );
     }
     

@@ -227,6 +227,9 @@ class Income_Expense {
         
         if ( $page == 'income' ) {
             $this->prev_data['income_sector_id'] = $income_sector_id;
+
+            $start_date = $start_date ? $start_date : 'not_defined';
+            $end_date   = $end_date ? $end_date : 'not_defined';
         }
 
         if ( $page == 'expense' ) {
@@ -298,14 +301,14 @@ class Income_Expense {
     }
 
     public function expense_validation( $budget_for_expense_id, $entry_date, $amount ) {
-        $expense_by_budget_id     = wpcpf_expense_by_budget_id( $budget_for_expense_id );
-        $single_budget            = wpcpf_get_single_expense_budget( $budget_for_expense_id );
-        $loan_recieve             = wpcpf_total_loan_recieve( $entry_date );
-        $loan_pay                 = wpcpf_total_loan_pay( $entry_date );
-        $investment               = wpcpf_total_investment( $entry_date );
-        $investment_earning       = wpcpf_total_investment_earning( $entry_date );
-        $total_income             = wpcpf_total_income_till_given_date( $entry_date );
-        $total_expense             = wpcpf_total_expense_till_given_date( $entry_date, $budget_for_expense_id);
+        $expense_by_budget_id = wpcpf_expense_by_budget_id( $budget_for_expense_id );
+        $single_budget        = wpcpf_get_single_expense_budget( $budget_for_expense_id );
+        $loan_recieve         = wpcpf_total_loan_recieve( $entry_date );
+        $loan_pay             = wpcpf_total_loan_pay( $entry_date );
+        $investment           = wpcpf_total_investment( $entry_date );
+        $investment_earning   = wpcpf_total_investment_earning( $entry_date );
+        $total_income         = wpcpf_total_income_till_given_date( $entry_date );
+        $total_expense        = wpcpf_total_expense_till_given_date( $entry_date, $budget_for_expense_id);
 
         $total_expense_from_budget_amount = $expense_by_budget_id ? $expense_by_budget_id->total_expense : 0;
         $total_income_amount              = $total_income ? $total_income->total_income : 0;
