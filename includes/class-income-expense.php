@@ -83,7 +83,6 @@ class Income_Expense {
                 break;
 
             default:
-                // $data = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
                 $data = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
                 if ( $page == 'income' ) {
                     $data = wpcpf_get_income_data( $start_date, $end_date, $income_sector_id );
@@ -96,7 +95,7 @@ class Income_Expense {
                         $budget_ids_by_expense_sector[] = $value->id; 
                     }
                     
-                    $data = wpcpf_get_expense_data( $start_date, $end_date, $budget_ids_by_expense_sector );
+                    $data = wpcpf_get_expense_data( $start_date, $end_date, $budget_ids_by_expense_sector, $expense_sector_id );
                 }
                 
                 if ( $start_date && $expense_sector_id ) {
@@ -234,33 +233,32 @@ class Income_Expense {
             wp_die( 'Are you cheating?' );
         }
 
-        $start_date            = isset( $_POST['start_date'] ) ? sanitize_text_field( $_POST['start_date'] ) : '';
-        $end_date              = isset( $_POST['end_date'] ) ? sanitize_text_field( $_POST['end_date'] ) : '';
-        $expense_sector_id = isset( $_POST['expense_sector_id'] ) ? sanitize_textarea_field( $_POST['expense_sector_id'] ) : '';
+        $start_date            = isset( $_POST['start_date'] ) && $_POST['start_date'] ? sanitize_text_field( $_POST['start_date'] ) : '1972-12-30';
+        $end_date              = isset( $_POST['end_date'] ) && $_POST['end_date'] ? sanitize_text_field( $_POST['end_date'] ) : date('Y-m-d');
+        $expense_sector_id     = isset( $_POST['expense_sector_id'] ) ? sanitize_textarea_field( $_POST['expense_sector_id'] ) : '';
         $income_sector_id      = isset( $_POST['income_sector_id'] ) ? sanitize_textarea_field( $_POST['income_sector_id'] ) : '';
         $page                  = $_GET['page'];
-        
+
         if ( $page == 'income' ) {
             $this->prev_data['income_sector_id'] = $income_sector_id;
-
-            $start_date = $start_date ? $start_date : 'not_defined';
-            $end_date   = $end_date ? $end_date : 'not_defined';
         }
 
         if ( $page == 'expense' ) {
             $this->prev_data['expense_sector_id'] = $expense_sector_id;
         }
 
-        if ( empty( $start_date ) ) {
-            $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
-        } else {
+        if ( !empty( $start_date ) ) {
             $this->prev_data['start_date'] = $start_date;
+            // $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
+        } else {
+            // $this->prev_data['start_date'] = $start_date;
         }
 
-        if ( empty( $end_date ) ) {
-            $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
-        } else {
+        if ( !empty( $end_date ) ) {
             $this->prev_data['end_date'] = $end_date;
+            // $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
+        } else {
+            // $this->prev_data['end_date'] = $end_date;
         }
 
         if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
@@ -271,7 +269,7 @@ class Income_Expense {
             return;
         }
 
-        $date_range = "start_date={$start_date}&end_date={$end_date}";
+        $date_range = "start_date={$_POST['start_date']}&end_date={$_POST['end_date']}";
         if ( $page == 'income' ) {
             $extra_parameter = "$date_range&income_sector_id={$income_sector_id}";
         } else {

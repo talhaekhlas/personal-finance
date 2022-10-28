@@ -66,63 +66,6 @@ function wpcpf_get_expense() {
     return $items;
 }
 
-/**
- * Fetch expene list.
- *
- * @param  array  $args
- *
- * @return array
- */
-function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_ids_by_expense_sector ) {
-    global $wpdb;
-    $order_by = 'id';
-    $order    = 'desc';
-    $common_sql = "SELECT {$wpdb->prefix}income_expenses.id,
-    {$wpdb->prefix}income_expenses.amount,
-    {$wpdb->prefix}income_expenses.entry_date,
-    {$wpdb->prefix}income_expenses.remarks,
-    {$wpdb->prefix}income_expense_sectors.name
-    FROM {$wpdb->prefix}income_expenses
-    INNER JOIN {$wpdb->prefix}budget_for_expenses
-        ON {$wpdb->prefix}income_expenses.budget_for_expense_id = {$wpdb->prefix}budget_for_expenses.id
-    INNER JOIN {$wpdb->prefix}income_expense_sectors
-        ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id";
-
-    if ( $start_date && $end_date && $budget_ids_by_expense_sector == 'All') {
-        $sql = $wpdb->prepare(
-            "{$common_sql}
-            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
-            AND {$wpdb->prefix}income_expenses.entry_date <= %s
-            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL", 
-            $start_date, $end_date
-        );
-    }
-
-    if ( $start_date && $end_date && $budget_ids_by_expense_sector != 'All') {
-        $budget_ids = implode(",",$budget_ids_by_expense_sector); 
-        $sql = $wpdb->prepare(
-            "{$common_sql}
-            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
-            AND {$wpdb->prefix}income_expenses.entry_date <= %s
-            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IN ($budget_ids)
-            ", $start_date, $end_date 
-        );
-    }
-
-    if ( !$start_date || !$end_date ) {
-        $sql = $wpdb->prepare(
-            "{$common_sql}
-            WHERE {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL 
-            ORDER BY %s %s ", $order_by, $order
-        );
-    }
-
-    
-
-    $items = $wpdb->get_results( $sql );
-
-    return $items;
-}
 
 /**
  * Fetch expense list.
@@ -390,6 +333,9 @@ function wpcpf_get_income_data( $start_date = null, $end_date = null, $income_se
     $order_by = 'id';
     $order    = 'desc';
 
+    $start_date = $start_date ? $start_date : '1972-12-30';
+    $end_date = $end_date ? $end_date : date('Y-m-d');
+
     $common_sql = "SELECT {$wpdb->prefix}income_expenses.id,
     {$wpdb->prefix}income_expenses.amount,
     {$wpdb->prefix}income_expenses.entry_date,
@@ -400,7 +346,7 @@ function wpcpf_get_income_data( $start_date = null, $end_date = null, $income_se
     INNER JOIN {$wpdb->prefix}income_expense_sectors
         ON {$wpdb->prefix}income_expenses.income_sector_id = {$wpdb->prefix}income_expense_sectors.id";
 
-    if ( $start_date && $end_date && $income_sector_id == 'All') {
+    if ( $income_sector_id == 'All' || !$income_sector_id ) {
         $sql = $wpdb->prepare(
             "{$common_sql}
             WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
@@ -409,36 +355,129 @@ function wpcpf_get_income_data( $start_date = null, $end_date = null, $income_se
         );
     }
 
-    if ( $start_date && $end_date && $income_sector_id != 'All') {
+    if ( $income_sector_id != 'All' && $income_sector_id ) {
         $sql = $wpdb->prepare(
             "{$common_sql}
             WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
             AND {$wpdb->prefix}income_expenses.entry_date <= %s
-            AND {$wpdb->prefix}income_expenses.income_sector_id = %d
-            ", $start_date, $end_date, $income_sector_id
+            AND {$wpdb->prefix}income_expenses.income_sector_id = %d", 
+            $start_date, $end_date, $income_sector_id
         );
     }
 
-    if ( !$start_date && !$end_date && !$income_sector_id ) {
-        $sql = $wpdb->prepare(
-            "{$common_sql}
-            ORDER BY %s %s
-            ", $order_by, $order
-        );
-    }
+    // if ( $start_date && $end_date && $income_sector_id != 'All') {
+    //     $sql = $wpdb->prepare(
+    //         "{$common_sql}
+    //         WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+    //         AND {$wpdb->prefix}income_expenses.entry_date <= %s
+    //         AND {$wpdb->prefix}income_expenses.income_sector_id = %d
+    //         ", $start_date, $end_date, $income_sector_id
+    //     );
+    // }
 
-    if ( $start_date == 'not_defined' && $end_date == 'not_defined' &&  ($income_sector_id != 'All' && $income_sector_id) ) {
-        $sql = $wpdb->prepare(
-            "{$common_sql}
-            WHERE {$wpdb->prefix}income_expenses.income_sector_id = %d
-            ",$income_sector_id
-        );
-    }
+    // if ( !$start_date && !$end_date && !$income_sector_id ) {
+    //     $sql = $wpdb->prepare(
+    //         "{$common_sql}
+    //         ORDER BY %s %s
+    //         ", $order_by, $order
+    //     );
+    // }
+
+    // if ( !$start_date && !$end_date &&  ($income_sector_id != 'All' && $income_sector_id) ) {
+    //     $sql = $wpdb->prepare(
+    //         "{$common_sql}
+    //         WHERE {$wpdb->prefix}income_expenses.income_sector_id = %d
+    //         ",$income_sector_id
+    //     );
+    // }
     
     $items = $wpdb->get_results( $sql );
 
     return $items;
     
+}
+
+/**
+ * Fetch expene list.
+ *
+ * @param  array  $args
+ *
+ * @return array
+ */
+function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_ids_by_expense_sector, $expense_sector_id ) {
+    global $wpdb;
+    $order_by   = 'id';
+    $order      = 'desc';
+    $start_date = $start_date ? $start_date : '1972-12-30';
+    $end_date   = $end_date ? $end_date : date('Y-m-d');
+
+    $common_sql = "SELECT {$wpdb->prefix}income_expenses.id,
+    {$wpdb->prefix}income_expenses.amount,
+    {$wpdb->prefix}income_expenses.entry_date,
+    {$wpdb->prefix}income_expenses.remarks,
+    {$wpdb->prefix}income_expense_sectors.name
+    FROM {$wpdb->prefix}income_expenses
+    INNER JOIN {$wpdb->prefix}budget_for_expenses
+        ON {$wpdb->prefix}income_expenses.budget_for_expense_id = {$wpdb->prefix}budget_for_expenses.id
+    INNER JOIN {$wpdb->prefix}income_expense_sectors
+        ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id";
+
+    if ( !count($budget_ids_by_expense_sector)) {
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+            AND {$wpdb->prefix}income_expenses.entry_date <= %s
+            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL", 
+            $start_date, $end_date
+        );
+    }
+
+    if ( count($budget_ids_by_expense_sector)) {
+        $budget_ids = implode(",",$budget_ids_by_expense_sector);
+        $sql = $wpdb->prepare(
+            "{$common_sql}
+            WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+            AND {$wpdb->prefix}income_expenses.entry_date <= %s
+            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL
+            AND {$wpdb->prefix}income_expenses.budget_for_expense_id IN ($budget_ids)", 
+            $start_date, $end_date
+        );
+    }
+
+    // if ( $start_date && $end_date && !count($budget_ids_by_expense_sector)) {
+    //     $sql = $wpdb->prepare(
+    //         "{$common_sql}
+    //         WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+    //         AND {$wpdb->prefix}income_expenses.entry_date <= %s
+    //         AND {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL", 
+    //         $start_date, $end_date
+    //     );
+    // }
+
+    // if ( $start_date && $end_date && count($budget_ids_by_expense_sector)) {
+    //     $budget_ids = implode(",",$budget_ids_by_expense_sector); 
+    //     $sql = $wpdb->prepare(
+    //         "{$common_sql}
+    //         WHERE {$wpdb->prefix}income_expenses.entry_date >= %s 
+    //         AND {$wpdb->prefix}income_expenses.entry_date <= %s
+    //         AND {$wpdb->prefix}income_expenses.budget_for_expense_id IN ($budget_ids)
+    //         ", $start_date, $end_date 
+    //     );
+    // }
+
+    // if ( !$start_date && !$end_date && ( !$expense_sector_id || $expense_sector_id == 'All' ) ) {
+    //     $sql = $wpdb->prepare(
+    //         "{$common_sql}
+    //         WHERE {$wpdb->prefix}income_expenses.budget_for_expense_id IS NOT NULL 
+    //         ORDER BY %s %s ", $order_by, $order
+    //     );
+    // }
+
+    
+
+    $items = $wpdb->get_results( $sql );
+
+    return $items;
 }
 
 
