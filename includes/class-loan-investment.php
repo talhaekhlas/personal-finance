@@ -43,6 +43,9 @@ class Loan_Investment {
         $action                  = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
         $page                    = isset( $_GET['page'] ) ? $_GET['page'] : 'list';
         $income_sectors          = wpcpf_get_income_expense_sector( 1 ); // 1 means income sector.
+        $start_date              = isset( $_GET['start_date'] ) ? $_GET['start_date'] : null;
+        $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
+        $loan_investment_id      = isset( $_GET['loan_investment_id'] ) ? $_GET['loan_investment_id'] : null;
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
 
         $income_sector_by_id = [];
@@ -165,9 +168,9 @@ class Loan_Investment {
             $this->errors['missing_parent_investment_earning'] = __( 'Earning should have parent source.', 'wpcodal-pf' ); 
         }
 
-        $amount_validation = $this->expense_or_loan_pay_capability_check( $entry_date, $amount );
+        $amount_validation = $this->investment_or_loan_pay_capability_check( $entry_date, $amount );
 
-        if ( ($trn_type == 1 || $trn_type == 3) &&  ! $amount_validation) {
+        if ( ($trn_type == 2 || $trn_type == 3) &&  ! $amount_validation) {
             $message = "You don't have sufficient amount.You have just <span style='font-size: 20px;color:#88200A'>{$this->total_amount_in_hand}</span> in your hand";
             $this->errors['amount_validation_failed'] = __($message , 'wpcodal-pf' );
         }
@@ -231,7 +234,7 @@ class Loan_Investment {
         exit;
     }
 
-    public function expense_or_loan_pay_capability_check( $entry_date, $submit_amount ) {
+    public function investment_or_loan_pay_capability_check( $entry_date, $submit_amount ) {
         $total_income_info                   = wpcpf_total_income_till_given_date( $entry_date );
         $total_expense_info                  = wpcpf_total_expense_till_given_date( $entry_date );
         $loan_recieve_and_investment_earning = wpcpf_total_loan_recieve_and_investment( $entry_date );

@@ -43,8 +43,8 @@ class Expense_Budget {
     public function expense_budget_page() {
         $action            = isset( $_GET['action'] ) ? $_GET['action'] : 'list';
         $expense_sectors   = wpcpf_get_income_expense_sector( 2 ); // 2 means expense sector.
-        $start_date        = isset( $_GET['start_date'] ) ? $_GET['start_date'] : null;
-        $end_date          = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
+        $start_date        = isset( $_POST['start_date'] ) && $_POST['start_date'] ? sanitize_text_field( $_POST['start_date'] ) : '';
+        $end_date          = isset( $_POST['end_date'] ) && $_POST['end_date'] ? sanitize_text_field( $_POST['end_date'] ) : '';
         $expense_sector_id = isset( $_GET['expense_sector_id'] ) ? $_GET['expense_sector_id'] : null;
 
         $expense_sector_by_id = [];
@@ -70,6 +70,9 @@ class Expense_Budget {
 
             default:
                 $data     = wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id );
+                // echo '<pre>';
+                // print_r($data);
+                // die();
                 $data_for_dropdown = wpcpf_get_expense_budget(null, null, null);
                 $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
                 break;
@@ -208,21 +211,25 @@ class Expense_Budget {
             wp_die( 'Are you cheating?' );
         }
 
-        $start_date  = isset( $_POST['start_date'] ) ? sanitize_textarea_field( $_POST['start_date'] ) : '';
-        $end_date    = isset( $_POST['end_date'] ) ? sanitize_textarea_field( $_POST['end_date'] ) : '';
-        $expense_sector_id   = isset( $_POST['expense_sector_id'] ) ? sanitize_text_field( $_POST['expense_sector_id'] ) : '';
-        $this->prev_data['expense_sector_id'] = $expense_sector_id;
-        if ( empty( $start_date ) ) {
-            $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
-        } else {
-            $this->prev_data['start_date'] = $start_date;
-        }
+        $start_date        = isset( $_POST['start_date'] ) && $_POST['start_date'] ? sanitize_text_field( $_POST['start_date'] ) : '1972-12-30';
+        $end_date          = isset( $_POST['end_date'] ) && $_POST['end_date'] ? sanitize_text_field( $_POST['end_date'] ) : date('Y-m-d');
+        $expense_sector_id = isset( $_POST['expense_sector_id'] ) ? sanitize_text_field( $_POST['expense_sector_id'] ) : '';
 
-        if ( empty( $end_date ) ) {
-            $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
-        } else {
-            $this->prev_data['end_date'] = $end_date;
-        }
+        $this->prev_data['expense_sector_id'] = $expense_sector_id;
+        $this->prev_data['start_date']        = $start_date;
+        $this->prev_data['end_date']          = $end_date;
+        // if ( empty( $start_date ) ) {
+        //     $this->prev_data['start_date'] = $start_date;
+        //     $this->errors['start_date'] = __( 'Please Provide Start Date', 'wpcodal-pf' );
+        // } else {
+        //     $this->prev_data['start_date'] = $start_date;
+        // }
+
+        // if ( empty( $end_date ) ) {
+        //     $this->errors['end_date'] = __( 'Please Provide End Date', 'wpcodal-pf' );
+        // } else {
+        //     $this->prev_data['end_date'] = $end_date;
+        // }
 
         if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
             $this->errors['greater_start_date'] = __( 'Start date should not be less than end date.', 'wpcodal-pf' );
@@ -236,7 +243,7 @@ class Expense_Budget {
             $this->errors['greater_start_date'] = __( 'Start date will no be greater than end date', 'wpcodal-pf' );
             return;
         }
-        $extra_parameter = "start_date={$start_date}&end_date={$end_date}&expense_sector_id={$expense_sector_id}";
+        $extra_parameter = "start_date={$_POST['start_date']}&end_date={$_POST['end_date']}&expense_sector_id={$expense_sector_id}";
         $redirected_to = admin_url( "admin.php?page=expense_budget&$extra_parameter" );
 
         wp_redirect( $redirected_to );

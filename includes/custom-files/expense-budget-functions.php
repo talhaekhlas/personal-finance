@@ -21,7 +21,29 @@ function wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id ) 
     global $wpdb;
     $order_by = 'id';
     $order    = 'DESC';
-    if ( !$start_date || !$end_date || !$expense_sector_id) {
+    $start_date = $start_date ? $start_date : '1972-12-30';
+    $end_date   = $end_date ? $end_date : '2072-12-30';
+
+    if ( !$expense_sector_id || $expense_sector_id == 'All' ) {
+        $sql = $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id as budget_id,
+        {$wpdb->prefix}budget_for_expenses.expense_sector_id,
+         {$wpdb->prefix}budget_for_expenses.amount, 
+         {$wpdb->prefix}budget_for_expenses.start_date,
+         {$wpdb->prefix}budget_for_expenses.end_date,
+         {$wpdb->prefix}budget_for_expenses.remarks,
+         {$wpdb->prefix}income_expense_sectors.name as expense_sector_name,
+         sum({$wpdb->prefix}income_expenses.amount) as total_expense
+         FROM {$wpdb->prefix}budget_for_expenses 
+        INNER JOIN {$wpdb->prefix}income_expense_sectors
+            ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
+        LEFT JOIN {$wpdb->prefix}income_expenses
+            ON {$wpdb->prefix}budget_for_expenses.id = {$wpdb->prefix}income_expenses.budget_for_expense_id
+        WHERE {$wpdb->prefix}budget_for_expenses.start_date >= %s
+        AND  {$wpdb->prefix}budget_for_expenses.end_date <= %s
+        GROUP BY {$wpdb->prefix}budget_for_expenses.id", $start_date, $end_date);
+    }
+
+    if ( $expense_sector_id && $expense_sector_id != 'All' ) {
         $sql = $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id as budget_id,
         {$wpdb->prefix}budget_for_expenses.expense_sector_id,
          {$wpdb->prefix}budget_for_expenses.amount, 
@@ -36,7 +58,10 @@ function wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id ) 
         LEFT JOIN {$wpdb->prefix}income_expenses
             ON {$wpdb->prefix}budget_for_expenses.id = {$wpdb->prefix}income_expenses.budget_for_expense_id
         
-        WHERE {$wpdb->prefix}budget_for_expenses.id >= %d GROUP BY {$wpdb->prefix}budget_for_expenses.id", 1);
+        WHERE {$wpdb->prefix}budget_for_expenses.start_date >= %s
+        AND  {$wpdb->prefix}budget_for_expenses.end_date <= %s
+        AND  {$wpdb->prefix}budget_for_expenses.expense_sector_id <= %d
+        GROUP BY {$wpdb->prefix}budget_for_expenses.id", $start_date, $end_date, $expense_sector_id);
     }
 
     // {$wpdb->prefix}budget_for_expenses.expense_sector_id,
@@ -50,42 +75,42 @@ function wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id ) 
     //         ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
     //     WHERE {$wpdb->prefix}budget_for_expenses.id = %d", $id)
 
-    if ( $start_date && $end_date && $expense_sector_id =='All' ) {
+    // if ( $start_date && $end_date && $expense_sector_id =='All' ) {
         
-        $sql = $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
-            WHERE start_date >= %s 
-            AND end_date <= %s
-            ORDER BY expense_sector_id ASC, id DESC", $start_date, $end_date
-        );
-    }
+    //     $sql = $wpdb->prepare(
+    //         "SELECT * FROM {$wpdb->prefix}budget_for_expenses 
+    //         WHERE start_date >= %s 
+    //         AND end_date <= %s
+    //         ORDER BY expense_sector_id ASC, id DESC", $start_date, $end_date
+    //     );
+    // }
 
-    if ( $start_date && $end_date && $expense_sector_id !='All' ) {
-        $sql = $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}budget_for_expenses
-            WHERE start_date >= %s 
-            AND end_date <= %s
-            AND expense_sector_id = %d 
-            ORDER BY %s %s ", $start_date, $end_date, $expense_sector_id, $order_by, $order
-        );
+    // if ( $start_date && $end_date && $expense_sector_id !='All' ) {
+    //     $sql = $wpdb->prepare(
+    //         "SELECT * FROM {$wpdb->prefix}budget_for_expenses
+    //         WHERE start_date >= %s 
+    //         AND end_date <= %s
+    //         AND expense_sector_id = %d 
+    //         ORDER BY %s %s ", $start_date, $end_date, $expense_sector_id, $order_by, $order
+    //     );
 
-        $sql = $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id as budget_id,
-        {$wpdb->prefix}budget_for_expenses.expense_sector_id,
-         {$wpdb->prefix}budget_for_expenses.amount, 
-         {$wpdb->prefix}budget_for_expenses.start_date,
-         {$wpdb->prefix}budget_for_expenses.end_date,
-         {$wpdb->prefix}budget_for_expenses.remarks,
-         {$wpdb->prefix}income_expense_sectors.name as expense_sector_name,
-         sum({$wpdb->prefix}income_expenses.amount) as total_expense
-         FROM {$wpdb->prefix}budget_for_expenses 
-        INNER JOIN {$wpdb->prefix}income_expense_sectors
-            ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
-        LEFT JOIN {$wpdb->prefix}income_expenses
-            ON {$wpdb->prefix}budget_for_expenses.id = {$wpdb->prefix}income_expenses.budget_for_expense_id
+    //     $sql = $wpdb->prepare( "SELECT {$wpdb->prefix}budget_for_expenses.id as budget_id,
+    //     {$wpdb->prefix}budget_for_expenses.expense_sector_id,
+    //      {$wpdb->prefix}budget_for_expenses.amount, 
+    //      {$wpdb->prefix}budget_for_expenses.start_date,
+    //      {$wpdb->prefix}budget_for_expenses.end_date,
+    //      {$wpdb->prefix}budget_for_expenses.remarks,
+    //      {$wpdb->prefix}income_expense_sectors.name as expense_sector_name,
+    //      sum({$wpdb->prefix}income_expenses.amount) as total_expense
+    //      FROM {$wpdb->prefix}budget_for_expenses 
+    //     INNER JOIN {$wpdb->prefix}income_expense_sectors
+    //         ON {$wpdb->prefix}budget_for_expenses.expense_sector_id = {$wpdb->prefix}income_expense_sectors.id
+    //     LEFT JOIN {$wpdb->prefix}income_expenses
+    //         ON {$wpdb->prefix}budget_for_expenses.id = {$wpdb->prefix}income_expenses.budget_for_expense_id
         
-        WHERE {$wpdb->prefix}budget_for_expenses.expense_sector_id = %d GROUP BY {$wpdb->prefix}budget_for_expenses.id", $expense_sector_id);
+    //     WHERE {$wpdb->prefix}budget_for_expenses.expense_sector_id = %d GROUP BY {$wpdb->prefix}budget_for_expenses.id", $expense_sector_id);
 
-    }
+    // }
     
 
     $items = $wpdb->get_results( $sql );

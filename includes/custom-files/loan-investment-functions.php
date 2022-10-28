@@ -327,7 +327,9 @@ function wpcpf_get_loan_investment_data( $type_id ) {
     global $wpdb;
 
     return $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE loan_or_investment = %d", $type_id )
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
+        WHERE loan_or_investment = %d
+        ORDER BY entry_date DESC", $type_id )
     );
 }
 
