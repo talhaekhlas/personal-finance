@@ -24,7 +24,7 @@
     <input type="hidden" name="loan_or_investment" value="<?php echo $page == 'loan' ? 1 : 2; ?>">
     <div class="mb-5">
       <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'loan' ? _e("Loan Transaction Type") : _e("Investment Transaction Type"); ?></label>
-      <select name="trn_type" id="trn_type" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+      <select name="trn_type" id="trn_type" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
           <?php 
           $transaction_type = $page == 'loan' ? [1=>'Recieve', 'Pay'] : [3=>'Investment', 'Earning'];
           foreach ( $transaction_type as $key => $value) {
@@ -37,7 +37,7 @@
 
     <div class="mb-5">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Parent Source"); ?></label>
-        <select name="parent_source_id" id="parent_source_id" class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+        <select name="parent_source_id" id="parent_source_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="no_parent"><?php _e("No Parent Source"); ?></option>
             <?php foreach ( $parent_data as $key => $value) {
                  $selected = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) && $this->prev_data['parent_source_id'] == $value->id ? 'selected' : null;
@@ -63,7 +63,7 @@
           value="<?php echo $prev_source_name; ?>"
           id="source_name"
           placeholder="<?php _e("Enter Source Name", "wpcodal-pf"); ?>"
-          class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
         <?php if ( $source_name_error ) { ?>
                 <p class="text-base text-red-600 italic font-bold"><?php echo $source_name_error; ?></p>
@@ -84,7 +84,7 @@
               name="entry_date"
               value="<?php echo $prev_entry_date; ?>"
               id="loan_investment_entry_date"
-              class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
             <?php if ( $greater_entry_date_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $greater_entry_date_error; ?></p>
@@ -105,7 +105,7 @@
           value="<?php echo $prev_amount; ?>"
           id="amount"
           placeholder="<?php _e("Enter Amount", "wpcodal-pf"); ?>"
-          class="w-96 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
         />
         <?php if ( $amount_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $amount_error; ?></p>
@@ -120,7 +120,7 @@
       <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
         Remarks
       </label>
-      <textarea id="remarks" name="remarks" rows="4" class="block p-2.5 w-96 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
+      <textarea id="remarks" name="remarks" rows="4" class="w-[100%] block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."><?php echo $prev_remarks; ?></textarea>
       <?php if ( $remarks_error ) { ?>
             <p class="text-base text-red-600 italic font-bold"><?php echo $remarks_error; ?></p>
       <?php } ?>

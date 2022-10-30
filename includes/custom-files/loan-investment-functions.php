@@ -307,13 +307,31 @@ function delete_loan_investment( $id ) {
  *
  * @return int|boolean
  */
-function wpcpf_get_parent_loan_investment_data( $type_id, $id ) {
+function wpcpf_get_loan_investment_data( $type, $trn_type, $start_date, $end_date ) {
     global $wpdb;
+    $start_date = $start_date ? $start_date : '1972-12-30';
+    $end_date   = $end_date ? $end_date : date('Y-m-d');
+    $trn_type   = $trn_type ? $trn_type : 'All';
 
-    return $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments WHERE loan_or_investment = %d 
-        AND parent_source_id IS NULL AND id!=%d", $type_id, $id )
-    );
+    if ( $trn_type == 'All' ) {
+        return $wpdb->get_results(
+            $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
+            WHERE loan_or_investment = %d
+            AND entry_date >= %s
+            AND entry_date <= %s
+            ORDER BY entry_date DESC", $type, $start_date, $end_date )
+        );
+    } else {
+        return $wpdb->get_results(
+            $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
+            WHERE loan_or_investment = %d
+            AND entry_date >= %s
+            AND entry_date <= %s
+            AND trn_type = %d
+            ORDER BY entry_date DESC", $type, $start_date, $end_date, $trn_type )
+        );
+    }
+    
 }
 
 /**
@@ -323,30 +341,33 @@ function wpcpf_get_parent_loan_investment_data( $type_id, $id ) {
  *
  * @return int|boolean
  */
-function wpcpf_get_loan_investment_data( $type_id ) {
+function wpcpf_get_parent_loan_investment_data( $type_id ) {
     global $wpdb;
 
     return $wpdb->get_results(
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
         WHERE loan_or_investment = %d
+        AND source_name IS NOT NULL
         ORDER BY entry_date DESC", $type_id )
     );
 }
 
-/**
- * Fetch a single expense budget from the DB
- *
- * @param  string $date
- *
- * @return object
- */
-function wpcpf_total_loan_recieve_and_investment( $date ) {
-    global $wpdb;
-    return $wpdb->get_row(
-        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(1,3)", $date
-    ));
+
+
+// /**
+//  * Fetch a single expense budget from the DB
+//  *
+//  * @param  string $date
+//  *
+//  * @return object
+//  */
+// function wpcpf_total_loan_recieve_and_investment_earning( $date ) {
+//     global $wpdb;
+//     return $wpdb->get_row(
+//         $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(1,4)", $date
+//     ));
     
-}
+// }
 
 /**
  * Fetch total loan recieve by till date.
@@ -417,10 +438,10 @@ function wpcpf_total_investment_earning( $date ) {
  *
  * @return object
  */
-function wpcpf_total_loan_pay_and_investment_earning( $date ) {
+function wpcpf_total_loan_pay_and_investment( $date ) {
     global $wpdb;
     return $wpdb->get_row(
-        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(2,4)", $date
+        $wpdb->prepare( "SELECT sum(amount) as total_amount FROM {$wpdb->prefix}loan_investments WHERE entry_date <= %s AND trn_type IN(2,3)", $date
     ));
     
 }

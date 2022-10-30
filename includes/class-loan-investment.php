@@ -27,7 +27,7 @@ class Loan_Investment {
 	private function __construct() {
         session_start();
 		$this->loan_investment_form_handler();
-        
+        $this->search_loan_investment_form_handler();
         $this->delete_loan_investment();
 
 		$this->income_expense_page();
@@ -46,6 +46,7 @@ class Loan_Investment {
         $start_date              = isset( $_GET['start_date'] ) ? $_GET['start_date'] : null;
         $end_date                = isset( $_GET['end_date'] ) ? $_GET['end_date'] : null;
         $loan_investment_id      = isset( $_GET['loan_investment_id'] ) ? $_GET['loan_investment_id'] : null;
+        $trn_type                = isset( $_GET['trn_type'] ) ? $_GET['trn_type'] : null;
         $budget_list_for_expense = wpcpf_get_budget_list_for_expense();
 
         $income_sector_by_id = [];
@@ -74,9 +75,10 @@ class Loan_Investment {
                 break;
 
             default:
-                $type     = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
-                $data     = wpcpf_get_loan_investment_data( $type );
-                $template = WPCPF_PLUGIN_DIR . '/templates/loan-investment/list.php';
+                $type                   = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
+                $data                   = wpcpf_get_loan_investment_data( $type, $trn_type, $start_date, $end_date );
+                $parent_loan_investment = wpcpf_get_parent_loan_investment_data( $type );
+                $template    = WPCPF_PLUGIN_DIR . '/templates/loan-investment/list.php';
                 break;
         }
 
@@ -208,6 +210,61 @@ class Loan_Investment {
         exit;
     }
 
+    /**
+     * Handle the form
+     *
+     * @return void
+     */
+    public function search_loan_investment_form_handler() {
+        
+        if ( ! isset( $_POST['submit_search_loan_investment'] ) ) {
+            return;
+        }
+		
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'search_loan_investment' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Are you cheating?' );
+        }
+
+        $start_date          = isset( $_POST['start_date'] ) && $_POST['start_date'] ? sanitize_text_field( $_POST['start_date'] ) : '1972-12-30';
+        $end_date            = isset( $_POST['end_date'] ) && $_POST['end_date'] ? sanitize_text_field( $_POST['end_date'] ) : date('Y-m-d');
+        $loan_investment_id  = isset( $_POST['loan_investment_id'] ) ? sanitize_textarea_field( $_POST['loan_investment_id'] ) : '';
+        $trn_type            = isset( $_POST['trn_type'] ) ? sanitize_textarea_field( $_POST['trn_type'] ) : '';
+        $page                = $_GET['page'];
+
+        $this->prev_data['loan_investment_id'] = $loan_investment_id;
+        $this->prev_data['trn_type'] = $trn_type;
+
+        if ( !empty( $start_date ) ) {
+            $this->prev_data['start_date'] = $start_date;
+        }
+
+        if ( !empty( $end_date ) ) {
+            $this->prev_data['end_date'] = $end_date;
+        }
+
+        if ( strtotime( $start_date ) > strtotime( $end_date ) ) {
+            $this->errors['greater_start_date'] = __( 'Start date should not be less than end date.', 'wpcodal-pf' );
+        }
+
+        if ( ! empty( $this->errors ) ) {
+            return;
+        }
+
+        $date_range = "start_date={$_POST['start_date']}&end_date={$_POST['end_date']}";
+        $extra_parameter = "$date_range&trn_type={$trn_type}&loan_investment_id={$loan_investment_id}";
+        
+
+        $redirected_to = admin_url( "admin.php?page={$page}&{$extra_parameter}" );
+        wp_redirect( $redirected_to );
+        exit;
+    }
+
+
     public function delete_loan_investment() {
         
         if ( ! isset( $_REQUEST['delete_loan_invest_action'] ) ) {
@@ -235,21 +292,36 @@ class Loan_Investment {
     }
 
     public function investment_or_loan_pay_capability_check( $entry_date, $submit_amount ) {
-        $total_income_info                   = wpcpf_total_income_till_given_date( $entry_date );
-        $total_expense_info                  = wpcpf_total_expense_till_given_date( $entry_date );
-        $loan_recieve_and_investment_earning = wpcpf_total_loan_recieve_and_investment( $entry_date );
-        $loan_pay_and_investment             = wpcpf_total_loan_pay_and_investment_earning( $entry_date );
+        $total_income       = wpcpf_total_income_till_given_date( $entry_date );
+        $total_expense      = wpcpf_total_expense_till_given_date( $entry_date );
+        $loan_recieve       = wpcpf_total_loan_recieve( $entry_date );
+        $investment_earning = wpcpf_total_investment_earning( $entry_date );
+        $loan_pay           = wpcpf_total_loan_pay( $entry_date );
+        $investment         = wpcpf_total_investment( $entry_date );
 
-        $total_income                        = $total_income_info ? $total_income_info->total_income : 0;
-        $total_expense                       = $total_expense_info ? $total_expense_info->total_expense : 0;
-        $loan_recieve_and_investment_earning = $loan_recieve_and_investment_earning ? $loan_recieve_and_investment_earning->total_amount : 0;
-        $loan_pay_and_investment             = $loan_pay_and_investment ? $loan_pay_and_investment->total_amount : 0;
+        // total in amount
+        $total_income             = $total_expense ? $total_expense->total_income : 0;
+        $total_loan_recieve       = $loan_recieve ? $loan_recieve->total_amount : 0;
+        $total_investment_earning = $investment_earning ? $investment_earning->total_amount : 0;
+        // total out amount
+        $total_expense    = $total_expense ? $total_expense->total_expense : 0;
+        $total_loan_pay   = $loan_pay ? $loan_pay->total_amount : 0;
+        $total_investment = $investment ? $investment->total_amount : 0;
 
-        $total_in_amount  = $total_income + $loan_recieve_and_investment_earning;
-        $total_out_amount = $total_expense + $loan_pay_and_investment + $submit_amount;
+        $total_in_amount  = $total_income + $total_loan_recieve + $total_investment_earning;
+        $total_out_amount = $total_expense + $total_loan_pay + $total_investment + $submit_amount;
 
         if ( $total_in_amount < $total_out_amount ) {
-            $this->total_amount_in_hand = $total_in_amount - $total_out_amount;
+            $this->loan_investment_validation_info['total_income']               = $total_income;
+            $this->loan_investment_validation_info['loan_recieve_amount']        = $total_loan_recieve;
+            $this->loan_investment_validation_info['investment_earning_amount']  = $total_investment_earning;
+            $this->loan_investment_validation_info['total_expense_amount']       = $total_expense;
+            $this->loan_investment_validation_info['loan_pay_amount']            = $total_loan_pay;
+            $this->loan_investment_validation_info['investment_amount']          = $total_investment;
+            $this->loan_investment_validation_info['total_in_amount']            = $total_in_amount;
+            $this->loan_investment_validation_info['total_out_amount']           = $total_out_amount;
+            $this->loan_investment_validation_info['total_in_hand']              = $total_in_amount - $total_out_amount;
+            $this->loan_investment_validation_info['submit_amount']              = $submit_amount;
             return false;
         }
         

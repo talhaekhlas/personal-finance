@@ -19,6 +19,9 @@
     </button>
     </a>
   </div>
+  <?php 
+    include WPCPF_PLUGIN_DIR . '/templates/loan-investment/search-loan-investment-form.php'; 
+   ?>
   <div class="bg-white shadow-md rounded my-6">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
       <caption>
