@@ -16,9 +16,10 @@
   $prev_remarks          = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
   $prev_parent_source_id = isset( $this->prev_data ) && isset( $this->prev_data['parent_source_id'] ) ? $this->prev_data['parent_source_id'] : null;
   $prev_trn_type         = isset( $this->prev_data ) && isset( $this->prev_data['trn_type'] ) ? $this->prev_data['trn_type'] : null;
+  $form_align            = isset( $this->loan_investment_validation_info ) ? 'float-left' : 'mx-auto';
 
 ?>
-<div class="flex items-center justify-center p-12">
+<div class="p-12 w-[50%]  <?php echo $form_align; ?>">
   <div class="mx-auto w-full max-w-[550px]">
     <form action="" method="post">
     <input type="hidden" name="loan_or_investment" value="<?php echo $page == 'loan' ? 1 : 2; ?>">
@@ -135,3 +136,9 @@
     </form>
   </div>
 </div>
+
+<?php 
+    if ( isset( $this->loan_investment_validation_info ) ) {
+      include WPCPF_PLUGIN_DIR . '/templates/loan-investment/loan-investment-info.php'; 
+    }  
+?>

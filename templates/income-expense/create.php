@@ -13,11 +13,11 @@
   $prev_entry_date        = isset( $this->prev_data ) && isset( $this->prev_data['entry_date'] ) ? $this->prev_data['entry_date'] : null;
   $prev_remarks           = isset( $this->prev_data ) && isset( $this->prev_data['remarks'] ) ? $this->prev_data['remarks'] : null;
 
-  $income_expense_list_float = isset( $this->expense_validation_info ) ? 'float-left' : 'mx-auto';
+  $form_align = isset( $this->expense_validation_info ) ? 'float-left' : 'mx-auto';
 
 
 ?>
-<div class="p-12 w-[50%]  <?php echo $income_expense_list_float; ?>">
+<div class="p-12 w-[50%]  <?php echo $form_align; ?>">
   <div class="">
     <form action="" method="post">
     <?php

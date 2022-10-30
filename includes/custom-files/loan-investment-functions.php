@@ -307,19 +307,38 @@ function delete_loan_investment( $id ) {
  *
  * @return int|boolean
  */
-function wpcpf_get_loan_investment_data( $type, $trn_type, $start_date, $end_date ) {
+function wpcpf_get_loan_investment_data( $type, $trn_type, $loan_investment_id, $start_date, $end_date ) {
     global $wpdb;
     $start_date = $start_date ? $start_date : '1972-12-30';
     $end_date   = $end_date ? $end_date : date('Y-m-d');
     $trn_type   = $trn_type ? $trn_type : 'All';
+    $loan_investment_id = $loan_investment_id ? $loan_investment_id : 'All';
 
-    if ( $trn_type == 'All' ) {
+    if ( $trn_type == 'All' && $loan_investment_id == 'All' ) {
         return $wpdb->get_results(
             $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
             WHERE loan_or_investment = %d
             AND entry_date >= %s
             AND entry_date <= %s
             ORDER BY entry_date DESC", $type, $start_date, $end_date )
+        );
+    } else if ( $trn_type == 'All' && $loan_investment_id !='All' ) {
+        return $wpdb->get_results(
+            $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
+            WHERE loan_or_investment = %d
+            AND entry_date >= %s
+            AND entry_date <= %s
+            AND id = %d
+            ORDER BY entry_date DESC", $type, $start_date, $end_date, $loan_investment_id )
+        );
+    } else if ( $trn_type != 'All' && $loan_investment_id =='All' ) {
+        return $wpdb->get_results(
+            $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}loan_investments 
+            WHERE loan_or_investment = %d
+            AND entry_date >= %s
+            AND entry_date <= %s
+            AND trn_type = %d
+            ORDER BY entry_date DESC", $type, $start_date, $end_date, $trn_type )
         );
     } else {
         return $wpdb->get_results(
@@ -328,7 +347,8 @@ function wpcpf_get_loan_investment_data( $type, $trn_type, $start_date, $end_dat
             AND entry_date >= %s
             AND entry_date <= %s
             AND trn_type = %d
-            ORDER BY entry_date DESC", $type, $start_date, $end_date, $trn_type )
+            AND id = %d
+            ORDER BY entry_date DESC", $type, $start_date, $end_date, $trn_type, $loan_investment_id )
         );
     }
     

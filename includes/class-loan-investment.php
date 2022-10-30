@@ -76,7 +76,7 @@ class Loan_Investment {
 
             default:
                 $type                   = $page == 'loan' ? 1 : 2; //1 for loan, 2 for investment.
-                $data                   = wpcpf_get_loan_investment_data( $type, $trn_type, $start_date, $end_date );
+                $data                   = wpcpf_get_loan_investment_data( $type, $trn_type, $loan_investment_id, $start_date, $end_date );
                 $parent_loan_investment = wpcpf_get_parent_loan_investment_data( $type );
                 $template    = WPCPF_PLUGIN_DIR . '/templates/loan-investment/list.php';
                 break;
@@ -173,8 +173,9 @@ class Loan_Investment {
         $amount_validation = $this->investment_or_loan_pay_capability_check( $entry_date, $amount );
 
         if ( ($trn_type == 2 || $trn_type == 3) &&  ! $amount_validation) {
-            $message = "You don't have sufficient amount.You have just <span style='font-size: 20px;color:#88200A'>{$this->total_amount_in_hand}</span> in your hand";
-            $this->errors['amount_validation_failed'] = __($message , 'wpcodal-pf' );
+            // $message = "You don't have sufficient amount.You have just <span style='font-size: 20px;color:#88200A'>{$this->total_amount_in_hand}</span> in your hand";
+            // $this->errors['amount_validation_failed'] = __($message , 'wpcodal-pf' );
+            return;
         }
 
         if ( ! empty( $this->errors ) ) {
@@ -300,7 +301,7 @@ class Loan_Investment {
         $investment         = wpcpf_total_investment( $entry_date );
 
         // total in amount
-        $total_income             = $total_expense ? $total_expense->total_income : 0;
+        $total_income             = $total_income ? $total_income->total_income : 0;
         $total_loan_recieve       = $loan_recieve ? $loan_recieve->total_amount : 0;
         $total_investment_earning = $investment_earning ? $investment_earning->total_amount : 0;
         // total out amount
@@ -309,9 +310,9 @@ class Loan_Investment {
         $total_investment = $investment ? $investment->total_amount : 0;
 
         $total_in_amount  = $total_income + $total_loan_recieve + $total_investment_earning;
-        $total_out_amount = $total_expense + $total_loan_pay + $total_investment + $submit_amount;
+        $total_out_amount = $total_expense + $total_loan_pay + $total_investment;
 
-        if ( $total_in_amount < $total_out_amount ) {
+        if ( $total_in_amount < $total_out_amount + $submit_amount ) {
             $this->loan_investment_validation_info['total_income']               = $total_income;
             $this->loan_investment_validation_info['loan_recieve_amount']        = $total_loan_recieve;
             $this->loan_investment_validation_info['investment_earning_amount']  = $total_investment_earning;

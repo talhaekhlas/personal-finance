@@ -18,9 +18,10 @@
   $prev_remarks          = $prev_data && isset( $prev_data['remarks'] ) ? $prev_data['remarks'] :$single_loan_investment->remarks;
   $prev_parent_source_id = $prev_data && isset( $prev_data['parent_source_id'] ) ? $prev_data['parent_source_id'] : $single_loan_investment->parent_source_id;
   $prev_trn_type         = $prev_data && isset( $prev_data['trn_type'] ) ? $prev_data['trn_type'] : $single_loan_investment->trn_type;
+  $form_align            = isset( $this->loan_investment_validation_info ) ? 'float-left' : 'mx-auto';
 
 ?>
-<div class="flex items-center justify-center p-12">
+<div class="p-12 w-[50%]  <?php echo $form_align; ?>">
   <div class="mx-auto w-full max-w-[550px]">
     <form action="" method="post">
     <input type="hidden" name="loan_or_investment" value="<?php echo $page == 'loan' ? 1 : 2; ?>">
@@ -31,8 +32,16 @@
           <?php 
           $transaction_type = $page == 'loan' ? [1=>'Recieve', 'Pay'] : [3=>'Investment', 'Earning'];
           foreach ( $transaction_type as $key => $value) {
-            $selected = isset( $this->prev_data ) && isset( $this->prev_data['trn_type'] ) && $this->prev_data['trn_type'] == $key ? 'selected' : null;
-             ?>
+            $selected =  null;
+            if ( isset( $this->prev_data ) && isset( $this->prev_data['trn_type'] ) && $this->prev_data['trn_type'] == $key ) {
+              $selected = 'selected';
+            }
+
+            if ( $single_loan_investment->trn_type == $key ) {
+              $selected = 'selected';
+            }
+            
+            ?>
           <option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
           <?php } ?>
       </select>
@@ -148,3 +157,9 @@
     </form>
   </div>
 </div>
+
+<?php 
+    if ( isset( $this->loan_investment_validation_info ) ) {
+      include WPCPF_PLUGIN_DIR . '/templates/loan-investment/loan-investment-info.php'; 
+    }  
+?>
