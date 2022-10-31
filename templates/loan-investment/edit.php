@@ -74,7 +74,9 @@
     </div>
     
     <?php 
-      if ( $prev_parent_source_id == 'no_parent' || ! $prev_parent_source_id) {
+      if ( ( $prev_parent_source_id == 'no_parent' 
+      || count($parent_data) == 0 
+      || ! $prev_parent_source_id ) && !$missing_parent_investment_earning_error ) {
     ?>
     <div class="mb-5" id="loan_investment_source">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Source Name"); ?></label>
@@ -136,6 +138,8 @@
             <p class="text-base text-red-600 italic font-bold"><?php echo $amount_validation_failed_error; ?></p>
         <?php } ?>
       </div>
+
+      <input type="hidden" name="amount_by_id" value="<?php echo $single_loan_investment->amount ?>">
       
 
       <div class="mb-5">

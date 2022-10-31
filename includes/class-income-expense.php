@@ -283,11 +283,13 @@ class Income_Expense {
 
 
     public function delete_income() {
+
         
-        if ( ! isset( $_REQUEST['delete_income_action'] ) ) {
+        if ( !isset( $_REQUEST['delete_expense_action'] ) &&  !isset( $_REQUEST['delete_income_action'] ) ) {
             return;
         }
-        if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-income' ) ) {
+
+        if ( !wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-income' ) && !wp_verify_nonce( $_REQUEST['_wpnonce'], 'wpcpf-delete-expense' ) ) {
             wp_die( 'Are you cheating?' );
         }
 
@@ -298,10 +300,12 @@ class Income_Expense {
         $id   = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
         $page = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 'income_sector';
 
+        
+
         if ( delete_income( $id ) ) {
             $redirected_to = admin_url( "admin.php?page={$page}&income_deleted=true" );
         } else {
-            $redirected_to = admin_url( "admin.php?page={$page}_budget&{$page}_deleted_failed=true" );
+            $redirected_to = admin_url( "admin.php?page={$page}&{$page}_deleted_failed=true" );
         }
         $_SESSION["alert_message"] = true;
         wp_redirect( $redirected_to );

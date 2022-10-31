@@ -297,7 +297,6 @@ function wpcpf_total_expense_till_given_date( $date ) {
  */
 function delete_income( $id ) {
     global $wpdb;
-
     return $wpdb->delete(
         $wpdb->prefix . 'income_expenses',
         [ 'id' => $id ],

@@ -4,7 +4,7 @@
 
     $source_name_by_id = [];
 
-    foreach ( $data as $value ) {
+    foreach ( $parent_loan_investment as $value ) {
       $source_name_by_id[ $value->id ] = $value->source_name;
     }
 
@@ -66,6 +66,7 @@
             class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">
               Delete
           </a>
+          
           </td>
         </tr>
         <?php } ?>

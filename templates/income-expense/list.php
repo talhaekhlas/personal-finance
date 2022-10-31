@@ -50,7 +50,7 @@
             $edit_url = admin_url( "admin.php?page={$page}&action=edit&id={$value->id}") ; 
           ?>  
           <a href="<?php echo $edit_url; ?>" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark">Edit</a>
-          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=income&delete_income_action=wpcpf-delete-income&id=" . $value->id ), 'wpcpf-delete-income' ); ?>
+          <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page={$page}&delete_{$page}_action=wpcpf-delete-{$page}&id=" . $value->id ), "wpcpf-delete-{$page}" ); ?>
           <a 
             href="#" 
             onclick="JSconfirm('<?php echo $delete_url;  ?>')" 

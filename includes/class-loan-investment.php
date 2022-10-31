@@ -299,7 +299,6 @@ class Loan_Investment {
         $investment_earning = wpcpf_total_investment_earning( $entry_date );
         $loan_pay           = wpcpf_total_loan_pay( $entry_date );
         $investment         = wpcpf_total_investment( $entry_date );
-
         // total in amount
         $total_income             = $total_income ? $total_income->total_income : 0;
         $total_loan_recieve       = $loan_recieve ? $loan_recieve->total_amount : 0;
@@ -312,6 +311,12 @@ class Loan_Investment {
         $total_in_amount  = $total_income + $total_loan_recieve + $total_investment_earning;
         $total_out_amount = $total_expense + $total_loan_pay + $total_investment;
 
+        if ( isset($_POST['amount_by_id'] ) && $_POST['trn_type'] == 2 ) {
+            $total_in_amount  = $total_income + $total_loan_recieve + $total_investment_earning - $_POST['amount_by_id'];
+        }
+
+
+
         if ( $total_in_amount < $total_out_amount + $submit_amount ) {
             $this->loan_investment_validation_info['total_income']               = $total_income;
             $this->loan_investment_validation_info['loan_recieve_amount']        = $total_loan_recieve;
@@ -323,6 +328,11 @@ class Loan_Investment {
             $this->loan_investment_validation_info['total_out_amount']           = $total_out_amount;
             $this->loan_investment_validation_info['total_in_hand']              = $total_in_amount - $total_out_amount;
             $this->loan_investment_validation_info['submit_amount']              = $submit_amount;
+
+            if ( isset($_POST['amount_by_id'] ) && $_POST['trn_type'] == 2 ) {
+                $this->loan_investment_validation_info['loan_recieve_amount']    = $total_loan_recieve - $_POST['amount_by_id'];
+            }
+
             return false;
         }
         

@@ -46,7 +46,7 @@
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['budget_for_expense_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Type");; ?></option>
             
             <?php 
-            $trn_types = [1=>'Loan Recieve','Loan Pay'];
+            $trn_types = $page == 'loan' ? [1=>'Loan Recieve','Loan Pay'] : [3=>'Investment','Earning from investment'];
             foreach ( $trn_types as $trn_type_id => $trn_type_name ) { 
               $selected = null;
               if ( isset( $this->prev_data) &&  $this->prev_data['trn_type'] == $trn_type_id ) {

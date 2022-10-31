@@ -54,7 +54,9 @@
     </div>
     
     <?php 
-      if ( $prev_parent_source_id == 'no_parent' || count($parent_data) == 0 || ! $prev_parent_source_id ) {
+      if ( ( $prev_parent_source_id == 'no_parent' 
+      || count($parent_data) == 0 
+      || ! $prev_parent_source_id ) && !$missing_parent_investment_earning_error ) {
     ?>
     <div class="mb-5" id="loan_investment_source">
         <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php _e("Source Name"); ?></label>

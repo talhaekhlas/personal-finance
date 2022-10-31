@@ -95,7 +95,9 @@ if ( document.querySelector("#loan_investment_entry_date") ) {
 
     $( "#trn_type" ).change(function() {
       var trnType = $('#trn_type').val();
-      var trnType  = $('#trn_type').val();
+      var parentId = $('#parent_source_id').val();
+      
+      console.log(trnType);
 
       if ( trnType != 4 && parentId == 'no_parent' ) { //trn type 4 means earning from investment.
         $("#loan_investment_source").css("display", "block"); 
