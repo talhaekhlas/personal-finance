@@ -64,6 +64,11 @@ class Enqueue {
                 'version' => time(),
                 'deps'    => [ 'wpcpf-sweetalert-js','jquery' ]
 			],
+            'flowbite-js' => [
+                'src'     => WPCPF_PLUGIN_URL . '/assets/js/flowbite153.js',
+                'version' => time(),
+                'deps'    => []
+			],
 			'tailwind-script' => [
                 'src'     => WPCPF_PLUGIN_URL . '/assets/js/tailwind.js',
                 'version' => time(),
@@ -85,6 +90,11 @@ class Enqueue {
                 'src'     => WPCPF_PLUGIN_URL . '/assets/css/admin.css',
                 'version' => time()
             ]
+            // ,
+            // 'flowbite-style' =>[
+            //     'src'     => WPCPF_PLUGIN_URL . '/assets/css/flowbite153.min.css',
+            //     'version' => time()
+            // ]
         ];
     }
 

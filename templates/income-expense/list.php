@@ -44,7 +44,12 @@
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->name; ?></td> 
           <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->amount; ?></td>
           <td class="py-4 px-6 border-b border-grey-light text-red-400 italic font-extrabold"><?php echo $value->entry_date; ?></td>
-          <td class="py-4 px-6 border-b border-grey-light"><?php echo $value->remarks; ?></td>
+          <td class="py-4 px-6 border-b border-grey-light">
+          <button data-tooltip-target="tooltip-light" data-tooltip-style="light" type="button" class="text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-blue-dark">Remarks</button>
+          <div id="tooltip-light" role="tooltip" class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-black rounded-lg border border-gray-200 shadow-sm opacity-0 tooltip">
+              <?php echo $value->remarks; ?>
+          </div>
+          </td>
           <td class="py-4 px-6 border-b border-grey-light">
           <?php 
             $edit_url = admin_url( "admin.php?page={$page}&action=edit&id={$value->id}") ; 
