@@ -30,7 +30,7 @@
          $sl = 0;
          foreach($data as $value) { 
           $extra_class = in_array($value->id, $all_used_income_ids) ? 'text-blue-500 underline':null;
-          $date_range      = "start_date=not_defined&end_date=not_defined";
+          $date_range      = "start_date=&end_date=";
           $extra_parameter = "$date_range&income_sector_id={$value->id}";
           $redirected_to   = admin_url( "admin.php?page=income&{$extra_parameter}" );
         ?>
