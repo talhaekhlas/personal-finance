@@ -22,23 +22,11 @@ class Sample_Ajax {
 	use Singleton;
 
 	/**
-	 * Constructor of Bootstrap class.
+	 * Constructor of Sample_Ajax class.
 	 */
 	private function __construct() {
-		add_action( 'wp_ajax_sample_action', array( $this, 'sample_action' ) );
-		add_action( 'wp_ajax_nopriv_sample_action', array( $this, 'sample_action' ) );
-
 		add_action( 'wp_ajax_expense_budget_id_by_date', array( $this, 'expense_budget_id_by_date' ) );
 		add_action( 'wp_ajax_nopriv_expense_budget_id_by_date', array( $this, 'expense_budget_id_by_date' ) );
-	}
-
-	/**
-	 * Run a sample action.
-	 */
-	public function sample_action() {
-		echo 'This is a sample action.';
-
-		wp_die();
 	}
 
 	/**

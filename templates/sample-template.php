@@ -1,1 +1,0 @@
-<h1>The cow is a domestic animal</h1>

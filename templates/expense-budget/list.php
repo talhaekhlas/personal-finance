@@ -76,7 +76,7 @@
           <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=expense_budget&delete_expense_budget_action=wpcpf-delete-expense-budget&id=" . $value->budget_id ), 'wpcpf-delete-expense-budget' ); ?>
           <a 
             href="#" 
-            onclick="JSconfirm('<?php echo $delete_url;  ?>')" 
+            onclick="deleteConfirmation('<?php echo $delete_url;  ?>')" 
             class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">
               Delete
           </a>

@@ -55,9 +55,9 @@ if ( ! class_exists( 'WPCPF\Bootstrap' ) ) {
  * @since  1.0.0
  * @return WPBP\Bootstrap
  */
-function wp_boilerplate_plugin() {
+function wp_personal_finance_plugin() {
 	return WPCPF\Bootstrap::instance();
 }
 
 // Call initialization function.
-wp_boilerplate_plugin();
+wp_personal_finance_plugin();

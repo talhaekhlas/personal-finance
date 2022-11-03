@@ -58,7 +58,7 @@
           <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page={$sector_type}_sector&delete_sector_action=wpcpf-delete-sector&id=" . $value->id ), 'wpcpf-delete-sector' ); ?>
           <a 
             href="#" 
-            onclick="JSconfirm('<?php echo $delete_url;  ?>')" 
+            onclick="deleteConfirmation('<?php echo $delete_url;  ?>')" 
             class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">
               Delete
           </a>

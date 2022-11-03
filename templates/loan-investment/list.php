@@ -81,7 +81,7 @@
           <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page={$page}&delete_loan_invest_action=wpcpf-delete-loan-investment&id=" . $value->id ), "wpcpf-delete-loan-investment" ); ?>
           <a 
             href="#" 
-            onclick="JSconfirm('<?php echo $delete_url;  ?>')" 
+            onclick="deleteConfirmation('<?php echo $delete_url;  ?>')" 
             class="text-white font-bold py-1 px-3 rounded text-xs bg-red-500 hover:bg-blue-dark">
               Delete
           </a>

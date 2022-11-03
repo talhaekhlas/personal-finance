@@ -59,7 +59,7 @@ class Bootstrap {
 	 * Load ajax classes
 	 */
 	private function load_ajax_classes() {
-		require_once __DIR__ . '/ajax/class-sample-ajax.php';
+		require_once __DIR__ . '/ajax/class-ajax.php';
 		
 		Sample_Ajax::instance();
 	}
