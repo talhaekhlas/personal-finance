@@ -5,10 +5,7 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
 
 <div class="float-left w-[45%] ml-[50px]">
   <div class="bg-white shadow-md rounded mt-20">
-    <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
-      <!-- <caption>
-        <p class="text-2xl text-emerald-900 font-bold"><?php _e("Transaction Summary"); ?></p>
-      </caption> -->
+    <table class="text-left w-full border-collapse">
       <thead>
         <?php 
             if ( isset( $this->expense_validation_info['budget_amount'] ) ) { ?>
@@ -109,10 +106,8 @@ $trn_amount_class = "w-10 py-2 px-6 bg-grey-lightest text-sm text-black border-b
           <td class="<?php echo $trn_head_class ?> text-rose-700" colspan="2" align="center">You don't have sufficient amount to complete this transaction</td>
         </tr>
         <?php } ?>
-        
       </thead>
       <tbody>
-       
       </tbody>
     </table>
   </div>

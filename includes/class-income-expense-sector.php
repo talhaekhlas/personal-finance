@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Add styles of scripts files inside this class.
+ * Income expense sector class.
  */
 class Income_Expense_Sector {
 
@@ -27,11 +27,8 @@ class Income_Expense_Sector {
 	private function __construct( $sector_type ) {
         session_start();
 		$this->form_handler();
-        // add_action( 'admin_post_wpcpf-delete-sector', [ $this, 'delete_income_expense_sector' ] );
         $this->delete_income_expense_sector();
-
 		$this->income_expense_page( $sector_type );
-		
 	}
 
 	/**
@@ -89,7 +86,6 @@ class Income_Expense_Sector {
             return;
         }
 		
-
         if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'new-income-expense-sector' ) ) {
             wp_die( 'Are you cheating?' );
         }
@@ -107,12 +103,11 @@ class Income_Expense_Sector {
             $this->errors['name'] = __( 'Please provide a name', 'wpcodal-pf' );
         }
 
-
         if ( ! empty( $this->errors ) ) {
             return;
         }
         $check_exist = wpcpf_income_expense_sector_check( $name, $type );
-        $name = trim($name);
+        $name        = trim($name);
         if ( ! $id ) {
             if ( $check_exist ) {
                 $this->errors['duplicate_name'] = __( 'Duplicate name', 'wpcodal-pf' );
@@ -153,6 +148,11 @@ class Income_Expense_Sector {
         exit;
     }
 
+    /**
+     * Delete income expense sector.
+     *
+     * @return void
+     */
     public function delete_income_expense_sector() {
         
         if ( ! isset( $_REQUEST['delete_sector_action'] ) ) {

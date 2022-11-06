@@ -13,7 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Fetch budget for expense.
  *
- * @param  array  $args
+ * @param  string $start_date
+ * @param string $end_date
+ * @param int $expense_sector_id
  *
  * @return array
  */

@@ -1,38 +1,36 @@
 <form action="" method="post">
   <div class="-mx-3 flex flex-wrap">
-      
         <div class="w-full px-3 sm:w-1/4 mt-10">
           <div>
           <label
-              for="date"
-              class="mb-3 block text-base font-medium text-[#07074D]"
-            >
+              for   = "date"
+              class = "mb-3 block text-base font-medium text-[#07074D]"
+          >
             <?php _e("Start Date"); ?>
           </label>
             <input
-              type="date"
-              name="start_date"
-              value="<?php echo isset( $this->prev_data['start_date'] ) ? $this->prev_data['start_date']: $start_date ?>"
-              id="<?php echo $page ?>_start_date"
-              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              type  = "date"
+              name  = "start_date"
+              value = "<?php echo isset( $this->prev_data['start_date'] ) ? $this->prev_data['start_date']: $start_date ?>"
+              id    = "<?php echo $page ?>_start_date"
+              class = "w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
         </div>
-
         <div class="w-full px-3 sm:w-1/4 mt-10">
           <div>
           <label
-              for="date"
-              class="mb-3 block text-base font-medium text-[#07074D]"
+              for   = "date"
+              class = "mb-3 block text-base font-medium text-[#07074D]"
             >
             <?php _e("End Date"); ?>
           </label>
             <input
-              type="date"
-              name="end_date"
-              value="<?php echo isset( $this->prev_data['end_date'] ) ? $this->prev_data['end_date']: $end_date ?>"
-              id="<?php echo $page ?>_end_date"
-              class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              type  = "date"
+              name  = "end_date"
+              value = "<?php echo isset( $this->prev_data['end_date'] ) ? $this->prev_data['end_date']: $end_date ?>"
+              id    = "<?php echo $page ?>_end_date"
+              class = "w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
         </div>
@@ -42,11 +40,18 @@
           <?php
           if ( $page == 'expense' ) {
           ?> 
-          <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-          <select name="expense_sector_id" id="expense_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          <label 
+            for   = "name" 
+            class = "mb-3 block text-base font-medium text-[#07074D]">
+            <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name
+          </label>
+          <select 
+            name  = "expense_sector_id" 
+            id    = "expense_sector_id" 
+            class = "w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+          >
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['budget_for_expense_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector");; ?></option>
             <?php 
-            
             foreach ( $active_expense_ids as $sector_id => $expense_sector_name ) { 
               $selected = null;
               if ( isset( $this->prev_data) &&  $this->prev_data['expense_sector_id'] == $sector_id ) {
@@ -62,11 +67,16 @@
             <?php } ?>
           </select>
           <?php } else { ?>
-            <label for="name" class="mb-3 block text-base font-medium text-[#07074D]"><?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name</label>
-          <select name="income_sector_id" id="income_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+            <label 
+              for   = "name" 
+              class = "mb-3 block text-base font-medium text-[#07074D]">
+            <?php $page == 'income'? _e("Income") : _e("Expense"); ?> Sector Name
+            </label>
+          <select 
+            name = "income_sector_id" 
+            id   = "income_sector_id" class="w-[100%] rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
             <option value="All" <?php echo isset( $this->prev_data ) && $this->prev_data['income_sector_id'] == 'All' ? 'selected' : null; ?> ><?php echo _e("All Sector"); ?></option>
             <?php 
-            
             foreach ( $income_sector_by_id as $sector_id => $sector_name ) { 
               $selected = null;
               if ( isset( $this->prev_data) &&  $this->prev_data['income_sector_id'] == $sector_id ) {

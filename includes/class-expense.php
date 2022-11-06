@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Add styles of scripts files inside this class.
+ * Expense class.
  */
 class Expense {
 
@@ -65,7 +65,7 @@ class Expense {
                 break;
 
             default:
-                $data     = wpcpf_get_expense_budget();
+                $data     = wpcpf_get_expense_budget( null , null, null );
                 $template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
                 break;
         }

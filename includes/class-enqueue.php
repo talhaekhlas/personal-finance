@@ -25,98 +25,71 @@ class Enqueue {
 	 * Constructor of Bootstrap class.
 	 */
 	private function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_admin_assets' ] );
-
 	}
 
 	/**
-	 * Add JS scripts.
+	 * All available admin scripts.
+	 *
+	 * @return array
 	 */
-	public function enqueue_scripts() {
-		// wp_enqueue_script();
-	}
-
-	/**
-	 * Add CSS files.
-	 */
-	public function enqueue_styles() {
-		// wp_enqueue_style();
-	}
-
-	/**
-     * All available admin scripts.
-     *
-     * @return array
-     */
-    public function get_admin_scripts() {
-        return [
-            'wpcpf-sweetalert-js' => [
-                'src'     => WPCPF_PLUGIN_URL . '/assets/js/sweetalert.js',
-                'version' => time(),
-                'deps'    => []
+	public function get_admin_scripts() {
+		return [
+			'wpcpf-sweetalert-js' => [
+				'src'     => WPCPF_PLUGIN_URL . '/assets/js/sweetalert.js',
+				'version' => time(),
+				'deps'    => []
 			],
-            'wpcpf-admin-js' => [
-                'src'     => WPCPF_PLUGIN_URL . '/assets/js/admin.js',
-                'version' => time(),
-                'deps'    => [ 'wpcpf-sweetalert-js','jquery' ]
+			'wpcpf-admin-js' => [
+				'src'     => WPCPF_PLUGIN_URL . '/assets/js/admin.js',
+				'version' => time(),
+				'deps'    => [ 'wpcpf-sweetalert-js','jquery' ]
 			],
-            'flowbite-js' => [
-                'src'     => WPCPF_PLUGIN_URL . '/assets/js/flowbite153.js',
-                'version' => time(),
-                'deps'    => []
+			'flowbite-js' => [
+				'src'     => WPCPF_PLUGIN_URL . '/assets/js/flowbite153.js',
+				'version' => time(),
+				'deps'    => []
 			],
 			'tailwind-script' => [
-                'src'     => WPCPF_PLUGIN_URL . '/assets/js/tailwind.js',
-                'version' => time(),
-                'deps'    => []
-            ]
-        ];
-    }
-
-	
-
-    /**
-     * All available admin styles.
-     *
-     * @return array
-     */
-    public function get_admin_styles() {
-        return [
-            'admin-style' => [
-                'src'     => WPCPF_PLUGIN_URL . '/assets/css/admin.css',
-                'version' => time()
-            ]
-            // ,
-            // 'flowbite-style' =>[
-            //     'src'     => WPCPF_PLUGIN_URL . '/assets/css/flowbite153.min.css',
-            //     'version' => time()
-            // ]
-        ];
-    }
+				'src'     => WPCPF_PLUGIN_URL . '/assets/js/tailwind.js',
+				'version' => time(),
+				'deps'    => []
+			]
+		];
+	}
 
 	/**
-     * Register scripts and styles
-     *
-     * @return void
-     */
-    public function register_admin_assets() {
-        $scripts = $this->get_admin_scripts();
-        $styles  = $this->get_admin_styles();
+	 * All available admin styles.
+	 *
+	 */
+	public function get_admin_styles() {
+		return [
+			'admin-style' => [
+				'src'     => WPCPF_PLUGIN_URL . '/assets/css/admin.css',
+				'version' => time()
+			]
+		];
+	}
 
-        foreach ( $scripts as $handle => $script ) {
-            $deps = isset( $script['deps'] ) ? $script['deps'] : false;
+	/**
+	 * Register scripts and styles
+	 *
+	 * @return void
+	 */
+	public function register_admin_assets() {
+		$scripts = $this->get_admin_scripts();
+		$styles  = $this->get_admin_styles();
 
-            wp_register_script( $handle, $script['src'], $deps, $script['version'], true );
-        }
+		foreach ( $scripts as $handle => $script ) {
+			$deps = isset( $script['deps'] ) ? $script['deps'] : false;
 
-        foreach ( $styles as $handle => $style ) {
-            $deps = isset( $style['deps'] ) ? $style['deps'] : false;
+			wp_register_script( $handle, $script['src'], $deps, $script['version'], true );
+		}
 
-            wp_register_style( $handle, $style['src'], $deps, $style['version'] );
-        }
-    }
+		foreach ( $styles as $handle => $style ) {
+			$deps = isset( $style['deps'] ) ? $style['deps'] : false;
+
+			wp_register_style( $handle, $style['src'], $deps, $style['version'] );
+		}
+	}
 }
