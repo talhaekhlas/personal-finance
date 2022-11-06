@@ -1,4 +1,4 @@
-<div class="w-4/5 mx-auto">
+<div class="w-full mx-auto">
   <?php 
     include WPCPF_PLUGIN_DIR . '/templates/notification.php'; 
    ?>
@@ -111,7 +111,7 @@
               class = "text-white font-bold py-1 px-3 rounded text-xs bg-blue-500 hover:bg-green-dark"
             >
               Edit
-            </a>
+            </a>&nbsp;&nbsp;
             <?php $delete_url = wp_nonce_url( admin_url( "admin.php?page=expense_budget&delete_expense_budget_action=wpcpf-delete-expense-budget&id=" . $value->budget_id ), 'wpcpf-delete-expense-budget' ); ?>
             <a 
               href="#" 

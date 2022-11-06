@@ -1,4 +1,4 @@
-<div class="w-4/5 mx-auto">
+<div class="w-full mx-auto">
 	<?php 
 	include WPCPF_PLUGIN_DIR . '/templates/notification.php'; 
 
