@@ -28,11 +28,8 @@ class Expense_Budget {
 		session_start();
 		$this->budget_form_handler();
 		$this->budget_search_form_handler();
-		
 		$this->delete_expense_budget();
-
 		$this->expense_budget_page();
-		
 	}
 
 	/**
@@ -55,23 +52,20 @@ class Expense_Budget {
 
 		switch ( $action ) {
 			case 'new':
-				$template        = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
+				$template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/create.php';
 				break;
-
 			case 'edit':
 				$id                    = isset( $_GET['id'] ) ? $_GET['id'] : null;
 				$single_expense_budget = wpcpf_get_single_expense_budget( $id );
 				$template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/edit.php';
 				break;
-
 			case 'view':
 				$template = __DIR__ . '/views/income-expense-sector/view.php';
 				break;
-
 			default:
-				$data     = wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id );
+				$data              = wpcpf_get_expense_budget( $start_date, $end_date, $expense_sector_id );
 				$data_for_dropdown = wpcpf_get_expense_budget(null, null, null);
-				$template = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
+				$template          = WPCPF_PLUGIN_DIR . '/templates/expense-budget/list.php';
 				break;
 		}
 

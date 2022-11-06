@@ -121,7 +121,6 @@ function wpcpf_insert_loan_investment( $args = [], $page ) {
 		return new \WP_Error( 'no-expense-budget-remarks', __( 'You must provide remarks.', 'wpcodal-pf' ) );
 	}
 
-
 	$defaults = [
 		'trn_type'           => null,
 		'parent_source_id'   => null,
@@ -147,7 +146,6 @@ function wpcpf_insert_loan_investment( $args = [], $page ) {
 			'%s',
 			'%s',
 			'%d',
-			
 		]
 	);
 

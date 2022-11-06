@@ -52,7 +52,7 @@ class Income_Expense {
 			$active_expense_ids[$value->expense_sector_id] = $value->expense_sector_name;
 		}
 
-		$active_expense_ids = array_unique($active_expense_ids);
+		$active_expense_ids = array_unique( $active_expense_ids );
 
 		$income_sector_by_id     = [];
 
@@ -64,20 +64,17 @@ class Income_Expense {
 			case 'new':
 				$template        = WPCPF_PLUGIN_DIR . '/templates/income-expense/create.php';
 				break;
-
 			case 'edit':
 				$id            = isset( $_GET['id'] ) ? $_GET['id'] : null;
 				$single_income_expense = wpcpf_get_single_income_expense( $id );
 				if ( $page == 'expense' ) {
 					$expense_budget_id_by_date = wpcpf_expense_budget_id_by_date( $single_income_expense->entry_date );
 				}
-				$template      = WPCPF_PLUGIN_DIR . '/templates/income-expense/edit.php';
+				$template = WPCPF_PLUGIN_DIR . '/templates/income-expense/edit.php';
 				break;
-
 			case 'view':
 				$template = __DIR__ . '/views/income-expense-sector/view.php';
 				break;
-
 			default:
 				$data = $page == 'income' ? wpcpf_get_income() : wpcpf_get_expense();
 				if ( $page == 'income' ) {
@@ -93,7 +90,6 @@ class Income_Expense {
 					$data = wpcpf_get_expense_data( $start_date, $end_date, $budget_ids_by_expense_sector, $expense_sector_id );
 				}
 				
-
 				$template = WPCPF_PLUGIN_DIR . '/templates/income-expense/list.php';
 				break;
 		}
@@ -352,7 +348,6 @@ class Income_Expense {
 			$this->expense_validation_info['budgets_by_date']            = $budget_ids_by_date;
 			$this->expense_validation_info['prev_budget_id']             = $budget_for_expense_id;
 			return false;
-			
 		}
 		return true;
 	}

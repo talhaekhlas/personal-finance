@@ -120,7 +120,6 @@ function wpcpf_insert_expense_budget( $args = [] ) {
 			'%s',
 			'%s',
 			'%d',
-			
 		]
 	);
 
@@ -161,7 +160,6 @@ function wpcpf_update_expense_budget( $args = [], $id ) {
 	if ( empty( $args['remarks'] ) ) {
 		return new \WP_Error( 'no-expense-budget-remarks', __( 'You must provide remarks.', 'wpcodal-pf' ) );
 	}
-
 
 	$defaults = [
 		'expense_sector_id' => 0,

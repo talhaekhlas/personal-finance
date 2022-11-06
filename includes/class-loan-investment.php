@@ -264,7 +264,6 @@ class Loan_Investment {
 	 * @return void
 	 */
 	public function delete_loan_investment() {
-		
 		if ( ! isset( $_REQUEST['delete_loan_invest_action'] ) ) {
 			return;
 		}
