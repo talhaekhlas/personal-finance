@@ -95,36 +95,12 @@ function wpcpf_get_budget_list_for_expense() {
 function wpcpf_insert_income_expense( $args = [], $page ) {
 	global $wpdb;
 
-	if ( $page == 'income' && empty( $args['income_sector_id'] ) ) {
-		return new \WP_Error( 'no-income-sector', __( 'You must provide income sector name.', 'wpcodal-pf' ) );
+	$validation = mandatory_field_validation( $args, $page );
+	if ( !$validation ) {
+		return;
 	}
 
-	if ( $page == 'expense' && empty( $args['budget_for_expense_id'] ) ) {
-		return new \WP_Error( 'no-income-sector', __( 'You must provide expense sector name.', 'wpcodal-pf' ) );
-	}
-
-	if ( empty( $args['amount'] ) ) {
-		return new \WP_Error( 'no-income-amount', __( 'You must provide income amount.', 'wpcodal-pf' ) );
-	}
-
-	if ( empty( $args['entry_date'] ) ) {
-		return new \WP_Error( 'no-entry-date', __( 'You must provide entry date.', 'wpcodal-pf' ) );
-	}
-
-	if ( empty( $args['remarks'] ) ) {
-		return new \WP_Error( 'no-expense-budget-remarks', __( 'You must provide remarks.', 'wpcodal-pf' ) );
-	}
-
-	$defaults = [
-		'income_sector_id'      => null,
-		'budget_for_expense_id' => null,
-		'amount'                => 0,
-		'entry_date'            => null,
-		'remarks'               => '',
-		'created_by'            => get_current_user_id(),
-	];
-
-	$data = wp_parse_args( $args, $defaults );
+	$data = default_format( $args );
 
 	$inserted = $wpdb->insert(
 		$wpdb->prefix . 'income_expenses',
@@ -158,36 +134,12 @@ function wpcpf_insert_income_expense( $args = [], $page ) {
 function wpcpf_update_income_expense( $args = [], $id, $page ) {
 	global $wpdb;
 
-	if ( $page == 'income' && empty( $args['income_sector_id'] ) ) {
-		return new \WP_Error( 'no-income-sector', __( 'You must provide income sector name.', 'wpcodal-pf' ) );
+	$validation = mandatory_field_validation( $args, $page );
+	if ( !$validation ) {
+		return;
 	}
 
-	if ( $page == 'expense' && empty( $args['budget_for_expense_id'] ) ) {
-		return new \WP_Error( 'no-income-sector', __( 'You must provide expense sector name.', 'wpcodal-pf' ) );
-	}
-
-	if ( empty( $args['amount'] ) ) {
-		return new \WP_Error( 'no-income-amount', __( 'You must provide income amount.', 'wpcodal-pf' ) );
-	}
-
-	if ( empty( $args['entry_date'] ) ) {
-		return new \WP_Error( 'no-entry-date', __( 'You must provide entry date.', 'wpcodal-pf' ) );
-	}
-
-	if ( empty( $args['remarks'] ) ) {
-		return new \WP_Error( 'no-expense-budget-remarks', __( 'You must provide remarks.', 'wpcodal-pf' ) );
-	}
-
-	$defaults = [
-		'income_sector_id'      => null,
-		'budget_for_expense_id' => null,
-		'amount'                => 0,
-		'entry_date'            => null,
-		'remarks'               => '',
-		'created_by'            => get_current_user_id(),
-	];
-
-	$data = wp_parse_args( $args, $defaults );
+	$data = default_format( $args );
 
 	$updated = $wpdb->update(
 		$wpdb->prefix . 'income_expenses',
@@ -404,4 +356,60 @@ function wpcpf_get_expense_data( $start_date = null, $end_date = null, $budget_i
 	$items = $wpdb->get_results( $sql );
 
 	return $items;
+}
+
+/**
+ * Mandatory field validation.
+ *
+ * @param  array $args
+ * @param string $page
+ *
+ * @return boolean
+ */
+function mandatory_field_validation( $args, $page ) {
+	if ( $page == 'income' && empty( $args['income_sector_id'] ) ) {
+		new \WP_Error( 'no-income-sector', __( 'You must provide income sector name.', 'wpcodal-pf' ) );
+		return false;
+	}
+
+	if ( $page == 'expense' && empty( $args['budget_for_expense_id'] ) ) {
+		new \WP_Error( 'no-expense-sector', __( 'You must provide expense sector name.', 'wpcodal-pf' ) );
+		return false;
+	}
+
+	if ( empty( $args['amount'] ) ) {
+		new \WP_Error( 'no-income-amount', __( 'You must provide income amount.', 'wpcodal-pf' ) );
+		return false;
+	}
+
+	if ( empty( $args['entry_date'] ) ) {
+		new \WP_Error( 'no-entry-date', __( 'You must provide entry date.', 'wpcodal-pf' ) );
+		return false;
+	}
+
+	if ( empty( $args['remarks'] ) ) {
+		new \WP_Error( 'no-expense-budget-remarks', __( 'You must provide remarks.', 'wpcodal-pf' ) );
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Default Format.
+ *
+ * @param  array $args
+ *
+ * @return array
+ */
+function default_format( $args ) {
+	$defaults = [
+		'income_sector_id'      => null,
+		'budget_for_expense_id' => null,
+		'amount'                => 0,
+		'entry_date'            => null,
+		'remarks'               => '',
+		'created_by'            => get_current_user_id(),
+	];
+
+	return wp_parse_args( $args, $defaults );
 }
